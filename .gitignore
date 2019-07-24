@@ -1,0 +1,72 @@
+# MacOS
+.DS_store/
+# Cron intermediate file
+update_cron
+
+# Python runtime files
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+coverage.xml
+cover/
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# Vim
+*.sw[a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+# rope
+.ropeproject/
+
+# celery
+celerybeat-schedule
+celerybeat-schedule.db
+
+# bower
+kmad_web/frontend/static/libs
+node_modules/
+
+#redis
+dump.rdb
+
+#tmp files produced by predictors
+tmp*
+
+error.log
+
+core

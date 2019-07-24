@@ -1,4 +1,4 @@
-from imports import QtWidgets,QtCore,QtGui,QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class DlgSelectFile(QtWidgets.QWidget):
     def __init__(self,label,fileType,path=QtCore.QDir.homePath(),parent=None):

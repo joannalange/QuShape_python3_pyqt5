@@ -2,12 +2,11 @@ from copy import deepcopy
 
 from .funcSeqAll import findPOutlierBox,normSimple, normBox
 from .funcTimeWarp import autoROIwDTW
-from .funcToolsAll import  autoDecaySum
+from .funcToolsAll import autoDecaySum
 from .funcToolsAll import findPeakMatchX, splineSampleData, findMatchX_DTW, dtwAlign2Cap, splineCap
 from .funcToolsAll import correctSatd,smoothRect,baselineAdjust, smoothTriangle, fitLinear
-from imports import QtGui,QtCore
 from .funcToolsAll import fMobilityShift, dDyesWL
-from .funcPeakAlign import  fPeakList
+from .funcPeakAlign import fPeakList
 from .funcSeqAll import peakLinking
 from .funcSeqAll import fitShapeData
 from .funcSeqAll import scaleShapeDataWindow, scaleShapeData

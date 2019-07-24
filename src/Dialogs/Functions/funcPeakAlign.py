@@ -661,18 +661,16 @@ def splineSampleData(dataS,dataR, linkXR,linkXS, isCorr=True):
     return newS
 
 
-
 if __name__ == "__main__":
-    import sys
     import os
     import time
     import numpy as np
-    import matplotlib
     import matplotlib.pyplot as plt
     from matplotlib.pyplot import figure, show
     from matplotlib.patches import ConnectionPatch
-    #from funcFile import readABI
-    from Functions import ABIFReader,readABI,peakDetection
+    import ABIFReader
+    import readABI
+    import peakDetection
     np.set_printoptions(precision=2)
 
     currentDir=os.getcwd()

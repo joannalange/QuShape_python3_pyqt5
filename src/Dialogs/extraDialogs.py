@@ -1,4 +1,4 @@
-from imports import QtGui,QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 import numpy as np
 from .myWidgets import *

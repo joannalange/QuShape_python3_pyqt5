@@ -1,9 +1,8 @@
-from imports import QtGui,QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
-import numpy as np
 from .myWidgets import * #GroupBoxROI,ApplyChannel,ToolButton
 from .Functions import * # smoothRect, smoothTriangle, smoothGaussian,DData,chKeysRS,enhance,baselineAdjust
-import shelve
+
 
 class DlgToolsAll(QtWidgets.QWidget):
     def __init__(self,dProject,dProjRef,parent=None):

@@ -1,4 +1,12 @@
-from imports import *
+from copy import deepcopy
+import shelve
+
+from PyQt5 import QtCore, QtWidgets
+
+from Dialogs.Functions import readShapeData, DProjectNew, DVar
+from Dialogs.myWidgets import myHBoxLayout
+from Dialogs.Functions.funcGeneral import *
+
 
 msgAbout = """<b>QuShape</b> v %s
             <p>Copyright &copy; 2010 Weeks Lab.
@@ -13,12 +21,15 @@ msgAbout = """<b>QuShape</b> v %s
 
 
 def myGetOpenFileName(workingDir):
-    getOpenFileName=QtWidgets.QFileDialog.getOpenFileName(None,"Select a file",workingDir,("QuShape project file (*.qushape *.pyshape *.txt *.fsa )"))
-    if isPyQt:
-        projFileName=str(getOpenFileName)
+    getOpenFileName = QtWidgets.QFileDialog.getOpenFileName(
+            None, "Select a file", workingDir, "QuShape project file (*.qushape *.pyshape *.txt *.fsa)")
+    if isinstance(getOpenFileName, tuple):
+        projFileName = str(getOpenFileName[0])
     else:
-        projFileName=str(getOpenFileName[0])
+        projFileName = str(getOpenFileName)
+
     return projFileName
+
 
 def openProjFile(projFileName):
     extFile=QtCore.QFileInfo(projFileName).suffix()

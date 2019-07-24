@@ -1,7 +1,9 @@
+import os
+import sys
+from PyQt5 import QtGui, QtCore, QtWidgets
 
-from PyQt4 import QtGui, QtCore
-import sys, os
 from mainWindow import *
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     app.setOrganizationName("Week Lab")
@@ -12,5 +14,4 @@ if __name__ == '__main__':
     app.setWindowIcon(QtGui.QIcon(iconFileName))
     form = MainWindow()
     form.show()
-  #  form.loadInitialFile()
     app.exec_()

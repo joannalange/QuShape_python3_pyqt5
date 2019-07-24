@@ -2,7 +2,7 @@ import numpy as np
 from .myWidgets import *
 from .Functions import *
 import shelve
-from imports import QtGui,QtCore,QtWidgets
+from PyQt5 import QtGui, QtWidgets
 
 class DlgSeqAlign(QtWidgets.QWidget):
     def __init__(self,dProject,parent=None):

@@ -1,4 +1,4 @@
-from imports import QtWidgets,QtCore
+from PyQt5 import QtWidgets,QtCore
 
 from .myWidgets import myGridLayout
 
@@ -238,7 +238,7 @@ if __name__ == "__main__":
                             'RXS2':str(QtWidgets.QColor('yellow').name()),
                             'BGS2':str(QtWidgets.QColor('cyan').name())}
     app = QtWidgets.QApplication(sys.argv)
-    from Functions import DVar
+    from .Functions import DVar
     form = DlgFigureSet(DVar(dLineVisible.keys()),dLineVisible.keys())
     form.show()
     app.exec_()

@@ -260,8 +260,8 @@ def dtwDer(x):
     out=np.zeros(n)
     for i in range(1,n-1):
         out[i] = ((x[i] - x[i-1]) + ((x[i+1] - x[i-1]) / 2.0)) / 2.0
-    out[0] = out[1];
-    out[n-1] = out[n-2];
+    out[0] = out[1]
+    out[n-1] = out[n-2]
     return out
 
 def myDTW(X, Y, derivative=False, costMType='0',D=0.02, bandType = "noband", r=3, gap=True):
@@ -360,7 +360,7 @@ def optimalWarpingPathLocal2(dtw):
     pathX=np.append(pathX,i)
     pathY=np.append(pathY,j)
     while i>0 and j>0:
-        i,j = pathAppend1(dtw,i,j)
+        i,j, argM = pathAppend1(dtw,i,j)
 
         pathX=np.append(pathX,i)
         pathY=np.append(pathY,j)
@@ -486,7 +486,6 @@ def autoROIwDTW(sampleData,refData):
 if __name__ == "__main__":
     import os
 
-    import mlpy
     fname=os.getcwd()+'/data/hyg_applied_tools.txt'
     A=np.loadtxt(fname)
     X=A[:100,0]

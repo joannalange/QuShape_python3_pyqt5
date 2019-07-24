@@ -1,4 +1,4 @@
-from imports import QtGui,QtCore,QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 from .Functions import readShapeData,readBaseFile,DProjectNew
 from .myWidgets import DlgSelectFile, DlgSelectDir,hintLabel

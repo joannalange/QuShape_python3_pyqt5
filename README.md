@@ -10,6 +10,11 @@ https://www.ncbi.nlm.nih.gov/pubmed/23188808
 brew install pyqt;
 pip3 install -r requirements.txt
 ```
+if you don't have pip3 installed you'll need to run this first:
+```
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+```
 
 # run
 ```

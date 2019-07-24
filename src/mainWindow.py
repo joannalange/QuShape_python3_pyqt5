@@ -1,4 +1,18 @@
+import os
+import sys
+
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+from matplotlib import rcParams
+
+from PyQt5 import QtCore, QtWidgets
+
 from funcMainWin import *
+from Dialogs.Functions.funcGeneral import *
+from Dialogs.myStyleSheet import *
+from Dialogs.newProjDialogs import *
+from Dialogs.myWidgets import *
+
 
 class MainWindow(QtWidgets.QMainWindow):
 

@@ -1,5 +1,5 @@
 import numpy as np
-from imports import QtGui,QtCore
+from PyQt5 import QtGui, QtCore
 from copy import deepcopy
 
 #chKeysCC=['RX','RXS1','RXS2','BG','BGS1','BGS2']
