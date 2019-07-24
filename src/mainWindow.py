@@ -1,13 +1,18 @@
 import os
 import sys
+import shelve
+
+from copy import deepcopy
 
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from matplotlib.pyplot import setp
 from matplotlib import rcParams
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from funcMainWin import *
+from drawClass import *
 from Dialogs.Functions.funcGeneral import *
 from Dialogs.myStyleSheet import *
 from Dialogs.newProjDialogs import *
@@ -744,9 +749,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.dProject['name']=='':
             self.saveProjectAs()
             return
-        self.dBase=shelve.open(str(self.projFileName))
-        self.dBase['dProject']=deepcopy(self.dProject)
-        self.dBase['intervalData']=deepcopy(self.intervalData)
+        self.dBase = shelve.open(str(self.projFileName))
+        self.dBase['dProject'] = deepcopy(self.dProject)
+        self.dBase['intervalData'] = deepcopy(self.intervalData)
         self.dBase['dProjRef']=deepcopy(self.dProjRef)
         self.dBase['dVar']=deepcopy(self.dVar)
         self.dBase.close()
@@ -755,6 +760,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def saveProjectAs(self):
         fName= QtWidgets.QFileDialog.getSaveFileName(self,"Save As", self.dProject['dir'],'')
         if fName:
+            if isinstance(fName, tuple):
+                fName = fName[0]
             self.projFileName=str(fName)+'.qushape'
             self.dProject['fName']=self.projFileName
             self.dProject['name']=fName.split('/')[-1]
