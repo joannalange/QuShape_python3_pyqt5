@@ -1,0 +1,43 @@
+<html><head>
+<title>Main Window </title></head>
+<body>
+ 
+<h1>MAIN WINDOW </h1>
+
+<p>Main window has a lot of features such as  plotting data, applying tools, and controlling the project files. When a data file is loaded into the program or selected in the Loaded Files window, it is plotted in the Data View window. </p>
+<p>Main window has 4 different parts; Central, top, left, and bottom. The central portion of the window displays data from the selected file.  This part has a number of features to display data in ways helpful for the execution of various tools. At top, some figure options is given to display the data in different ways.  Some docks on the left parts are used for script inspector, loaded files and log. Each portion is explained din detail below.</p>
+<p><img src="images/mainWindow.png"/> </p> 
+<h2>TOOL BAR</h2>
+<p>In the top of the main window, there is toolbar to apply some tools in a short way.  Each items are explained briefly following. 
+<h3>Menu Items:</h3>
+<p><b><img src="images/fileNew.png"/>New Project:</b> Use this tool to create a new project
+<p><b><img src="images/fileOpen.png"/>Open Project:</b> Click this icon to open an existing project
+<p><b><img src="images/fileSave.png"/>Save Project:</b>  Click this to save the project.
+<p><b><img src="images/fileSaveAs.png"/>Save Project as:</b> In order to save the project with different name, click this tool.
+<p><b><img src="images/EditUndo.png"/>Undo:</b> Use this tool to delete applied tools.</p>
+<h3>Channel Labels:</h3>
+<p>The colored label widgets relate line colors to specific channels. RX, BG, RXS1 and BGS1 channels are plotted in different color. In order to change the color of the channels, Channel Attributes from Option Menu can be used.</p>
+<p><h3>Figure Options </h3></p>
+<p>Finally in top partition, There are some options to configure the figure. Zoom(Z) SpinBox is used to change the 'y' value of the data. In this way, you can zoom the data and see the small values more closely. The data-file window can also be resized. Width (W) and Height (H) of the figure canvas can be resized. A value of 100 uses one point per pixel. If you check the “Fit to window checkbox widget, the figure is fitted to scroll area.”</p>
+<p><h3>Split Channels</h3></p>
+<p>Additionally, the Data View Window may be split into 4 individual "views" using Split Channel section. This is especially helpful to view data sets. These options are:</p>
+<p><b>Standard:</b> split the display to view each channel separately</p>
+<p><b>Reaction/Sequencing:</b> will pair the reactions channels (RX and BG) together in the upper half of the data view window and sequences channels (RXS1, BGS1) paired together in the lower half. This is helpful for Signal Alignment.</p>
+<p><b>Capillary:</b> will pair the (+) Reactions channels (RX and RXS1) together in the upper half of the data view window and (-) Reaction channels (BG, BGS1) paired together in the lower half. This option is especially useful to observe the result of Mobility Shift.</p>
+<p><b>One Panel:</b> does not split the channels, or will un-split them.</p>
+<p>RXS2 and BGS2 always plotted in the same axes with RXS1 and BGS1, respectively.</p>
+<p><h2>DOCKS</h2></p>
+<p>There are some dock areas in the user interface. You can activate or deactivate the docs cliking the right-mouse at the top of the user interface.</p>
+<p><h3>The Tool Inspector</h3></p>
+<p>The Tool Inspector is the consistent user interface to all of the analysis tools in FastShape. Making a selection from the menu will result in the appropriate tool interface being displayed in the panel. The tool can then operate on the data. It is possible to select a tool only after a data file has been loaded. The unique interface of each tool is displayed in the center of the Tool Inspector.</p>
+<p>There are four generic buttons for every tool. Available options are indicated in the bottom of the Tool Inspector window: The “Apply” button initiates the execution of the tool. Select this button after making the appropriate settings in the tool. If the result is satisfied by checking the result in data-window, “Done” button should be clicked. The name of the tool will then appear in the Scripting Inspector window and then the next tool will be showed in the tool inspector. The Skip button will cancel the tool as well as any modifications it may have made to the loaded data.</p>
+<p>Also, in most tools there are 'Apply to Channel' option. The tool is applied the channel if the channel check box is checked. In addition, a tool can be applied to all data or the data specified by 'Region of interest' spin-box widgets.</p>
+<p><h3>The Script Inspector</h3></p>
+<p>The Scripting Inspector displays the sequence of tools applied to the active dataset. It is possible, using this window, to review the effects of the tools used, to restore an earlier state and continue processing. By double-clicking the any script, the output of this script is shown in data window.</p>
+<p><h3>The Loaded Files</h3></p>
+<p>The Loaded Files Panel displays a list of all the files that are currently loaded in FastShape. The highlighted file is the current file displayed in the Data View Window. By clicking on a file name it is possible to switch the display from the current file to the newly selected file.</p>
+<p><h3>The Log Dock</h3></p>
+<p>This shows some information generated during analyses.</p>
+
+</body>
+</html>

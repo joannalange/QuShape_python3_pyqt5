@@ -1,0 +1,23 @@
+
+COPYRIGHT AND PERMISSION NOTICE
+
+QuShape is a comprehensive, platform-independent, user-friendly, and complete software package that enables efficient, reliable, highly automated, and accurate analysis of high-throughput capillary electrophoresis-detected nucleic acid chemical probing experiments.
+
+Copyright (C) 2012  Fethullah Karabiber, Oleg V. Favorov, Kevin M. Weeks
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License. 
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You can download a copy of the GNU General Public License at http://www.gnu.org/licenses/gpl-3.0.txt or get a free printed copy by writing to:
+  Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor,
+  Boston, MA 02110-1301, USA.
+
+Weeks Laboratory
+Department of Chemistry, CB-3290
+University of North Carolina
+Chapel Hill, NC 27599-3290
+919-962-7486; 919-962-2184 - Laboratory
+http://www.chem.unc.edu/rna/qushape/
+
