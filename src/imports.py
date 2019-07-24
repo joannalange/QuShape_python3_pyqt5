@@ -7,16 +7,16 @@ import sys
 import numpy as np
 import shelve
 
-from PyQt4 import QtCore,QtGui, Qt
+from PyQt5 import QtCore,QtGui,Qt,QtWidgets
 
 import time
 import webbrowser
-    
+
 ### IMPORT MATPLOT
-import matplotlib 
+import matplotlib
 matplotlib.use('Qt4Agg')
 #if matplotlib.get_backend() != 'agg':
-#    matplotlib.use('agg')   
+#    matplotlib.use('agg')
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 #from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
 from matplotlib.figure import Figure
@@ -35,7 +35,7 @@ import warnings
 warnings.simplefilter('ignore', np.RankWarning)
 np.seterr(all='ignore')
 
-  
+
 #from dlgTool import *
 from Dialogs import *
-from drawClass import *   
+from drawClass import *
