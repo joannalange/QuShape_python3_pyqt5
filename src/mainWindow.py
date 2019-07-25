@@ -4,7 +4,7 @@ import shelve
 
 from copy import deepcopy
 
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import setp
 from matplotlib import rcParams
