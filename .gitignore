@@ -8,7 +8,7 @@ update_cron
 *.py[cod]
 
 # C extensions
-*.so
+#*.so
 
 # Packages
 *.egg
