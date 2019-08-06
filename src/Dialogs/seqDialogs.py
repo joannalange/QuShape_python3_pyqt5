@@ -84,13 +84,13 @@ class DlgSeqAlign(QtWidgets.QWidget):
         labelSetting3=QtWidgets.QLabel("To:")
         labelSetting4=QtWidgets.QLabel("Seq Start: ")
 
-        self.spinBoxSeqRangeFrom=QtGui.QSpinBox()
-        self.spinBoxSeqRangeTo=QtGui.QSpinBox()
+        self.spinBoxSeqRangeFrom=QtWidgets.QSpinBox()
+        self.spinBoxSeqRangeTo=QtWidgets.QSpinBox()
         try:
             self.setSpinBoxSeq()
         except:
             pass
-        self.spinBoxSeqOffset=QtGui.QSpinBox()
+        self.spinBoxSeqOffset=QtWidgets.QSpinBox()
         self.spinBoxSeqOffset.setRange(0, len(self.dProject['RNA']))
 
         self.checkBoxLineDraw=QtWidgets.QCheckBox('Draw peak match lines')

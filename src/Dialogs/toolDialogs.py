@@ -20,12 +20,12 @@ class DlgToolsAll(QtWidgets.QWidget):
         label1 = QtWidgets.QLabel("End Point")
         start,end=0,len(self.dProject['dData']['RX']) # findRoi(self.dCurData['RXS'])
 
-        self.spinBox0 = QtGui.QSpinBox()
+        self.spinBox0 = QtWidgets.QSpinBox()
         self.spinBox0.setRange(0, len(self.dProject['dData']['RX']))
         self.spinBox0.setValue(start)
         self.spinBox0.setSingleStep(1)
 
-        self.spinBox1 = QtGui.QSpinBox()
+        self.spinBox1 = QtWidgets.QSpinBox()
         self.spinBox1.setRange(0, len(self.dProject['dData']['RX']))
         self.spinBox1.setValue(end)
         self.spinBox1.setSingleStep(1)
@@ -53,12 +53,12 @@ class DlgToolsAll(QtWidgets.QWidget):
         self.checkBox3.setChecked(True)
         self.checkBox4.setChecked(True)
 
-        self.spinBox2 = QtGui.QSpinBox()
+        self.spinBox2 = QtWidgets.QSpinBox()
         self.spinBox2.setRange(0, 10)
         self.spinBox2.setValue(1)
         self.spinBox2.setSingleStep(1)
 
-        self.spinBox4 = QtGui.QSpinBox()
+        self.spinBox4 = QtWidgets.QSpinBox()
         self.spinBox4.setRange(0, 500)
         self.spinBox4.setValue(60)
         self.spinBox4.setSingleStep(1)
@@ -189,15 +189,15 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
         labelTo = QtWidgets.QLabel("To   ")
 
         labelPlus=QtWidgets.QLabel('(+) Reaction')
-        self.spinBoxPlusFrom=QtGui.QSpinBox()
-        self.spinBoxPlusTo=QtGui.QSpinBox()
+        self.spinBoxPlusFrom=QtWidgets.QSpinBox()
+        self.spinBoxPlusTo=QtWidgets.QSpinBox()
         self.spinBoxPlusFrom.setRange(0,len(self.dProject['dData']['RX']))
         self.spinBoxPlusTo.setRange(0,len(self.dProject['dData']['RX']))
         self.spinBoxPlusTo.setValue(len(self.dProject['dData']['RX']))
 
         labelMinus=QtWidgets.QLabel('(-) Reaction')
-        self.spinBoxMinusFrom=QtGui.QSpinBox()
-        self.spinBoxMinusTo=QtGui.QSpinBox()
+        self.spinBoxMinusFrom=QtWidgets.QSpinBox()
+        self.spinBoxMinusTo=QtWidgets.QSpinBox()
         self.spinBoxMinusFrom.setRange(0,len(self.dProject['dData']['BG']))
         self.spinBoxMinusTo.setRange(0,len(self.dProject['dData']['BG']))
         self.spinBoxMinusTo.setValue(len(self.dProject['dData']['BG']))
@@ -291,7 +291,7 @@ class DlgSmooth(QtWidgets.QWidget):
 
  #### Window Size
         windowSizeLabel = QtWidgets.QLabel("Window Size:")
-        self.spinBox1 = QtGui.QSpinBox()
+        self.spinBox1 = QtWidgets.QSpinBox()
         self.spinBox1.setRange(1, 10)
         self.spinBox1.setValue(1)
         self.spinBox1.setSingleStep(1)
@@ -369,7 +369,7 @@ class DlgBaseline(QtWidgets.QWidget):
         self.isToolApplied=False
 #### Window Size
         windowLabel = QtWidgets.QLabel("Baseline Window:")
-        self.spinBox0 = QtGui.QSpinBox()
+        self.spinBox0 = QtWidgets.QSpinBox()
         self.spinBox0.setRange(0,200)
         self.spinBox0.setValue(60)
         self.spinBox0.setSingleStep(1)
