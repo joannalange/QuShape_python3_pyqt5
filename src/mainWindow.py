@@ -85,27 +85,27 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def writeSettings(self):
         self.qSettings = QtCore.QSettings()
-        filename = QtCore.QVariant(QtCore.QString(self.projFileName)) \
-                if self.projFileName is not None else QtCore.QVariant()
+        filename = QtCore.QVariant(str(self.projFileName)) \
+            if self.projFileName is not None else QtCore.QVariant()
         self.qSettings.setValue("LastFile", filename)
         recentFiles = QtCore.QVariant(self.recentFiles) \
-                if self.recentFiles else QtCore.QVariant()
+            if self.recentFiles else QtCore.QVariant()
         self.qSettings.setValue("RecentFiles", recentFiles)
         self.qSettings.setValue("MainWindow/Size", QtCore.QVariant(self.size()))
         self.qSettings.setValue("MainWindow/Position",
-                QtCore.QVariant(self.pos()))
+                                QtCore.QVariant(self.pos()))
         self.qSettings.setValue("MainWindow/State", QtCore.QVariant(self.saveState()))
         self.qSettings.setValue("workingDir", QtCore.QVariant(self.workingDir))
 
     def createDockWidgets(self):
-        self.dockTool =ToolDock("Tool Inspector",self) #QtGui.QDockWidget("Tool Inspector",self)
+        self.dockTool = ToolDock("Tool Inspector",self) #QtGui.QDockWidget("Tool Inspector",self)
         self.dockTool.setObjectName("dockToolInspector")
         self.newProject()
 
         self.dockScript=QtWidgets.QDockWidget("Script Inspector", self)
         self.dockScript.setObjectName("dockScriptInspector")
         self.dockScript.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea| QtCore.Qt.RightDockWidgetArea)
-        self.scriptList=myListWidget()
+        self.scriptList = myListWidget()
         self.dockScript.setWidget(self.scriptList)
         self.dockScript.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea| QtCore.Qt.RightDockWidgetArea)
 
@@ -722,9 +722,9 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         if  fname in self.recentFiles:
             self.recentFiles.remove(fname)
-            self.recentFiles.insert(QtCore.QString(fname))
+            self.recentFiles.insert(str(fname))
         else:
-            self.recentFiles.insert(QtCore.QString(fname))
+            self.recentFiles.insert(str(fname))
             while len(self.recentFiles) > 9:
                 self.recentFiles.pop()
         self.updateFileMenu()
