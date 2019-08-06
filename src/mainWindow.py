@@ -1,25 +1,14 @@
 import os
 import sys
-import shelve
-
-from copy import deepcopy
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import setp
 from matplotlib import rcParams
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-
 from funcMainWin import *
 from drawClass import *
-from Dialogs.Functions.funcGeneral import *
-from Dialogs.Functions.funcFile import *
-from Dialogs.editDialogs import *
-from Dialogs.newProjectDialogs import *
-from Dialogs.myStyleSheet import *
-from Dialogs.newProjDialogs import *
-from Dialogs.myWidgets import *
+from Dialogs import *
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -35,8 +24,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.variables()
         self.createMainFrame()
         self.createProgressBar()
-     #   self.loadInitialFile()
-     #   self.readTestFile()
 
     def readTestFile(self):
         # self.projFileName=self.currentDir+'/data/test0223.pyshape'
@@ -1377,7 +1364,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def editLineProps(self):
         self.dlgChannel = DlgLineProps(self.dVar,self.dProject['chKeyRS'])
         # self.connect(self.dlgChannel.buttonBox.button(QtGui.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.applyEditLineProps)
-        self.dlgChannel.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.applyEditLineProps)
+        self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.applyEditLineProps)
         self.dlgChannel.show()
     def applyFigSet(self):
         self.dlgChannel.apply()
@@ -1392,7 +1379,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resizeFigure()
     def editFigSet(self):
         self.dlgChannel = DlgFigureSet(self.dVar,self.dProject['chKeyRS'])
-        self.connect(self.dlgChannel.buttonBox.button(QtGui.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.applyFigSet)
+        self.connect(self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.applyFigSet)
         self.dlgChannel.show()
 
 ##### HELP FUNCTIONS  ######
