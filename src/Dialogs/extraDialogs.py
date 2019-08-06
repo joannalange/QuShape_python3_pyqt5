@@ -8,18 +8,18 @@ class DlgVariousTools(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>SOME FUNCTIONS</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SOME FUNCTIONS</b></center>"))
         self.name="Various Tools"
         self.toolID=1
 
         self.dProject=dProject
         self.isToolApplied=False
 ####  Group  Box Radio
-        groupBoxRadio = QtGui.QGroupBox(self.tr("Select a Tool"))
-        self.radioButton0 = QtGui.QRadioButton(self.tr("Resolution Enhancement"))
-        self.radioButton1 = QtGui.QRadioButton(self.tr("First Derivative"))
-        self.radioButton2 = QtGui.QRadioButton(self.tr("Stat Normalization"))
-        self.radioButton3 = QtGui.QRadioButton(self.tr("Fourier Transform"))
+        groupBoxRadio = QtWidgets.QGroupBox(self.tr("Select a Tool"))
+        self.radioButton0 = QtWidgets.QRadioButton(self.tr("Resolution Enhancement"))
+        self.radioButton1 = QtWidgets.QRadioButton(self.tr("First Derivative"))
+        self.radioButton2 = QtWidgets.QRadioButton(self.tr("Stat Normalization"))
+        self.radioButton3 = QtWidgets.QRadioButton(self.tr("Fourier Transform"))
 
         self.radioButton0.setChecked(True)
 
@@ -73,7 +73,7 @@ class DlgSwap(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>CHANNEL SWAP</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>CHANNEL SWAP</b></center>"))
         self.name="Swap"
         self.toolID=1
 
@@ -83,8 +83,8 @@ class DlgSwap(QtWidgets.QWidget):
         self.label0={}
         self.comboBox0={}
         for key in self.dProject['chKeyRS']:
-            self.label0[key]=QtGui.QLabel(key)
-            self.comboBox0[key]=QtGui.QComboBox()
+            self.label0[key]=QtWidgets.QLabel(key)
+            self.comboBox0[key]=QtWidgets.QComboBox()
             self.comboBox0[key].addItems(self.dProject['chKeyRS'])
             self.comboBox0[key].setCurrentIndex(self.dProject['chKeyRS'].index(key))
 
@@ -103,7 +103,7 @@ class DlgSwap(QtWidgets.QWidget):
             vbox.addWidget(self.label0['BGS2'],5,0)
             vbox.addWidget(self.comboBox0['BGS2'],5,1)
 
-        self.groupBox0=QtGui.QGroupBox()
+        self.groupBox0=QtWidgets.QGroupBox()
         self.groupBox0.setLayout(vbox)
 
 
@@ -129,7 +129,7 @@ class DlgScale(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.title = QtGui.QLabel(self.tr("<center><b>SCALE</b></center>"))
+        self.title = QtWidgets.QLabel(self.tr("<center><b>SCALE</b></center>"))
         self.name="Scale"
         self.toolID=1
 
@@ -139,13 +139,13 @@ class DlgScale(QtWidgets.QWidget):
         self.label0={}
         self.doubleSpinBox0={}
         for key in self.dProject['chKeyRS']:
-            self.label0[key]=QtGui.QLabel(key)
-            self.doubleSpinBox0[key]=QtGui.QDoubleSpinBox()
+            self.label0[key]=QtWidgets.QLabel(key)
+            self.doubleSpinBox0[key]=QtWidgets.QDoubleSpinBox()
             self.doubleSpinBox0[key].setRange(0.01,100.00)
             self.doubleSpinBox0[key].setValue(1.00)
             self.doubleSpinBox0[key].setSingleStep(0.01)
 
-        self.groupBox1=QtGui.QGroupBox(self.tr('Enter Scale Factor'))
+        self.groupBox1=QtWidgets.QGroupBox(self.tr('Enter Scale Factor'))
 
         vbox=QtGui.QGridLayout()
         vbox.addWidget(self.label0['RX'],0,0)
@@ -166,7 +166,7 @@ class DlgScale(QtWidgets.QWidget):
         vbox.setContentsMargins(0,0,0,0)
         self.groupBox1.setLayout(vbox)
 
-        self.pushButton0=QtGui.QPushButton('Scale All to BG')
+        self.pushButton0=QtWidgets.QPushButton('Scale All to BG')
         self.connect(self.pushButton0,QtCore.SIGNAL("clicked()"),self.autoScale)
 
 ### Button Box
@@ -212,7 +212,7 @@ class DlgOpenABIFFile(QtWidgets.QWidget):
     def __init__(self,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.title = QtGui.QLabel(self.tr("<center><b>OPEN ABIF FILE</b></center>"))
+        self.title = QtWidgets.QLabel(self.tr("<center><b>OPEN ABIF FILE</b></center>"))
         self.name="Open ABIF File"
         self.toolID=1
 
@@ -264,7 +264,7 @@ class DlgOpenSeqFile(QtWidgets.QWidget):
     def __init__(self,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>OPEN SEQUENCE FILE</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>OPEN SEQUENCE FILE</b></center>"))
         self.name="Read Sequence File"
         self.toolID=1
 
@@ -314,7 +314,7 @@ class DlgOpenShapeFinder(QtWidgets.QWidget):
     def __init__(self,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>OPEN SHAPEFINDER FILES</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>OPEN SHAPEFINDER FILES</b></center>"))
         self.name="Read ShapeFinder File"
         self.toolID=1
 
@@ -421,7 +421,7 @@ class DlgManualSignalAlign(QtWidgets.QWidget):
     def __init__(self,dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>MANUAL SIGNAL ALGINMENT</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>MANUAL SIGNAL ALGINMENT</b></center>"))
         self.name="Manual Signal Alignment"
         self.toolID=1
 
@@ -432,11 +432,11 @@ class DlgManualSignalAlign(QtWidgets.QWidget):
         self.dataR,self.dataS=np.array([]),np.array([])
         self.isToolApplied=False
 
-        label0=QtGui.QLabel('Reference Channel')
-        self.comboBox0=QtGui.QComboBox()
+        label0=QtWidgets.QLabel('Reference Channel')
+        self.comboBox0=QtWidgets.QComboBox()
         self.comboBox0.addItems(dProject['chKeyRS'])
-        label1=QtGui.QLabel('Sample Channel')
-        self.comboBox1=QtGui.QComboBox()
+        label1=QtWidgets.QLabel('Sample Channel')
+        self.comboBox1=QtWidgets.QComboBox()
         self.comboBox1.addItems(dProject['chKeyRS'])
         self.comboBox1.setCurrentIndex(1)
 
@@ -446,11 +446,11 @@ class DlgManualSignalAlign(QtWidgets.QWidget):
         layout0.addWidget(label1,1,0)
         layout0.addWidget(self.comboBox1,1,1)
 
-        self.groupBox0=QtGui.QGroupBox("Select Channels")
+        self.groupBox0=QtWidgets.QGroupBox("Select Channels")
         self.groupBox0.setLayout(layout0)
         self.groupBox0.setCheckable(True)
 
-        self.button0=QtGui.QPushButton('Modify Matched Peaks')
+        self.button0=QtWidgets.QPushButton('Modify Matched Peaks')
         self.button0.setEnabled(False)
 
         self.buttonBox = ToolButton()

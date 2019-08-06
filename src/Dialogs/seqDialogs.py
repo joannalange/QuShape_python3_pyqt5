@@ -8,7 +8,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
     def __init__(self,dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.title = QtGui.QLabel(self.tr("<center><b>SEQUENCE ALIGNMENT</b></center>"))
+        self.title = QtWidgets.QLabel(self.tr("<center><b>SEQUENCE ALIGNMENT</b></center>"))
         self.name="Sequence Alignment"
         self.toolID=1
 
@@ -22,16 +22,16 @@ class DlgSeqAlign(QtWidgets.QWidget):
         self.NSeqRNA = len(self.dProjOut['RNA'])
 
 ###  SEQUENCE FIND
-        label0=QtGui.QLabel("Channel")
-        label1=QtGui.QLabel("ddNTP")
-        label2=QtGui.QLabel('Thres')
+        label0=QtWidgets.QLabel("Channel")
+        label1=QtWidgets.QLabel("ddNTP")
+        label2=QtWidgets.QLabel('Thres')
 
-        self.comboBox0=QtGui.QComboBox()
-        self.comboBox1=QtGui.QComboBox()
-        self.comboBox2=QtGui.QComboBox()
-        self.comboBox3=QtGui.QComboBox()
+        self.comboBox0=QtWidgets.QComboBox()
+        self.comboBox1=QtWidgets.QComboBox()
+        self.comboBox2=QtWidgets.QComboBox()
+        self.comboBox3=QtWidgets.QComboBox()
 
-        self.spinBox0 = QtGui.QDoubleSpinBox()
+        self.spinBox0 = QtWidgets.QDoubleSpinBox()
         self.spinBox0.setRange(-3, 3)
         self.spinBox0.setValue(0.5)
         self.spinBox0.setSingleStep(0.1)
@@ -44,8 +44,8 @@ class DlgSeqAlign(QtWidgets.QWidget):
         self.comboBox1.addItems(self.choicesNuc)
         self.comboBox1.setCurrentIndex(self.nucNames.index(self.dProject['nuc1']))
 
-        self.radioSeqFind0=QtGui.QRadioButton('Histogram')
-        self.radioSeqFind1=QtGui.QRadioButton('Background')
+        self.radioSeqFind0=QtWidgets.QRadioButton('Histogram')
+        self.radioSeqFind1=QtWidgets.QRadioButton('Background')
 
         layoutMethod=myHBoxLayout()
         layoutMethod.addWidget(self.radioSeqFind0)
@@ -65,7 +65,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
             self.comboBox2.addItems(choices2)
             self.comboBox3.addItems(self.choicesNuc)
             self.comboBox3.setCurrentIndex(self.nucNames.index(self.dProject['nuc2']))
-            self.spinBox1 = QtGui.QDoubleSpinBox()
+            self.spinBox1 = QtWidgets.QDoubleSpinBox()
             self.spinBox1.setRange(-3, 3)
             self.spinBox1.setValue(0.5)
             self.spinBox1.setSingleStep(0.1)
@@ -73,16 +73,16 @@ class DlgSeqAlign(QtWidgets.QWidget):
             gridLayout.addWidget(self.comboBox3, 2, 1)
        #    gridLayout.addWidget(self.spinBox1, 2, 2)
 
-        self.checkBox0=QtGui.QCheckBox('Check for high BG peaks')
+        self.checkBox0=QtWidgets.QCheckBox('Check for high BG peaks')
 
-        self.groupBoxBaseCall=QtGui.QGroupBox('Base Calling')
+        self.groupBoxBaseCall=QtWidgets.QGroupBox('Base Calling')
         self.groupBoxBaseCall.setLayout(gridLayout)
         self.groupBoxBaseCall.setCheckable(True)
 
 ##  LAYOUTS
-        labelSetting2=QtGui.QLabel("Seq Range: From")
-        labelSetting3=QtGui.QLabel("To:")
-        labelSetting4=QtGui.QLabel("Seq Start: ")
+        labelSetting2=QtWidgets.QLabel("Seq Range: From")
+        labelSetting3=QtWidgets.QLabel("To:")
+        labelSetting4=QtWidgets.QLabel("Seq Start: ")
 
         self.spinBoxSeqRangeFrom=QtGui.QSpinBox()
         self.spinBoxSeqRangeTo=QtGui.QSpinBox()
@@ -93,7 +93,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
         self.spinBoxSeqOffset=QtGui.QSpinBox()
         self.spinBoxSeqOffset.setRange(0, len(self.dProject['RNA']))
 
-        self.checkBoxLineDraw=QtGui.QCheckBox('Draw peak match lines')
+        self.checkBoxLineDraw=QtWidgets.QCheckBox('Draw peak match lines')
         self.checkBoxLineDraw.setChecked(True)
         layoutSetting=myGridLayout()
         layoutSetting.addWidget(labelSetting2,0,0)
@@ -102,7 +102,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
         layoutSetting.addWidget(self.spinBoxSeqRangeTo,0,3)
  #       layoutSetting.addWidget(self.checkBoxLineDraw,1,0,1,2)
 
-        self.groupBoxSettings=QtGui.QGroupBox('Settings')
+        self.groupBoxSettings=QtWidgets.QGroupBox('Settings')
         self.groupBoxSettings.setLayout(layoutSetting)
 
 
@@ -217,7 +217,7 @@ class DlgReactivity(QtWidgets.QWidget):
     def __init__(self, dProject,dProjRef,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>REACTIVITY</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>REACTIVITY</b></center>"))
         self.name="Reactivity"
         self.toolID=1
 
@@ -227,16 +227,16 @@ class DlgReactivity(QtWidgets.QWidget):
 
         self.scaleFactor=1
 
-        self.checkBox0=QtGui.QCheckBox('Scale and Normalize with Reference')
+        self.checkBox0=QtWidgets.QCheckBox('Scale and Normalize with Reference')
 
 ## SCALE
         self.groupBox1=scaleGroupBox("Scale BG")
 
 ## NORMALIZATION
-        label0=QtGui.QLabel('Outlier')
-        label1=QtGui.QLabel('Average')
-        self.spinBox0=QtGui.QDoubleSpinBox()
-        self.spinBox1=QtGui.QDoubleSpinBox()
+        label0=QtWidgets.QLabel('Outlier')
+        label1=QtWidgets.QLabel('Average')
+        self.spinBox0=QtWidgets.QDoubleSpinBox()
+        self.spinBox1=QtWidgets.QDoubleSpinBox()
         self.spinBox0.setRange(0,9)
         self.spinBox1.setRange(0,15)
         self.spinBox0.setSuffix("%")
@@ -246,7 +246,7 @@ class DlgReactivity(QtWidgets.QWidget):
         self.spinBox0.setValue(2.0)
         self.spinBox1.setValue(10.0)
 
-        self.checkBox1=QtGui.QCheckBox("Set Negative Value to Zero")
+        self.checkBox1=QtWidgets.QCheckBox("Set Negative Value to Zero")
 
         layout2=myHBoxLayout()
         layout2.addWidget(label0)
@@ -259,17 +259,17 @@ class DlgReactivity(QtWidgets.QWidget):
         layout21.addLayout(layout2)
         layout21.addWidget(self.checkBox1)
 
-        self.groupBox2=QtGui.QGroupBox(self.tr('Normalization'))
+        self.groupBox2=QtWidgets.QGroupBox(self.tr('Normalization'))
         self.groupBox2.setLayout(layout21)
      #   self.groupBox2.setEnabled(False)
 
-        self.radio3to5=QtGui.QRadioButton("3' to 5'")
-        self.radio5to3=QtGui.QRadioButton("5' to 3'")
+        self.radio3to5=QtWidgets.QRadioButton("3' to 5'")
+        self.radio5to3=QtWidgets.QRadioButton("5' to 3'")
         self.radio3to5.setChecked(True)
 
-        self.pushButton0=QtGui.QPushButton('Reactivity')
-        self.pushButton1=QtGui.QPushButton('Peak Area')
-        self.pushButton2=QtGui.QPushButton('Data')
+        self.pushButton0=QtWidgets.QPushButton('Reactivity')
+        self.pushButton1=QtWidgets.QPushButton('Peak Area')
+        self.pushButton2=QtWidgets.QPushButton('Data')
 
         layout3=myGridLayout()
         layout3.addWidget(self.radio3to5,0,0)
@@ -278,11 +278,11 @@ class DlgReactivity(QtWidgets.QWidget):
         layout3.addWidget(self.pushButton1,1,1)
         layout3.addWidget(self.pushButton2,1,3)
 
-        self.groupBox3=QtGui.QGroupBox(self.tr('Select Plot Type'))
+        self.groupBox3=QtWidgets.QGroupBox(self.tr('Select Plot Type'))
         self.groupBox3.setLayout(layout3)
     #    self.groupBox3.setEnabled(False)
 
-        self.buttonBox =ToolButton()
+        self.buttonBox = ToolButton()
 
         mainLayout=QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.labelTitle)
@@ -343,7 +343,7 @@ class DlgReportTable(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>REPORT</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>REPORT</b></center>"))
         self.name="Report"
         self.toolID=1
 
@@ -353,35 +353,34 @@ class DlgReportTable(QtWidgets.QWidget):
         for key in self.dReport.keys():
             self.dReport[key]=self.dReport[key][::-1]
 
-        self.saveTextButton = QtGui.QPushButton("Save as Text")
+        self.saveTextButton = QtWidgets.QPushButton("Save as Text")
 
         #self.connect(self.saveTextButton,QtCore.SIGNAL('clicked()'),self.saveTextReport)
         self.saveTextButton.clicked.connect(self.saveTextReport)
 
-        self.layout0 = QtGui.QHBoxLayout()
+        self.layout0 = QtWidgets.QHBoxLayout()
         self.layout0.addWidget(self.saveTextButton)
         self.layout0.addStretch()
 
         N=len(self.dReport['seqNum'])
-        self.table = QtGui.QTableWidget()
+        self.table = QtWidgets.QTableWidget()
         self.table.setRowCount(N)
         self.table.setColumnCount(len(reportKeys))
         self.table.setHorizontalHeaderLabels(reportKeys)
-        self.table.setSelectionBehavior(QtGui.QTableWidget.SelectRows)
-        self.table.setSelectionMode(QtGui.QTableWidget.SingleSelection)
+        self.table.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
+        self.table.setSelectionMode(QtWidgets.QTableWidget.SingleSelection)
         self.font = QtGui.QFont()
         self.font.setPointSize(9)
         self.table.setFont(self.font)
 
-
         for i in range(N):
             for key in reportKeys:
-                if key=='seqRNA':
-                    item =QtGui.QTableWidgetItem(self.dReport[key][i])
+                if key == 'seqRNA':
+                    item = QtWidgets.QTableWidgetItem(self.dReport[key][i])
                 elif key in ['seqNum','posSeq','posRX','posBG']:
-                    item =QtGui.QTableWidgetItem("%d" % self.dReport[key][i])
+                    item = QtWidgets.QTableWidgetItem("%d" % self.dReport[key][i])
                 else:
-                    item =QtGui.QTableWidgetItem("%.2f" % self.dReport[key][i])
+                    item = QtWidgets.QTableWidgetItem("%.2f" % self.dReport[key][i])
                 col=reportKeys.index(key)
                 self.table.setItem(int(i), int(col), item)
         self.table.resizeColumnsToContents()
@@ -403,7 +402,7 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
     def __init__(self,dProject,dProjRef,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.title = QtGui.QLabel(self.tr("<center><b>SEQUENCE ALIGNMENT BY REFERENCE</b></center>"))
+        self.title = QtWidgets.QLabel(self.tr("<center><b>SEQUENCE ALIGNMENT BY REFERENCE</b></center>"))
         self.name="Sequence Alignment by Reference"
         self.toolID=1
 
@@ -420,13 +419,13 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
         # self.connect(self.fileReadRef.pushButton0,QtCore.SIGNAL("clicked()"),self.changeRefFile)
         self.fileReadRef.pushButton0.clicked.connect(self.changeRefFile)
 
-        label10=QtGui.QLabel("Ref. Channel")
-        self.comboBox10=QtGui.QComboBox()
+        label10=QtWidgets.QLabel("Ref. Channel")
+        self.comboBox10 = QtWidgets.QComboBox()
         self.comboBox10.addItems(chKeysRS)
         self.comboBox10.setCurrentIndex(3)
 
-        label11=QtGui.QLabel("Sample Channel")
-        self.comboBox11=QtGui.QComboBox()
+        label11=QtWidgets.QLabel("Sample Channel")
+        self.comboBox11 = QtWidgets.QComboBox()
         self.comboBox11.addItems(chKeysRS)
         self.comboBox11.setCurrentIndex(3)
 
@@ -437,22 +436,22 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
         layout0.addWidget(label11,2,0)
         layout0.addWidget(self.comboBox11,2,1)
 
-        self.groupBox0=QtGui.QGroupBox(self.tr('Signal Alignment'))
+        self.groupBox0=QtWidgets.QGroupBox(self.tr('Signal Alignment'))
         self.groupBox0.setLayout(layout0)
         self.groupBox0.setCheckable(True)
 
-        labelRX=QtGui.QLabel('Scale Factor for RX')
-        labelBG=QtGui.QLabel('Scale Factor for BG')
-        self.spinBoxRX=QtGui.QDoubleSpinBox()
+        labelRX=QtWidgets.QLabel('Scale Factor for RX')
+        labelBG=QtWidgets.QLabel('Scale Factor for BG')
+        self.spinBoxRX=QtWidgets.QDoubleSpinBox()
         self.spinBoxRX.setRange(0.01,100.00)
         self.spinBoxRX.setValue(1.00)
         self.spinBoxRX.setSingleStep(0.01)
-        self.spinBoxBG=QtGui.QDoubleSpinBox()
+        self.spinBoxBG=QtWidgets.QDoubleSpinBox()
         self.spinBoxBG.setRange(0.01,100.00)
         self.spinBoxBG.setValue(1.00)
         self.spinBoxBG.setSingleStep(0.01)
 
-        self.checkBoxScale0=QtGui.QCheckBox('Scale by windowing')
+        self.checkBoxScale0=QtWidgets.QCheckBox('Scale by windowing')
 
         layout1 = myGridLayout()
         layout1.addWidget(labelRX,0,0)
@@ -461,16 +460,16 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
         layout1.addWidget(self.spinBoxBG,1,1)
         layout1.addWidget(self.checkBoxScale0,2,0,1,2)
 
-        self.groupBox1=QtGui.QGroupBox(self.tr('Scale RX and BG'))
+        self.groupBox1=QtWidgets.QGroupBox(self.tr('Scale RX and BG'))
         self.groupBox1.setLayout(layout1)
        # self.groupBox1.setCheckable(True)
 
-      #  self.button0=QtGui.QPushButton('Modify Matched Peaks')
+      #  self.button0=QtWidgets.QPushButton('Modify Matched Peaks')
       #  self.button0.setEnabled(False)
 
         self.button0=peakMatchModifyButton()
 
-        self.button1=QtGui.QPushButton('Modify Peak Link by Reference')
+        self.button1=QtWidgets.QPushButton('Modify Peak Link by Reference')
         self.button1.setEnabled(False)
         self.button1.setWhatsThis(self.tr(" Check the accuracy of linked peaks"
                                           " by C\changing the peak position in the sample RX and BG peaks."
@@ -541,7 +540,7 @@ class DlgReactivityRef(QtWidgets.QWidget):
     def __init__(self,dProject,dProjRef,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.title = QtGui.QLabel(self.tr("<center><b>REACTIVITY BY REFERENCE</b></center>"))
+        self.title = QtWidgets.QLabel(self.tr("<center><b>REACTIVITY BY REFERENCE</b></center>"))
         self.name="Reactivity by Reference"
         self.toolID=1
 
@@ -557,16 +556,16 @@ class DlgReactivityRef(QtWidgets.QWidget):
 ### SCALE REACTIVITY
         self.groupBox2=scaleGroupBox("Scale Reactivity")
 
-        self.pushButton0=QtGui.QPushButton('Reactivity')
-        self.pushButton1=QtGui.QPushButton('Peak Area')
-        self.pushButton2=QtGui.QPushButton('Data')
+        self.pushButton0=QtWidgets.QPushButton('Reactivity')
+        self.pushButton1=QtWidgets.QPushButton('Peak Area')
+        self.pushButton2=QtWidgets.QPushButton('Data')
 
         layout3=myGridLayout()
         layout3.addWidget(self.pushButton0,1,0)
         layout3.addWidget(self.pushButton1,1,1)
         layout3.addWidget(self.pushButton2,1,3)
 
-        self.groupBox3=QtGui.QGroupBox(self.tr('Select Plot Type'))
+        self.groupBox3=QtWidgets.QGroupBox(self.tr('Select Plot Type'))
         self.groupBox3.setLayout(layout3)
 
 ### BUTTON BOX
@@ -642,7 +641,7 @@ class DlgApplyAutoRef(QtWidgets.QWidget):
     def __init__(self,dProject,dProjRef,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.title = QtGui.QLabel(self.tr("<center><b>AUTOMATED ANALYSIS BY REFERENCE</b></center>"))
+        self.title = QtWidgets.QLabel(self.tr("<center><b>AUTOMATED ANALYSIS BY REFERENCE</b></center>"))
         self.name="Automated by Reference"
         self.toolID=1
 
@@ -651,17 +650,14 @@ class DlgApplyAutoRef(QtWidgets.QWidget):
         self.dProjRef=dProjRef
         self.isToolApplied=False
 
-        self.checkBox0=QtGui.QCheckBox("Tools")
-        self.checkBox1=QtGui.QCheckBox("Sequence Alignment")
+        self.checkBox0=QtWidgets.QCheckBox("Tools")
+        self.checkBox1=QtWidgets.QCheckBox("Sequence Alignment")
         self.checkBox0.setChecked(True)
         self.checkBox1.setChecked(True)
 
-
-
-
-        self.pushButton0=QtGui.QPushButton('Reactivity')
-        self.pushButton1=QtGui.QPushButton('Peak Area')
-        self.pushButton2=QtGui.QPushButton('Data')
+        self.pushButton0=QtWidgets.QPushButton('Reactivity')
+        self.pushButton1=QtWidgets.QPushButton('Peak Area')
+        self.pushButton2=QtWidgets.QPushButton('Data')
 
         layout3=myGridLayout()
         layout3.addWidget(self.checkBox0,1,0,1,3)
@@ -670,7 +666,7 @@ class DlgApplyAutoRef(QtWidgets.QWidget):
         layout3.addWidget(self.pushButton1,3,1)
         layout3.addWidget(self.pushButton2,3,3)
 
-        self.groupBox3=QtGui.QGroupBox(self.tr('Select Plot Type'))
+        self.groupBox3=QtWidgets.QGroupBox(self.tr('Select Plot Type'))
         self.groupBox3.setLayout(layout3)
 
 ### BUTTON BOX

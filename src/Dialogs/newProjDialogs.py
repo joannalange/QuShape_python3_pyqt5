@@ -9,7 +9,7 @@ class ButtonWizard(QtWidgets.QWidget):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        # self.cancelButton = QtGui.QPushButton(self.tr("Cancel"))
+        # self.cancelButton = QtWidgets.QPushButton(self.tr("Cancel"))
         self.backButton = QtWidgets.QPushButton(self.tr("< &Back"))
         self.nextButton = QtWidgets.QPushButton(self.tr("Next >"))
         self.doneButton = QtWidgets.QPushButton(self.tr("&Done"))

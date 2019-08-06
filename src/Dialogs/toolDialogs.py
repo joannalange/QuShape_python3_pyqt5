@@ -8,7 +8,7 @@ class DlgToolsAll(QtWidgets.QWidget):
     def __init__(self,dProject,dProjRef,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>APPLY ALL TOOLS</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>APPLY ALL TOOLS</b></center>"))
         self.name="Apply All Tools"
         self.toolID=1
 
@@ -16,8 +16,8 @@ class DlgToolsAll(QtWidgets.QWidget):
         self.dProjOut=deepcopy(dProject)
         self.dProjRef=deepcopy(dProjRef)
 
-        label0 = QtGui.QLabel("Start Point")
-        label1 = QtGui.QLabel("End Point")
+        label0 = QtWidgets.QLabel("Start Point")
+        label1 = QtWidgets.QLabel("End Point")
         start,end=0,len(self.dProject['dData']['RX']) # findRoi(self.dCurData['RXS'])
 
         self.spinBox0 = QtGui.QSpinBox()
@@ -30,21 +30,21 @@ class DlgToolsAll(QtWidgets.QWidget):
         self.spinBox1.setValue(end)
         self.spinBox1.setSingleStep(1)
 
-        layout0=QtGui.QHBoxLayout()
+        layout0=QtWidgets.QHBoxLayout()
         layout0.addWidget(label0)
         layout0.addWidget(self.spinBox0)
         layout0.addWidget(label1)
         layout0.addWidget(self.spinBox1)
 
-        groupBox0=QtGui.QGroupBox('Select Region of Interest')
+        groupBox0=QtWidgets.QGroupBox('Select Region of Interest')
         groupBox0.setLayout(layout0)
 
-        self.checkBox01=QtGui.QCheckBox("Saturation Correction")
-        self.checkBox0=QtGui.QCheckBox("Smoothing Windows Size")
-        self.checkBox1=QtGui.QCheckBox("Mobility Shift")
-        self.checkBox2=QtGui.QCheckBox("Baseline Adjustment Window")
-        self.checkBox3=QtGui.QCheckBox("Signal Decay Correction")
-        self.checkBox4=QtGui.QCheckBox("Signal Alignment")
+        self.checkBox01=QtWidgets.QCheckBox("Saturation Correction")
+        self.checkBox0=QtWidgets.QCheckBox("Smoothing Windows Size")
+        self.checkBox1=QtWidgets.QCheckBox("Mobility Shift")
+        self.checkBox2=QtWidgets.QCheckBox("Baseline Adjustment Window")
+        self.checkBox3=QtWidgets.QCheckBox("Signal Decay Correction")
+        self.checkBox4=QtWidgets.QCheckBox("Signal Alignment")
 
         self.checkBox01.setChecked(True)
         self.checkBox0.setChecked(True)
@@ -72,7 +72,7 @@ class DlgToolsAll(QtWidgets.QWidget):
         layout1.addWidget(self.spinBox4,3,1)
         layout1.addWidget(self.checkBox3,4,0)
         layout1.addWidget(self.checkBox4,5,0)
-        groupBox1=QtGui.QGroupBox('Select Tools')
+        groupBox1=QtWidgets.QGroupBox('Select Tools')
         groupBox1.setLayout(layout1)
 
  ### Button Box
@@ -166,10 +166,10 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
     def __init__(self, dProject,dProjRef,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>REGION OF INTEREST</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>REGION OF INTEREST</b></center>"))
         self.name="Region of Interest"
         self.toolID=1
-        self.hint = QtGui.QLabel(self.tr("HINT: Press Key 'F' button and click the axes to set From. "
+        self.hint = QtWidgets.QLabel(self.tr("HINT: Press Key 'F' button and click the axes to set From. "
                                          "Press Key 'T' button and click the axes  to set To"
                                                                     ))
         self.hint.setWordWrap(True)
@@ -185,17 +185,17 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
         for key in self.dProject['chKeyRS']:
             self.roi[key]=[0,len(self.dProject['dData'][key])]
 
-        labelFrom = QtGui.QLabel("From ")
-        labelTo = QtGui.QLabel("To   ")
+        labelFrom = QtWidgets.QLabel("From ")
+        labelTo = QtWidgets.QLabel("To   ")
 
-        labelPlus=QtGui.QLabel('(+) Reaction')
+        labelPlus=QtWidgets.QLabel('(+) Reaction')
         self.spinBoxPlusFrom=QtGui.QSpinBox()
         self.spinBoxPlusTo=QtGui.QSpinBox()
         self.spinBoxPlusFrom.setRange(0,len(self.dProject['dData']['RX']))
         self.spinBoxPlusTo.setRange(0,len(self.dProject['dData']['RX']))
         self.spinBoxPlusTo.setValue(len(self.dProject['dData']['RX']))
 
-        labelMinus=QtGui.QLabel('(-) Reaction')
+        labelMinus=QtWidgets.QLabel('(-) Reaction')
         self.spinBoxMinusFrom=QtGui.QSpinBox()
         self.spinBoxMinusTo=QtGui.QSpinBox()
         self.spinBoxMinusFrom.setRange(0,len(self.dProject['dData']['BG']))
@@ -212,10 +212,10 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
         layout0.addWidget( self.spinBoxMinusFrom,2,1)
         layout0.addWidget( self.spinBoxMinusTo,2,2)
 
-        self.groupBox0=QtGui.QGroupBox()
+        self.groupBox0=QtWidgets.QGroupBox()
         self.groupBox0.setLayout(layout0)
 
-        self.buttunAuto=QtGui.QPushButton('Auto ROI by Reference')
+        self.buttunAuto=QtWidgets.QPushButton('Auto ROI by Reference')
         self.connect(self.buttunAuto,QtCore.SIGNAL("clicked()"),self.autoFindROI)
 
         if not self.dProject['isRef']:
@@ -272,7 +272,7 @@ class DlgSmooth(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>SMOOTHING</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SMOOTHING</b></center>"))
         self.name="Smooth"
         self.toolID=2
 
@@ -281,16 +281,16 @@ class DlgSmooth(QtWidgets.QWidget):
         self.dProjOut=deepcopy(dProject)
         self.isToolApplied=False
 #Saturation Correction: Analysis of saturated data points by creating a synthetic peak based upon the peak shape before and after saturation.
-        self.checkBoxSatd=QtGui.QCheckBox('Saturation Correction')
+        self.checkBoxSatd=QtWidgets.QCheckBox('Saturation Correction')
         self.checkBoxSatd.setChecked(True)
 ####  Group  Box Radio
-        self.radioButton0 = QtGui.QRadioButton(self.tr("Triangular Moving Aver."))
-        self.radioButton1 = QtGui.QRadioButton(self.tr("Rectangular Moving Aver."))
-        self.radioButton2 = QtGui.QRadioButton(self.tr("Gaussian"))
+        self.radioButton0 = QtWidgets.QRadioButton(self.tr("Triangular Moving Aver."))
+        self.radioButton1 = QtWidgets.QRadioButton(self.tr("Rectangular Moving Aver."))
+        self.radioButton2 = QtWidgets.QRadioButton(self.tr("Gaussian"))
         self.radioButton0.setChecked(True)
 
  #### Window Size
-        windowSizeLabel = QtGui.QLabel("Window Size:")
+        windowSizeLabel = QtWidgets.QLabel("Window Size:")
         self.spinBox1 = QtGui.QSpinBox()
         self.spinBox1.setRange(1, 10)
         self.spinBox1.setValue(1)
@@ -303,7 +303,7 @@ class DlgSmooth(QtWidgets.QWidget):
         layout1.addWidget(windowSizeLabel,3,0)
         layout1.addWidget(self.spinBox1,3,1)
 
-        self.groupBox0 = QtGui.QGroupBox(self.tr("Smoothing"))
+        self.groupBox0 = QtWidgets.QGroupBox(self.tr("Smoothing"))
         self.groupBox0.setCheckable(True)
         self.groupBox0.setLayout(layout1)
 
@@ -361,27 +361,27 @@ class DlgBaseline(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>BASELINE ADJUSTMENT</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>BASELINE ADJUSTMENT</b></center>"))
         self.name="Baseline Adjustment"
         self.toolID=3
 
         self.dProject=dProject
         self.isToolApplied=False
 #### Window Size
-        windowLabel = QtGui.QLabel("Baseline Window:")
+        windowLabel = QtWidgets.QLabel("Baseline Window:")
         self.spinBox0 = QtGui.QSpinBox()
         self.spinBox0.setRange(0,200)
         self.spinBox0.setValue(60)
         self.spinBox0.setSingleStep(1)
 
-        self.smoothCheckBox = QtGui.QCheckBox("Smooth the Baseline Drift")
+        self.smoothCheckBox = QtWidgets.QCheckBox("Smooth the Baseline Drift")
         #self.smoothCheckBox.setChecked(True)
 
         layout2=myGridLayout()
         layout2.addWidget(windowLabel,0,0)
         layout2.addWidget(self.spinBox0,0,1)
         layout2.addWidget(self.smoothCheckBox,1,0)
-        groupBoxParameter = QtGui.QGroupBox()
+        groupBoxParameter = QtWidgets.QGroupBox()
         groupBoxParameter.setLayout(layout2)
 
 ### Button Box
@@ -421,7 +421,7 @@ class DlgSignalDecay(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>SIGNAL DECAY CORRECTION</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SIGNAL DECAY CORRECTION</b></center>"))
         self.name="Signal Decay Correction"
         self.toolID=4
 
@@ -431,15 +431,15 @@ class DlgSignalDecay(QtWidgets.QWidget):
         self.isToolApplied=False
 
 
-        self.spinBox0=QtGui.QDoubleSpinBox()
+        self.spinBox0=QtWidgets.QDoubleSpinBox()
         self.spinBox0.setRange(0,2.0)
         self.spinBox0.setValue(0.2)
         self.spinBox0.setSingleStep(0.1)
 
         ####  Group  Box Radio
-        self.radioButton0 = QtGui.QRadioButton(self.tr(" Automatic Summation "))
-        self.radioButton1 = QtGui.QRadioButton(self.tr("Exponential"))
-        self.radioButton2 = QtGui.QRadioButton(self.tr("Summation       - Factor"))
+        self.radioButton0 = QtWidgets.QRadioButton(self.tr(" Automatic Summation "))
+        self.radioButton1 = QtWidgets.QRadioButton(self.tr("Exponential"))
+        self.radioButton2 = QtWidgets.QRadioButton(self.tr("Summation       - Factor"))
 
         self.radioButton0.setChecked(True)
 
@@ -448,7 +448,7 @@ class DlgSignalDecay(QtWidgets.QWidget):
         layout0.addWidget(self.radioButton1,1,0)
         layout0.addWidget(self.radioButton2,2,0)
         layout0.addWidget(self.spinBox0,2,1)
-        groupBox0 = QtGui.QGroupBox(self.tr("Select a method"))
+        groupBox0 = QtWidgets.QGroupBox(self.tr("Select a method"))
         groupBox0.setLayout(layout0)
 
  ### Button Box
@@ -488,7 +488,7 @@ class DlgMobilityShift(QtWidgets.QWidget):
     def __init__(self,dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.labelTitle = QtGui.QLabel(self.tr("<center><b>MOBILITY SHIFT</b></center>"))
+        self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>MOBILITY SHIFT</b></center>"))
         self.name="Mobility Shift"
         self.toolID=4
 
@@ -497,21 +497,21 @@ class DlgMobilityShift(QtWidgets.QWidget):
         self.dProject=dProject.copy()
         self.isToolApplied=False
 
-        self.radioButton0=QtGui.QRadioButton('Position Similarity')
-        self.radioButton1=QtGui.QRadioButton('Dynamic Programming')
+        self.radioButton0=QtWidgets.QRadioButton('Position Similarity')
+        self.radioButton1=QtWidgets.QRadioButton('Dynamic Programming')
         self.radioButton0.setChecked(True)
 
         layoutMethod=myVBoxLayout()
         layoutMethod.addWidget((self.radioButton0))
         layoutMethod.addWidget(self.radioButton1)
-        self.groupBoxMethod=QtGui.QGroupBox('Select a method')
+        self.groupBoxMethod=QtWidgets.QGroupBox('Select a method')
         self.groupBoxMethod.setLayout(layoutMethod)
 
         self.comboBox0={}
         self.label0={}
         for key in dProject['chKeyRS']:
-            self.label0[key] = QtGui.QLabel(key)
-            self.comboBox0[key]=QtGui.QComboBox()
+            self.label0[key] = QtWidgets.QLabel(key)
+            self.comboBox0[key]=QtWidgets.QComboBox()
             self.comboBox0[key].addItems(dyesName)
             try:
                 self.comboBox0[key].setCurrentIndex(dyesName.index(dProject['dyeN'][key]))
@@ -520,7 +520,7 @@ class DlgMobilityShift(QtWidgets.QWidget):
             if len(self.dProject['dData'][key])==0:
                 self.comboBox0[key].setEnabled(False)
 
-        self.groupBoxRX=QtGui.QGroupBox(self.tr('(+) Reagent'))
+        self.groupBoxRX=QtWidgets.QGroupBox(self.tr('(+) Reagent'))
         self.groupBoxRX.setCheckable(True)
         self.groupBoxRX.setChecked(True)
         layoutRX = myGridLayout()
@@ -534,7 +534,7 @@ class DlgMobilityShift(QtWidgets.QWidget):
 
         self.groupBoxRX.setLayout(layoutRX)
 
-        self.groupBoxBG=QtGui.QGroupBox(self.tr('(-) Reagent)'))
+        self.groupBoxBG=QtWidgets.QGroupBox(self.tr('(-) Reagent)'))
         self.groupBoxBG.setCheckable(True)
         self.groupBoxBG.setChecked(True)
 
@@ -586,7 +586,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
     def __init__(self, dProject,parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        self.title = QtGui.QLabel(self.tr("<center><b>SIGNAL ALIGNMENT</b></center>"))
+        self.title = QtWidgets.QLabel(self.tr("<center><b>SIGNAL ALIGNMENT</b></center>"))
         self.name="Signal Alignment"
         self.toolID=4
 
@@ -597,9 +597,9 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.dataR,self.dataS=np.array([]),np.array([])
         self.isToolApplied=False
 ### Group of ComboBoxes
-        label1=QtGui.QLabel("Seq. Channels")
+        label1=QtWidgets.QLabel("Seq. Channels")
 
-        self.comboBox0=QtGui.QComboBox()
+        self.comboBox0=QtWidgets.QComboBox()
         self.comboBox0.setCurrentIndex(0)
         if self.dProject['isSeq2']:
             choices0= ['RXS1 - BGS1','RXS2 - BGS2']
@@ -611,7 +611,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
         gridLayout0.addWidget(label1, 0, 0)
         gridLayout0.addWidget(self.comboBox0, 0, 1)
 
-        groupBox1=QtGui.QGroupBox('Select Channels to be aligned')
+        groupBox1=QtWidgets.QGroupBox('Select Channels to be aligned')
         groupBox1.setLayout(gridLayout0)
 
         self.button0=peakMatchModifyButton()
@@ -619,10 +619,10 @@ class DlgSignalAlign(QtWidgets.QWidget):
         text=self.tr("HINT: When the matched peaks are modified; Key 'A'  to add a Peak. Key 'D'  to delete a Peak. Key 'Shift' to change position. ")
         self.hint = hintLabel(text)
 
-#        self.button0=QtGui.QPushButton('Modify Matched Peaks')
+#        self.button0=QtWidgets.QPushButton('Modify Matched Peaks')
 #        self.button0.setEnabled(False)
 #
-#        self.hint = QtGui.QLabel(self.tr("HINT: When the matched peaks are modified,"
+#        self.hint = QtWidgets.QLabel(self.tr("HINT: When the matched peaks are modified,"
 #                                         "Press Key 'A' button and click both plots to add a Peak. "
 #                                         "Press Key 'D' button and click to delete a Peak. "
 #                                         "Press Key 'Shift' button and select a peak in BGS to change position. "
