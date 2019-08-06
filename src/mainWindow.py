@@ -14,6 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from funcMainWin import *
 from drawClass import *
 from Dialogs.Functions.funcGeneral import *
+from Dialogs.Functions.funcFile import *
+from Dialogs.editDialogs import *
+from Dialogs.newProjectDialogs import *
 from Dialogs.myStyleSheet import *
 from Dialogs.newProjDialogs import *
 from Dialogs.myWidgets import *
@@ -278,7 +281,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def loadInitialFile(self):
         settings = QtCore.QSettings()
-        fname = unicode(settings.value("LastFile").toString())
+        fname = str(settings.value("LastFile").toString())
         if fname and QtCore.QFile.exists(fname):
             self.projFileName=fname
             self.openProject(self.projFileName)
@@ -700,7 +703,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if projFile is None:
             action = self.sender()
             if isinstance(action, QtGui.QAction):
-                self.projFileName = unicode(action.data().toString())
+                self.projFileName = str(action.data().toString())
                 if not self.okToContinue():
                     return
             else:
@@ -774,7 +777,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def saveFigure(self):
         fname = QtWidgets.QFileDialog.getSaveFileName(self, " ",self.dProject['dir'])
         if fname:
-            #self.canvas.print_figure(unicode(fname))
+            #self.canvas.print_figure(str(fname))
             self.fig.savefig(str(fname))
     def projInfo(self):
         self.dockTool.setWidget(DlgProjInfo(self.dProject))
@@ -1394,7 +1397,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 ##### HELP FUNCTIONS  ######
     def helpAbout(self):
-        QtWidgets.QMessageBox.about(self, "About PyShape",msgAbout)
+        QtWidgets.QMessageBox.about(self, "About PyShape", "bullshit")
     def helpHelp(self):
         indexPage=QtCore.QUrl.fromLocalFile(os.getcwd()+'/Help/index.html')
         QtGui.QDesktopServices.openUrl(indexPage)
