@@ -353,12 +353,12 @@ class DlgReportTable(QtWidgets.QWidget):
         for key in self.dReport.keys():
             self.dReport[key]=self.dReport[key][::-1]
 
-        self.saveTextButton=QtGui.QPushButton("Save as Text")
+        self.saveTextButton = QtGui.QPushButton("Save as Text")
 
         #self.connect(self.saveTextButton,QtCore.SIGNAL('clicked()'),self.saveTextReport)
         self.saveTextButton.clicked.connect(self.saveTextReport)
 
-        self.layout0=QtGui.QHBoxLayout()
+        self.layout0 = QtGui.QHBoxLayout()
         self.layout0.addWidget(self.saveTextButton)
         self.layout0.addStretch()
 

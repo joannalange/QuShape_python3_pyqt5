@@ -88,16 +88,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.qSettings.setValue("workingDir", QtCore.QVariant(self.workingDir))
 
     def createDockWidgets(self):
-        self.dockTool = ToolDock("Tool Inspector",self) #QtGui.QDockWidget("Tool Inspector",self)
+        self.dockTool = ToolDock("Tool Inspector", self) #QtGui.QDockWidget("Tool Inspector",self)
         self.dockTool.setObjectName("dockToolInspector")
         self.newProject()
 
         self.dockScript=QtWidgets.QDockWidget("Script Inspector", self)
         self.dockScript.setObjectName("dockScriptInspector")
-        self.dockScript.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea| QtCore.Qt.RightDockWidgetArea)
+        self.dockScript.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
         self.scriptList = myListWidget()
         self.dockScript.setWidget(self.scriptList)
-        self.dockScript.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea| QtCore.Qt.RightDockWidgetArea)
+        self.dockScript.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
 
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dockTool)
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dockScript)
@@ -1379,7 +1379,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resizeFigure()
     def editFigSet(self):
         self.dlgChannel = DlgFigureSet(self.dVar,self.dProject['chKeyRS'])
-        self.connect(self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.applyFigSet)
+        #self.connect(self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.applyFigSet)
+        self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.applyFigSet)
         self.dlgChannel.show()
 
 ##### HELP FUNCTIONS  ######
