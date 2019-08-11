@@ -119,7 +119,7 @@ def optimalWarpingPath(dtw):
 
 def pathAppend0(dtw, i, j):
     # classical Path append
-    argM=argmin3(dtw[i-1, j-1], dtw[i-1, j], dtw[i, j-1])
+    argM = argmin3(dtw[i-1, j-1], dtw[i-1, j], dtw[i, j-1])
     if argM==0:
         i=i-1
         j=j-1
@@ -129,7 +129,9 @@ def pathAppend0(dtw, i, j):
         j=j-1
     return i, j
 
-def pathAppend1(dtw, i, j, argM):
+def pathAppend1(dtw, i, j, argM=None):
+    if argM is None:
+        argM = argmin3(dtw[i-1, j-1], dtw[i-1, j], dtw[i, j-1])
     # GAP  Path append
     argM[0]=argM[1]
     argM[1]=argM[2]
@@ -334,7 +336,7 @@ def accumulatedCostMatrixLocal(X, Y, costM):
 def optimalWarpingPathLocal(dtw):
     pathX, pathY=[], []
     i=dtw.shape[0]-1
-    j=dtw.shape[1]-1
+    # j=dtw.shape[1]-1
     # Modifications for LOCAL
     j=np.argmin(dtw[i, :])
 
@@ -355,14 +357,14 @@ def optimalWarpingPathLocal(dtw):
 def optimalWarpingPathLocal2(dtw):
     pathX, pathY=np.array([]), np.array([])
     i=dtw.shape[0]-1
-    j=dtw.shape[1]-1
+    # j=dtw.shape[1]-1
     # Modifications for LOCAL
     j=np.argmin(dtw[i, :])
 
     pathX=np.append(pathX, i)
     pathY=np.append(pathY, j)
     while i>0 and j>0:
-        i, j, argM = pathAppend1(dtw, i, j)
+        i, j, argM = pathAppend1(dtw, i, j, argM)
 
         pathX=np.append(pathX, i)
         pathY=np.append(pathY, j)
@@ -519,7 +521,7 @@ def autoROIwDTW(sampleData, refData):
 #     axes1.plot(pathNo[:, 0], pathNo[:, 1], 'r')
 # #    axes1.plot(dtw2No, dtw3No, 'b')
 
-    plt.show()
+#    plt.show()
 
 #### TESTING MYDTW AND MLPY DTW
 #    t1=time.clock()
