@@ -199,10 +199,10 @@ class DlgScale(QtWidgets.QWidget):
         self.dProjOut['dData'] = self.dOutput
         self.isToolApplied = True
 
-    def autoScale(self):
-        dScaleFactor = scaleAllShapeData(self.dProject['dData'])
-        for key in self.dProject['chKeyRS']:
-            self.doubleSpinBox0[key].setValue(dScaleFactor[key])
+    # def autoScale(self):
+    #     dScaleFactor = scaleAllShapeData(self.dProject['dData'])
+    #     for key in self.dProject['chKeyRS']:
+    #         self.doubleSpinBox0[key].setValue(dScaleFactor[key])
 
 
 class DlgOpenABIFFile(QtWidgets.QWidget):
