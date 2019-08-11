@@ -1,7 +1,3 @@
-import os
-import sys
-from PyQt5 import QtGui, QtCore, QtWidgets
-
 from mainWindow import *
 
 if __name__ == '__main__':
@@ -9,8 +5,8 @@ if __name__ == '__main__':
     app.setOrganizationName("Week Lab")
     app.setOrganizationDomain("http://www.chem.unc.edu/rna/")
     app.setApplicationName("QuShape")
-    app.setStyle(QtWidgets.QStyleFactory.create('Cleanlooks'))  
-    iconFileName=os.getcwd()+"/Icons/QuShapeIcon.png"
+    app.setStyle(QtWidgets.QStyleFactory.create('Cleanlooks'))
+    iconFileName = os.getcwd() + "/Icons/QuShapeIcon.png"
     app.setWindowIcon(QtGui.QIcon(iconFileName))
     form = MainWindow()
     form.show()

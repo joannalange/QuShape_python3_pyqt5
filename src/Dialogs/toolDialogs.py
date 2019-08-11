@@ -1,7 +1,5 @@
-from PyQt5 import QtGui, QtCore, QtWidgets
-
-from .myWidgets import * #GroupBoxROI, ApplyChannel, ToolButton
-from .Functions import * # smoothRect, smoothTriangle, smoothGaussian, DData, chKeysRS, enhance, baselineAdjust
+from .Functions import *  # smoothRect, smoothTriangle, smoothGaussian, DData, chKeysRS, enhance, baselineAdjust
+from .myWidgets import *  # GroupBoxROI, ApplyChannel, ToolButton
 
 
 class DlgToolsAll(QtWidgets.QWidget):
@@ -9,16 +7,16 @@ class DlgToolsAll(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>APPLY ALL TOOLS</b></center>"))
-        self.name="Apply All Tools"
-        self.toolID=1
+        self.name = "Apply All Tools"
+        self.toolID = 1
 
-        self.dProject=dProject
-        self.dProjOut=deepcopy(dProject)
-        self.dProjRef=deepcopy(dProjRef)
+        self.dProject = dProject
+        self.dProjOut = deepcopy(dProject)
+        self.dProjRef = deepcopy(dProjRef)
 
         label0 = QtWidgets.QLabel("Start Point")
         label1 = QtWidgets.QLabel("End Point")
-        start, end=0, len(self.dProject['dData']['RX']) # findRoi(self.dCurData['RXS'])
+        start, end = 0, len(self.dProject['dData']['RX'])  # findRoi(self.dCurData['RXS'])
 
         self.spinBox0 = QtWidgets.QSpinBox()
         self.spinBox0.setRange(0, len(self.dProject['dData']['RX']))
@@ -30,21 +28,21 @@ class DlgToolsAll(QtWidgets.QWidget):
         self.spinBox1.setValue(end)
         self.spinBox1.setSingleStep(1)
 
-        layout0=QtWidgets.QHBoxLayout()
+        layout0 = QtWidgets.QHBoxLayout()
         layout0.addWidget(label0)
         layout0.addWidget(self.spinBox0)
         layout0.addWidget(label1)
         layout0.addWidget(self.spinBox1)
 
-        groupBox0=QtWidgets.QGroupBox('Select Region of Interest')
+        groupBox0 = QtWidgets.QGroupBox('Select Region of Interest')
         groupBox0.setLayout(layout0)
 
-        self.checkBox01=QtWidgets.QCheckBox("Saturation Correction")
-        self.checkBox0=QtWidgets.QCheckBox("Smoothing Windows Size")
-        self.checkBox1=QtWidgets.QCheckBox("Mobility Shift")
-        self.checkBox2=QtWidgets.QCheckBox("Baseline Adjustment Window")
-        self.checkBox3=QtWidgets.QCheckBox("Signal Decay Correction")
-        self.checkBox4=QtWidgets.QCheckBox("Signal Alignment")
+        self.checkBox01 = QtWidgets.QCheckBox("Saturation Correction")
+        self.checkBox0 = QtWidgets.QCheckBox("Smoothing Windows Size")
+        self.checkBox1 = QtWidgets.QCheckBox("Mobility Shift")
+        self.checkBox2 = QtWidgets.QCheckBox("Baseline Adjustment Window")
+        self.checkBox3 = QtWidgets.QCheckBox("Signal Decay Correction")
+        self.checkBox4 = QtWidgets.QCheckBox("Signal Alignment")
 
         self.checkBox01.setChecked(True)
         self.checkBox0.setChecked(True)
@@ -63,7 +61,7 @@ class DlgToolsAll(QtWidgets.QWidget):
         self.spinBox4.setValue(60)
         self.spinBox4.setSingleStep(1)
 
-        layout1=QtGui.QGridLayout()
+        layout1 = QtGui.QGridLayout()
         layout1.addWidget(self.checkBox01, 0, 0)
         layout1.addWidget(self.checkBox0, 1, 0)
         layout1.addWidget(self.spinBox2, 1, 1)
@@ -72,10 +70,10 @@ class DlgToolsAll(QtWidgets.QWidget):
         layout1.addWidget(self.spinBox4, 3, 1)
         layout1.addWidget(self.checkBox3, 4, 0)
         layout1.addWidget(self.checkBox4, 5, 0)
-        groupBox1=QtWidgets.QGroupBox('Select Tools')
+        groupBox1 = QtWidgets.QGroupBox('Select Tools')
         groupBox1.setLayout(layout1)
 
- ### Button Box
+        ### Button Box
         self.buttonBox = ToolButton()
 
         mainLayout = QtWidgets.QVBoxLayout()
@@ -85,81 +83,83 @@ class DlgToolsAll(QtWidgets.QWidget):
         mainLayout.addStretch()
         mainLayout.addWidget(self.buttonBox)
         self.setLayout(mainLayout)
-        self.isToolApplied=False
+        self.isToolApplied = False
 
     def apply1(self):
-        self.dProjOut=applyAllToolsAuto1(self.dProject, self.dProjRef)
+        self.dProjOut = applyAllToolsAuto1(self.dProject, self.dProjRef)
 
-#        self.dProjOut=deepcopy(self.dProject)
-#        self.dOutput=self.dProjOut['dData']
-#
-#        key='BG'
-#        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key], self.dProjOut['Satd'][key])
-#
-#        key='RX'
-#        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key], self.dProjOut['Satd'][key])
-        self.isToolApplied=True
+        #        self.dProjOut=deepcopy(self.dProject)
+        #        self.dOutput=self.dProjOut['dData']
+        #
+        #        key='BG'
+        #        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key], self.dProjOut[
+        # 'Satd'][key])
+        #
+        #        key='RX'
+        #        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key], self.dProjOut[
+        # 'Satd'][key])
+        self.isToolApplied = True
 
     def apply(self):
-        self.dProjOut=deepcopy(self.dProject)
-        self.dOutput=self.dProjOut['dData']
+        self.dProjOut = deepcopy(self.dProject)
+        self.dOutput = self.dProjOut['dData']
 
-### Select Region of Interest
-        roiStart=self.spinBox0.value() #1700
-        roiEnd=self.spinBox1.value() #7500
+        ### Select Region of Interest
+        roiStart = self.spinBox0.value()  # 1700
+        roiEnd = self.spinBox1.value()  # 7500
 
         for key in self.dProject['dData'].keys():
-            if len(self.dProject['dData'][key])>0:
-                self.dOutput[key]=self.dProject['dData'][key][roiStart:roiEnd]
+            if len(self.dProject['dData'][key]) > 0:
+                self.dOutput[key] = self.dProject['dData'][key][roiStart:roiEnd]
 
-### SATURATION CORRECTION
+        ### SATURATION CORRECTION
         if self.checkBox01.isChecked():
-                for key in self.dProject['chKeyRX']:
-                    self.dOutput[key]=correctSatd(self.dOutput[key], self.dProject['Satd']['RX'])
-                for key in self.dProject['chKeyBG']:
-                    self.dOutput[key]=correctSatd(self.dOutput[key], self.dProject['Satd']['BG'])
-                self.dProject['isSatd']=True
+            for key in self.dProject['chKeyRX']:
+                self.dOutput[key] = correctSatd(self.dOutput[key], self.dProject['Satd']['RX'])
+            for key in self.dProject['chKeyBG']:
+                self.dOutput[key] = correctSatd(self.dOutput[key], self.dProject['Satd']['BG'])
+            self.dProject['isSatd'] = True
 
-### SMOOTHING
+        ### SMOOTHING
         if self.checkBox0.isChecked():
-            self.smoothWindow=self.spinBox2.value()
+            self.smoothWindow = self.spinBox2.value()
             for key in self.dProject['dData'].keys():
-                if len(self.dProject['dData'][key])>0:
-                    self.dOutput[key]=smoothTriangle(self.dOutput[key], self.smoothWindow)
+                if len(self.dProject['dData'][key]) > 0:
+                    self.dOutput[key] = smoothTriangle(self.dOutput[key], self.smoothWindow)
 
-### MOBILITY SHIFT
+        ### MOBILITY SHIFT
         if self.checkBox1.isChecked():
-            dyeNR=self.dProject['dyeN']['RX']
-            dyeNS=self.dProject['dyeN']['RXS1']
-            self.dOutput['RXS1']=fMobilityShift(self.dOutput['RX'], self.dOutput['RXS1'], dyeNR, dyeNS)
+            dyeNR = self.dProject['dyeN']['RX']
+            dyeNS = self.dProject['dyeN']['RXS1']
+            self.dOutput['RXS1'] = fMobilityShift(self.dOutput['RX'], self.dOutput['RXS1'], dyeNR, dyeNS)
             if 'RXS2' in self.dProject['dData'].keys():
-                dyeWS=dDyesWL[self.dProject['dyeN']['RXS2']]
-                self.dOutput['RXS2']=fMobilityShift(self.dOutput['RX'], self.dOutput['RXS2'], dyeNR, dyeNS)
+                dyeWS = dDyesWL[self.dProject['dyeN']['RXS2']]
+                self.dOutput['RXS2'] = fMobilityShift(self.dOutput['RX'], self.dOutput['RXS2'], dyeNR, dyeNS)
 
-            dyeNR=self.dProject['dyeN']['BG']
-            dyeNS=self.dProject['dyeN']['BGS1']
-            self.dOutput['BGS1']=fMobilityShift(self.dOutput['BG'], self.dOutput['BGS1'], dyeNR, dyeNS)
+            dyeNR = self.dProject['dyeN']['BG']
+            dyeNS = self.dProject['dyeN']['BGS1']
+            self.dOutput['BGS1'] = fMobilityShift(self.dOutput['BG'], self.dOutput['BGS1'], dyeNR, dyeNS)
             if 'BGS2' in self.dProject['dData'].keys():
-                dyeWS=dDyesWL[self.dProject['dyeN']['BGS2']]
-                self.dOutput['BGS2']=fMobilityShift(self.dOutput['BG'], self.dOutput['BGS2'], dyeNR, dyeNS)
-### BASELINE ADJUSTMENT
+                dyeWS = dDyesWL[self.dProject['dyeN']['BGS2']]
+                self.dOutput['BGS2'] = fMobilityShift(self.dOutput['BG'], self.dOutput['BGS2'], dyeNR, dyeNS)
+        ### BASELINE ADJUSTMENT
         if self.checkBox2.isChecked():
-            self.baselineWindow=self.spinBox4.value()
+            self.baselineWindow = self.spinBox4.value()
             for key in self.dProject['dData'].keys():
-                if len(self.dProject['dData'][key])>0:
-                    self.dOutput[key]=baselineAdjust(self.dOutput[key], self.baselineWindow)
-### SIGNAL DECAY
+                if len(self.dProject['dData'][key]) > 0:
+                    self.dOutput[key] = baselineAdjust(self.dOutput[key], self.baselineWindow)
+        ### SIGNAL DECAY
         if self.checkBox3.isChecked():
             for key in self.dProject['dData'].keys():
-                self.dOutput[key]=autoDecaySum(self.dOutput[key])
-### SIGNAL ALIGNMENT
+                self.dOutput[key] = autoDecaySum(self.dOutput[key])
+        ### SIGNAL ALIGNMENT
         if self.checkBox4.isChecked():
-            self.dProjOut['dData']=self.dOutput.copy()
-            usedSeq=['RXS1', 'BGS1', 'RXS2', 'BGS2']
-            linkX0, linkX1=dtwAlign2Cap(self.dProjOut, usedSeq)
-            self.dProjOut=splineCap(self.dProjOut, usedSeq, linkX0, linkX1)
+            self.dProjOut['dData'] = self.dOutput.copy()
+            usedSeq = ['RXS1', 'BGS1', 'RXS2', 'BGS2']
+            linkX0, linkX1 = dtwAlign2Cap(self.dProjOut, usedSeq)
+            self.dProjOut = splineCap(self.dProjOut, usedSeq, linkX0, linkX1)
 
-        self.isToolApplied=True
+        self.isToolApplied = True
 
 
 class DlgRegionOfInterest(QtWidgets.QWidget):
@@ -167,62 +167,62 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>REGION OF INTEREST</b></center>"))
-        self.name="Region of Interest"
-        self.toolID=1
+        self.name = "Region of Interest"
+        self.toolID = 1
         self.hint = QtWidgets.QLabel(self.tr("HINT: Press Key 'F' button and click the axes to set From. "
-                                         "Press Key 'T' button and click the axes  to set To"
-                                                                    ))
+                                             "Press Key 'T' button and click the axes  to set To"
+                                             ))
         self.hint.setWordWrap(True)
         self.font = QtGui.QFont()
         self.font.setPointSize(10)
         self.hint.setFont(self.font)
-        self.dProject=dProject
-        self.dProjRef=dProjRef
-        self.dProjOut=deepcopy(dProject)
-        self.isToolApplied=False
+        self.dProject = dProject
+        self.dProjRef = dProjRef
+        self.dProjOut = deepcopy(dProject)
+        self.isToolApplied = False
 
-        self.roi={}
+        self.roi = {}
         for key in self.dProject['chKeyRS']:
-            self.roi[key]=[0, len(self.dProject['dData'][key])]
+            self.roi[key] = [0, len(self.dProject['dData'][key])]
 
         labelFrom = QtWidgets.QLabel("From ")
         labelTo = QtWidgets.QLabel("To   ")
 
-        labelPlus=QtWidgets.QLabel('(+) Reaction')
-        self.spinBoxPlusFrom=QtWidgets.QSpinBox()
-        self.spinBoxPlusTo=QtWidgets.QSpinBox()
+        labelPlus = QtWidgets.QLabel('(+) Reaction')
+        self.spinBoxPlusFrom = QtWidgets.QSpinBox()
+        self.spinBoxPlusTo = QtWidgets.QSpinBox()
         self.spinBoxPlusFrom.setRange(0, len(self.dProject['dData']['RX']))
         self.spinBoxPlusTo.setRange(0, len(self.dProject['dData']['RX']))
         self.spinBoxPlusTo.setValue(len(self.dProject['dData']['RX']))
 
-        labelMinus=QtWidgets.QLabel('(-) Reaction')
-        self.spinBoxMinusFrom=QtWidgets.QSpinBox()
-        self.spinBoxMinusTo=QtWidgets.QSpinBox()
+        labelMinus = QtWidgets.QLabel('(-) Reaction')
+        self.spinBoxMinusFrom = QtWidgets.QSpinBox()
+        self.spinBoxMinusTo = QtWidgets.QSpinBox()
         self.spinBoxMinusFrom.setRange(0, len(self.dProject['dData']['BG']))
         self.spinBoxMinusTo.setRange(0, len(self.dProject['dData']['BG']))
         self.spinBoxMinusTo.setValue(len(self.dProject['dData']['BG']))
 
-        layout0=myGridLayout()
+        layout0 = myGridLayout()
         layout0.addWidget(labelFrom, 0, 1)
         layout0.addWidget(labelTo, 0, 2)
         layout0.addWidget(labelPlus, 1, 0)
-        layout0.addWidget( self.spinBoxPlusFrom, 1, 1)
-        layout0.addWidget( self.spinBoxPlusTo, 1, 2)
+        layout0.addWidget(self.spinBoxPlusFrom, 1, 1)
+        layout0.addWidget(self.spinBoxPlusTo, 1, 2)
         layout0.addWidget(labelMinus, 2, 0)
-        layout0.addWidget( self.spinBoxMinusFrom, 2, 1)
-        layout0.addWidget( self.spinBoxMinusTo, 2, 2)
+        layout0.addWidget(self.spinBoxMinusFrom, 2, 1)
+        layout0.addWidget(self.spinBoxMinusTo, 2, 2)
 
-        self.groupBox0=QtWidgets.QGroupBox()
+        self.groupBox0 = QtWidgets.QGroupBox()
         self.groupBox0.setLayout(layout0)
 
-        self.buttunAuto=QtWidgets.QPushButton('Auto ROI by Reference')
+        self.buttunAuto = QtWidgets.QPushButton('Auto ROI by Reference')
         self.connect(self.buttunAuto, QtCore.SIGNAL("clicked()"), self.autoFindROI)
 
         if not self.dProject['isRef']:
             self.buttunAuto.setEnabled(False)
         self.buttonBox = ToolButton()
 
-        mainLayout=QtWidgets.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.labelTitle)
         mainLayout.addWidget(self.groupBox0)
         mainLayout.addWidget(self.buttunAuto)
@@ -233,63 +233,63 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
     def autoFindROI(self):
-        data0=self.dProject['dData']['RXS1']
-        data1=self.dProjRef['dData']['RXS1']
-        startRX, endRX=autoROIwDTW(data0, data1)
+        data0 = self.dProject['dData']['RXS1']
+        data1 = self.dProjRef['dData']['RXS1']
+        startRX, endRX = autoROIwDTW(data0, data1)
         self.spinBoxPlusFrom.setValue(startRX)
         self.spinBoxPlusTo.setValue(endRX)
 
-        data0=self.dProject['dData']['BGS1']
-        data1=self.dProjRef['dData']['BGS1']
-        startBG, endBG=autoROIwDTW(data0, data1)
+        data0 = self.dProject['dData']['BGS1']
+        data1 = self.dProjRef['dData']['BGS1']
+        startBG, endBG = autoROIwDTW(data0, data1)
         self.spinBoxMinusFrom.setValue(startBG)
         self.spinBoxMinusTo.setValue(endBG)
 
     def apply(self):
         for key in ['RX', 'BG']:
-            if key=='RX':# in self.dProject['chKeyRX']:
-                start=self.spinBoxPlusFrom.value()
-                end=self.spinBoxPlusTo.value()
+            if key == 'RX':  # in self.dProject['chKeyRX']:
+                start = self.spinBoxPlusFrom.value()
+                end = self.spinBoxPlusTo.value()
             else:
-                start=self.spinBoxMinusFrom.value()
-                end=self.spinBoxMinusTo.value()
-            if end<start:
-                message="Start should be lower than End"
+                start = self.spinBoxMinusFrom.value()
+                end = self.spinBoxMinusTo.value()
+            if end < start:
+                message = "Start should be lower than End"
                 QtWidgets.QMessageBox.warning(self, 'Warning', message)
             else:
-                self.roi[key]=[start, end]
-        self.isToolApplied=True
+                self.roi[key] = [start, end]
+        self.isToolApplied = True
 
     def done(self):
         for key in self.dProject['chKeyRX']:
-            self.dProjOut['dData'][key]=self.dProject['dData'][key][self.roi['RX'][0]:self.roi['RX'][1]]
+            self.dProjOut['dData'][key] = self.dProject['dData'][key][self.roi['RX'][0]:self.roi['RX'][1]]
         for key in self.dProject['chKeyBG']:
-                self.dProjOut['dData'][key]=self.dProject['dData'][key][self.roi['BG'][0]:self.roi['BG'][1]]
+            self.dProjOut['dData'][key] = self.dProject['dData'][key][self.roi['BG'][0]:self.roi['BG'][1]]
         self.dProjOut['Satd']['RX'] = fNewSatd(self.dProject['Satd']['RX'], self.roi['RX'][0], self.roi['RX'][1])
         self.dProjOut['Satd']['BG'] = fNewSatd(self.dProject['Satd']['BG'], self.roi['BG'][0], self.roi['BG'][1])
+
 
 class DlgSmooth(QtWidgets.QWidget):
     def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SMOOTHING</b></center>"))
-        self.name="Smooth"
-        self.toolID=2
+        self.name = "Smooth"
+        self.toolID = 2
 
-
-        self.dProject=dProject
-        self.dProjOut=deepcopy(dProject)
-        self.isToolApplied=False
-#Saturation Correction: Analysis of saturated data points by creating a synthetic peak based upon the peak shape before and after saturation.
-        self.checkBoxSatd=QtWidgets.QCheckBox('Saturation Correction')
+        self.dProject = dProject
+        self.dProjOut = deepcopy(dProject)
+        self.isToolApplied = False
+        # Saturation Correction: Analysis of saturated data points by creating a synthetic peak based upon the peak shape before and after saturation.
+        self.checkBoxSatd = QtWidgets.QCheckBox('Saturation Correction')
         self.checkBoxSatd.setChecked(True)
-####  Group  Box Radio
+        ####  Group  Box Radio
         self.radioButton0 = QtWidgets.QRadioButton(self.tr("Triangular Moving Aver."))
         self.radioButton1 = QtWidgets.QRadioButton(self.tr("Rectangular Moving Aver."))
         self.radioButton2 = QtWidgets.QRadioButton(self.tr("Gaussian"))
         self.radioButton0.setChecked(True)
 
- #### Window Size
+        #### Window Size
         windowSizeLabel = QtWidgets.QLabel("Window Size:")
         self.spinBox1 = QtWidgets.QSpinBox()
         self.spinBox1.setRange(1, 10)
@@ -307,14 +307,14 @@ class DlgSmooth(QtWidgets.QWidget):
         self.groupBox0.setCheckable(True)
         self.groupBox0.setLayout(layout1)
 
-### Button Box
+        ### Button Box
 
-        self.buttonBox =ToolButton()
+        self.buttonBox = ToolButton()
 
-        self.groupBoxROI=GroupBoxROI(self.dProject)
-        self.applyChannel=ApplyChannel(self.dProject)
+        self.groupBoxROI = GroupBoxROI(self.dProject)
+        self.applyChannel = ApplyChannel(self.dProject)
 
-        mainLayout=QtWidgets.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.labelTitle)
         mainLayout.addWidget(self.checkBoxSatd)
         mainLayout.addWidget(self.groupBox0)
@@ -326,48 +326,49 @@ class DlgSmooth(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
     def apply(self):
-        self.dProjOut=deepcopy(self.dProject)
-        winSize=self.spinBox1.value()
+        self.dProjOut = deepcopy(self.dProject)
+        winSize = self.spinBox1.value()
         try:
             if self.checkBoxSatd.isChecked():
                 for key in self.dProject['chKeyRX']:
-                    self.dProjOut['dData'][key]=correctSatd(self.dProject['dData'][key], self.dProject['Satd']['RX'])
+                    self.dProjOut['dData'][key] = correctSatd(self.dProject['dData'][key], self.dProject['Satd']['RX'])
                 for key in self.dProject['chKeyBG']:
-                    self.dProjOut['dData'][key]=correctSatd(self.dProject['dData'][key], self.dProject['Satd']['BG'])
-                self.dProject['isSatd']=True
+                    self.dProjOut['dData'][key] = correctSatd(self.dProject['dData'][key], self.dProject['Satd']['BG'])
+                self.dProject['isSatd'] = True
         except:
-            self.dOutput=self.dProject['dData'].copy()
+            self.dOutput = self.dProject['dData'].copy()
 
         if self.groupBox0.isChecked():
             for key in self.dProject['chKeyRS']:
                 if self.applyChannel.checkBox0[key].isChecked():
                     if self.groupBoxROI.groupBox.isChecked():
-                        fromP=self.groupBoxROI.fromSpinBox.value()
-                        toP=self.groupBoxROI.toSpinBox.value()
+                        fromP = self.groupBoxROI.fromSpinBox.value()
+                        toP = self.groupBoxROI.toSpinBox.value()
                     else:
-                        fromP=0
-                        toP=len(self.dProjOut['dData'][key])
+                        fromP = 0
+                        toP = len(self.dProjOut['dData'][key])
                     if self.radioButton0.isChecked():
-                        method='triangle'
+                        method = 'triangle'
                     elif self.radioButton1.isChecked():
-                        method='rectangle'
+                        method = 'rectangle'
                     elif self.radioButton2.isChecked():
-                        method='gaussian'
+                        method = 'gaussian'
 
-                    self.dProjOut['dData'][key][fromP:toP]=fSmooth(self.dProjOut['dData'][key][fromP:toP], winSize, method)
-        self.isToolApplied=True
+                    self.dProjOut['dData'][key][fromP:toP] = fSmooth(self.dProjOut['dData'][key][fromP:toP], winSize, method)
+        self.isToolApplied = True
+
 
 class DlgBaseline(QtWidgets.QWidget):
     def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>BASELINE ADJUSTMENT</b></center>"))
-        self.name="Baseline Adjustment"
-        self.toolID=3
+        self.name = "Baseline Adjustment"
+        self.toolID = 3
 
-        self.dProject=dProject
-        self.isToolApplied=False
-#### Window Size
+        self.dProject = dProject
+        self.isToolApplied = False
+        #### Window Size
         windowLabel = QtWidgets.QLabel("Baseline Window:")
         self.spinBox0 = QtWidgets.QSpinBox()
         self.spinBox0.setRange(0, 200)
@@ -375,22 +376,22 @@ class DlgBaseline(QtWidgets.QWidget):
         self.spinBox0.setSingleStep(1)
 
         self.smoothCheckBox = QtWidgets.QCheckBox("Smooth the Baseline Drift")
-        #self.smoothCheckBox.setChecked(True)
+        # self.smoothCheckBox.setChecked(True)
 
-        layout2=myGridLayout()
+        layout2 = myGridLayout()
         layout2.addWidget(windowLabel, 0, 0)
         layout2.addWidget(self.spinBox0, 0, 1)
         layout2.addWidget(self.smoothCheckBox, 1, 0)
         groupBoxParameter = QtWidgets.QGroupBox()
         groupBoxParameter.setLayout(layout2)
 
-### Button Box
+        ### Button Box
         self.buttonBox = ToolButton()
 
-        self.groupBoxROI=GroupBoxROI(self.dProject)
-        self.applyChannel=ApplyChannel(self.dProject)
+        self.groupBoxROI = GroupBoxROI(self.dProject)
+        self.applyChannel = ApplyChannel(self.dProject)
 
-        mainLayout=QtWidgets.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.labelTitle)
         mainLayout.addWidget(groupBoxParameter)
         mainLayout.addWidget(self.groupBoxROI.groupBox)
@@ -400,21 +401,20 @@ class DlgBaseline(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
     def apply(self):
-        self.dProjOut=deepcopy(self.dProject)
-        windowSize=self.spinBox0.value()
-        isSmooth=self.smoothCheckBox.isChecked()
+        self.dProjOut = deepcopy(self.dProject)
+        windowSize = self.spinBox0.value()
+        isSmooth = self.smoothCheckBox.isChecked()
         for key in self.dProject['dData'].keys():
             if self.applyChannel.checkBox0[key].isChecked():
                 if self.groupBoxROI.groupBox.isChecked():
-                    fromP=self.groupBoxROI.fromSpinBox.value()
-                    toP=self.groupBoxROI.toSpinBox.value()
+                    fromP = self.groupBoxROI.fromSpinBox.value()
+                    toP = self.groupBoxROI.toSpinBox.value()
                 else:
-                    fromP=0
-                    toP=len(self.dProjOut['dData'][key])
+                    fromP = 0
+                    toP = len(self.dProjOut['dData'][key])
 
-
-                self.dProjOut['dData'][key][fromP:toP]=baselineAdjust(self.dProject['dData'][key][fromP:toP], windowSize, isSmooth)
-        self.isToolApplied=True
+                self.dProjOut['dData'][key][fromP:toP] = baselineAdjust(self.dProject['dData'][key][fromP:toP], windowSize, isSmooth)
+        self.isToolApplied = True
 
 
 class DlgSignalDecay(QtWidgets.QWidget):
@@ -422,16 +422,15 @@ class DlgSignalDecay(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SIGNAL DECAY CORRECTION</b></center>"))
-        self.name="Signal Decay Correction"
-        self.toolID=4
+        self.name = "Signal Decay Correction"
+        self.toolID = 4
 
-        self.dProject=dProject
-        self.dOutput=dProject['dData'].copy()
-        self.dProjOut=deepcopy(dProject)
-        self.isToolApplied=False
+        self.dProject = dProject
+        self.dOutput = dProject['dData'].copy()
+        self.dProjOut = deepcopy(dProject)
+        self.isToolApplied = False
 
-
-        self.spinBox0=QtWidgets.QDoubleSpinBox()
+        self.spinBox0 = QtWidgets.QDoubleSpinBox()
         self.spinBox0.setRange(0, 2.0)
         self.spinBox0.setValue(0.2)
         self.spinBox0.setSingleStep(0.1)
@@ -451,12 +450,12 @@ class DlgSignalDecay(QtWidgets.QWidget):
         groupBox0 = QtWidgets.QGroupBox(self.tr("Select a method"))
         groupBox0.setLayout(layout0)
 
- ### Button Box
+        ### Button Box
         self.buttonBox = ToolButton()
-        self.groupBoxROI=GroupBoxROI(self.dProject)
-        self.applyChannel=ApplyChannel(self.dProject)
-### Main Layout
-        mainLayout=QtWidgets.QVBoxLayout()
+        self.groupBoxROI = GroupBoxROI(self.dProject)
+        self.applyChannel = ApplyChannel(self.dProject)
+        ### Main Layout
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.labelTitle)
         mainLayout.addWidget(groupBox0)
         mainLayout.addWidget(self.groupBoxROI.groupBox)
@@ -467,60 +466,62 @@ class DlgSignalDecay(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
     def apply(self):
-        self.dProjOut=deepcopy(self.dProject)
-        self.expF={}
+        self.dProjOut = deepcopy(self.dProject)
+        self.expF = {}
         for key in self.dProject['dData'].keys():
             if self.applyChannel.checkBox0[key].isChecked():
                 if self.groupBoxROI.groupBox.isChecked():
-                    fromP=self.groupBoxROI.fromSpinBox.value()
-                    toP=self.groupBoxROI.toSpinBox.value()
+                    fromP = self.groupBoxROI.fromSpinBox.value()
+                    toP = self.groupBoxROI.toSpinBox.value()
                 else:
-                    fromP=0
-                    toP=len(self.dProjOut['dData'][key])
+                    fromP = 0
+                    toP = len(self.dProjOut['dData'][key])
                 if self.radioButton0.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP]=autoDecaySum(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP] = autoDecaySum(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton1.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP], self.expF[key]=decayCorrectionExp(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP], self.expF[key] = decayCorrectionExp(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton2.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP]=decaySum(self.dProject['dData'][key][fromP:toP], self.spinBox0.value())
-        self.isToolApplied=True
+                    self.dProjOut['dData'][key][fromP:toP] = decaySum(self.dProject['dData'][key][fromP:toP], self.spinBox0.value())
+        self.isToolApplied = True
+
+
 class DlgMobilityShift(QtWidgets.QWidget):
     def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>MOBILITY SHIFT</b></center>"))
-        self.name="Mobility Shift"
-        self.toolID=4
+        self.name = "Mobility Shift"
+        self.toolID = 4
 
-        self.dProject=dProject
-        self.dProjOut=deepcopy(dProject)
-        self.dProject=dProject.copy()
-        self.isToolApplied=False
+        self.dProject = dProject
+        self.dProjOut = deepcopy(dProject)
+        self.dProject = dProject.copy()
+        self.isToolApplied = False
 
-        self.radioButton0=QtWidgets.QRadioButton('Position Similarity')
-        self.radioButton1=QtWidgets.QRadioButton('Dynamic Programming')
+        self.radioButton0 = QtWidgets.QRadioButton('Position Similarity')
+        self.radioButton1 = QtWidgets.QRadioButton('Dynamic Programming')
         self.radioButton0.setChecked(True)
 
-        layoutMethod=myVBoxLayout()
+        layoutMethod = myVBoxLayout()
         layoutMethod.addWidget((self.radioButton0))
         layoutMethod.addWidget(self.radioButton1)
-        self.groupBoxMethod=QtWidgets.QGroupBox('Select a method')
+        self.groupBoxMethod = QtWidgets.QGroupBox('Select a method')
         self.groupBoxMethod.setLayout(layoutMethod)
 
-        self.comboBox0={}
-        self.label0={}
+        self.comboBox0 = {}
+        self.label0 = {}
         for key in dProject['chKeyRS']:
             self.label0[key] = QtWidgets.QLabel(key)
-            self.comboBox0[key]=QtWidgets.QComboBox()
+            self.comboBox0[key] = QtWidgets.QComboBox()
             self.comboBox0[key].addItems(dyesName)
             try:
                 self.comboBox0[key].setCurrentIndex(dyesName.index(dProject['dyeN'][key]))
             except:
                 pass
-            if len(self.dProject['dData'][key])==0:
+            if len(self.dProject['dData'][key]) == 0:
                 self.comboBox0[key].setEnabled(False)
 
-        self.groupBoxRX=QtWidgets.QGroupBox(self.tr('(+) Reagent'))
+        self.groupBoxRX = QtWidgets.QGroupBox(self.tr('(+) Reagent'))
         self.groupBoxRX.setCheckable(True)
         self.groupBoxRX.setChecked(True)
         layoutRX = myGridLayout()
@@ -534,7 +535,7 @@ class DlgMobilityShift(QtWidgets.QWidget):
 
         self.groupBoxRX.setLayout(layoutRX)
 
-        self.groupBoxBG=QtWidgets.QGroupBox(self.tr('(-) Reagent)'))
+        self.groupBoxBG = QtWidgets.QGroupBox(self.tr('(-) Reagent)'))
         self.groupBoxBG.setCheckable(True)
         self.groupBoxBG.setChecked(True)
 
@@ -548,10 +549,10 @@ class DlgMobilityShift(QtWidgets.QWidget):
             layoutBG.addWidget(self.comboBox0['BGS2'], 2, 1)
 
         self.groupBoxBG.setLayout(layoutBG)
- ### Button Box
+        ### Button Box
         self.buttonBox = ToolButton()
 
-        mainLayout=QtWidgets.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.labelTitle)
         mainLayout.addWidget(self.groupBoxMethod)
         mainLayout.addWidget(self.groupBoxRX)
@@ -561,83 +562,85 @@ class DlgMobilityShift(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
     def apply(self):
-        self.dOutput=self.dProject['dData'].copy()
+        self.dOutput = self.dProject['dData'].copy()
         if self.groupBoxRX.isChecked():
-            dyeNR=str(self.comboBox0['RX'].currentText())
-            dyeNS=str(self.comboBox0['RXS1'].currentText())
-            method0='posSim'
+            dyeNR = str(self.comboBox0['RX'].currentText())
+            dyeNS = str(self.comboBox0['RXS1'].currentText())
+            method0 = 'posSim'
             if self.radioButton1.isChecked():
-                method0='peakSim'
-            self.dOutput['RXS1']=fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS1'], dyeNR, dyeNS, method=method0)
+                method0 = 'peakSim'
+            self.dOutput['RXS1'] = fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS1'], dyeNR, dyeNS, method=method0)
             if self.dProject['isSeq2']:
-                dyeNS=str(self.comboBox0['RXS2'].currentText())
-                self.dOutput['RXS2']=fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS2'], dyeNR, dyeNS, method=method0)
+                dyeNS = str(self.comboBox0['RXS2'].currentText())
+                self.dOutput['RXS2'] = fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS2'], dyeNR, dyeNS, method=method0)
         if self.groupBoxBG.isChecked():
-            dyeNR=str(self.comboBox0['BG'].currentText())
-            dyeNS=str(self.comboBox0['BGS1'].currentText())
-            self.dOutput['BGS1']=fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS1'], dyeNR, dyeNS, method=method0)
+            dyeNR = str(self.comboBox0['BG'].currentText())
+            dyeNS = str(self.comboBox0['BGS1'].currentText())
+            self.dOutput['BGS1'] = fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS1'], dyeNR, dyeNS, method=method0)
             if self.dProject['isSeq2']:
-                dyeNS=str(self.comboBox0['BGS2'].currentText())
-                self.dOutput['BGS2']=fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS2'], dyeNR, dyeNS, method=method0)
-        self.dProjOut['dData']=self.dOutput.copy()
-        self.isToolApplied=True
+                dyeNS = str(self.comboBox0['BGS2'].currentText())
+                self.dOutput['BGS2'] = fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS2'], dyeNR, dyeNS, method=method0)
+        self.dProjOut['dData'] = self.dOutput.copy()
+        self.isToolApplied = True
+
 
 class DlgSignalAlign(QtWidgets.QWidget):
     def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.title = QtWidgets.QLabel(self.tr("<center><b>SIGNAL ALIGNMENT</b></center>"))
-        self.name="Signal Alignment"
-        self.toolID=4
+        self.name = "Signal Alignment"
+        self.toolID = 4
 
-        self.dProject=dProject
-        self.dOutput=dProject['dData'].copy()
-        self.dProjOut=deepcopy(dProject)
-        self.linkXR, self.linkXS=np.array([]), np.array([])
-        self.dataR, self.dataS=np.array([]), np.array([])
-        self.isToolApplied=False
-### Group of ComboBoxes
-        label1=QtWidgets.QLabel("Seq. Channels")
+        self.dProject = dProject
+        self.dOutput = dProject['dData'].copy()
+        self.dProjOut = deepcopy(dProject)
+        self.linkXR, self.linkXS = np.array([]), np.array([])
+        self.dataR, self.dataS = np.array([]), np.array([])
+        self.isToolApplied = False
+        ### Group of ComboBoxes
+        label1 = QtWidgets.QLabel("Seq. Channels")
 
-        self.comboBox0=QtWidgets.QComboBox()
+        self.comboBox0 = QtWidgets.QComboBox()
         self.comboBox0.setCurrentIndex(0)
         if self.dProject['isSeq2']:
-            choices0= ['RXS1 - BGS1', 'RXS2 - BGS2']
+            choices0 = ['RXS1 - BGS1', 'RXS2 - BGS2']
         else:
-            choices0= ['RXS1 - BGS1']
+            choices0 = ['RXS1 - BGS1']
         self.comboBox0.addItems(choices0)
 
         gridLayout0 = QtGui.QGridLayout()
         gridLayout0.addWidget(label1, 0, 0)
         gridLayout0.addWidget(self.comboBox0, 0, 1)
 
-        groupBox1=QtWidgets.QGroupBox('Select Channels to be aligned')
+        groupBox1 = QtWidgets.QGroupBox('Select Channels to be aligned')
         groupBox1.setLayout(gridLayout0)
 
-        self.button0=peakMatchModifyButton()
+        self.button0 = peakMatchModifyButton()
 
-        text=self.tr("HINT: When the matched peaks are modified; Key 'A'  to add a Peak. Key 'D'  to delete a Peak. Key 'Shift' to change position. ")
+        text = self.tr(
+            "HINT: When the matched peaks are modified; Key 'A'  to add a Peak. Key 'D'  to delete a Peak. Key 'Shift' to change position. ")
         self.hint = hintLabel(text)
 
-#        self.button0=QtWidgets.QPushButton('Modify Matched Peaks')
-#        self.button0.setEnabled(False)
-#
-#        self.hint = QtWidgets.QLabel(self.tr("HINT: When the matched peaks are modified, "
-#                                         "Press Key 'A' button and click both plots to add a Peak. "
-#                                         "Press Key 'D' button and click to delete a Peak. "
-#                                         "Press Key 'Shift' button and select a peak in BGS to change position. "
-#                                                                ))
+        #        self.button0=QtWidgets.QPushButton('Modify Matched Peaks')
+        #        self.button0.setEnabled(False)
+        #
+        #        self.hint = QtWidgets.QLabel(self.tr("HINT: When the matched peaks are modified, "
+        #                                         "Press Key 'A' button and click both plots to add a Peak. "
+        #                                         "Press Key 'D' button and click to delete a Peak. "
+        #                                         "Press Key 'Shift' button and select a peak in BGS to change position. "
+        #                                                                ))
 
-#        self.font = QtGui.QFont()
-#        self.font.setPointSize(9)
-#        self.hint.setFont(self.font)
-#        self.hint.setWordWrap(True)
+        #        self.font = QtGui.QFont()
+        #        self.font.setPointSize(9)
+        #        self.hint.setFont(self.font)
+        #        self.hint.setWordWrap(True)
 
-### Button Box
+        ### Button Box
         self.buttonBox = ToolButton()
-## Main Layout
+        ## Main Layout
         mainLayout = QtWidgets.QVBoxLayout()
-        mainLayout.addWidget( self.title)
+        mainLayout.addWidget(self.title)
         mainLayout.addWidget(groupBox1)
         mainLayout.addWidget(self.button0)
         mainLayout.addWidget(self.hint)
@@ -646,31 +649,28 @@ class DlgSignalAlign(QtWidgets.QWidget):
         mainLayout.addWidget(self.buttonBox)
         self.setLayout(mainLayout)
 
-        self.isToolAppliedSigAlign=False
+        self.isToolAppliedSigAlign = False
         self.connect(self.comboBox0, QtCore.SIGNAL('currentIndexChanged(int)'), self.comboChanged)
 
     def comboChanged(self):
-        self.isToolAppliedSigAlign=False
+        self.isToolAppliedSigAlign = False
+
     def apply(self):
-        self.dProjOut=deepcopy(self.dProject)
-        if self.isToolAppliedSigAlign==False:
-            if self.comboBox0.currentIndex()==0:
-                self.usedSeq=['RXS1', 'BGS1', 'RXS2', 'BGS2']
+        self.dProjOut = deepcopy(self.dProject)
+        if self.isToolAppliedSigAlign == False:
+            if self.comboBox0.currentIndex() == 0:
+                self.usedSeq = ['RXS1', 'BGS1', 'RXS2', 'BGS2']
             else:
-                self.usedSeq=['RXS2', 'BGS2', 'RXS1', 'BGS1']
-            self.linkXR, self.linkXS=dtwAlign2Cap(self.dProjOut, self.usedSeq)
-            self.isToolAppliedSigAlign=True
+                self.usedSeq = ['RXS2', 'BGS2', 'RXS1', 'BGS1']
+            self.linkXR, self.linkXS = dtwAlign2Cap(self.dProjOut, self.usedSeq)
+            self.isToolAppliedSigAlign = True
             self.button0.setEnabled(True)
 
-        self.dataR=self.dProjOut['dData'][self.usedSeq[0]]
-        self.dataS=self.dProjOut['dData'][self.usedSeq[1]]
+        self.dataR = self.dProjOut['dData'][self.usedSeq[0]]
+        self.dataS = self.dProjOut['dData'][self.usedSeq[1]]
 
-        self.linkYR=self.dataR[self.linkXR]
-        self.linkYS=self.dataS[self.linkXS]
+        self.linkYR = self.dataR[self.linkXR]
+        self.linkYS = self.dataS[self.linkXS]
 
-        self.dProjOut=splineCap(self.dProjOut, self.usedSeq, self.linkXR, self.linkXS)
-        self.isToolApplied=True
-
-
-
-
+        self.dProjOut = splineCap(self.dProjOut, self.usedSeq, self.linkXR, self.linkXS)
+        self.isToolApplied = True

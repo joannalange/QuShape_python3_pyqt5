@@ -37,11 +37,12 @@
 # reader.close() # close the file, since it is kept open
 #
 
-import struct
 import datetime
+import struct
 
 ABIF_TYPES = {1: 'byte', 2: 'char', 3: 'word', 4: 'short', 5: 'long', 7: 'float', 8: 'double', \
-        10: 'date', 11: 'time', 12: 'thumb', 13: 'bool', 18: 'pString', 19: 'cString'}
+              10: 'date', 11: 'time', 12: 'thumb', 13: 'bool', 18: 'pString', 19: 'cString'}
+
 
 class ABIFReader:
     def __init__(self, fn):
@@ -56,7 +57,7 @@ class ABIFReader:
         self.seek(dir.dataoffset)
         self.entries = [DirEntry(self) for i in range(dir.numelements)]
 
-    def getData(self, name, num = 1):
+    def getData(self, name, num=1):
         entry = self.getEntry(name, num)
         if not entry:
             raise SystemExit("error: Entry '%s (%i)' not found in '%s'" % (name, num, self.filename))
@@ -168,8 +169,8 @@ class ABIFReader:
         return NotImplemented
 
     def primUnpack(self, format, nb):
-        val=self.file.read(nb)
-        x = struct.unpack(format, val )
+        val = self.file.read(nb)
+        x = struct.unpack(format, val)
         return x[0]
 
     def close(self):
@@ -180,6 +181,7 @@ class ABIFReader:
 
     def tell(self):
         return self.file.tell()
+
 
 class DirEntry:
     def __init__(self, reader):
@@ -208,38 +210,38 @@ class DirEntry:
         else:
             return 'user'
 
+
 def readOfSc(reader):
-    OfSc=reader.getData('OfSc', 1)
-    part=[]
-    newOfSc=[]
+    OfSc = reader.getData('OfSc', 1)
+    part = []
+    newOfSc = []
     for i in range(1, len(reader.getData('OfSc', 1))):
-        if OfSc[i]-OfSc[i-1]==1:
-            part.append(OfSc[i-1])
+        if OfSc[i] - OfSc[i - 1] == 1:
+            part.append(OfSc[i - 1])
         else:
-            part.append(OfSc[i-1])
+            part.append(OfSc[i - 1])
             newOfSc.append(part)
-            part=[]
+            part = []
     part.append(OfSc[-1])
     newOfSc.append(part)
     return newOfSc
 
+
 if __name__ == "__main__":
     import os
-    import matplotlib
-    import matplotlib.pyplot as plt
     from matplotlib.pyplot import figure, show
 
-    dir=os.getcwd()
-    #fname=dir+"/data/KS_-TPP_8mM_1M6_070110.fsa"
-    #fname=dir+"/data/primer559_raw_1M7.fsa"
-    fname=dir+"/data/+_330_ddC_A04.fsa"
+    dir = os.getcwd()
+    # fname=dir+"/data/KS_-TPP_8mM_1M6_070110.fsa"
+    # fname=dir+"/data/primer559_raw_1M7.fsa"
+    fname = dir + "/data/+_330_ddC_A04.fsa"
 
-    reader = ABIFReader(fname) # creates an instance of ABIFReader
-    reader.version # version of ABIF file
-    #reader.showEntries() # print all entries of ABIF file "<name> (<num>) / <type> (<size>)"
-    entry=reader.entries
+    reader = ABIFReader(fname)  # creates an instance of ABIFReader
+    reader.version  # version of ABIF file
+    # reader.showEntries() # print all entries of ABIF file "<name> (<num>) / <type> (<size>)"
+    entry = reader.entries
     for e in entry:
-        if e.name!='DATA':
+        if e.name != 'DATA':
             print(e.name, e.number, reader.getData(e.name, e.number))
 
     fig = figure(1, figsize=(12, 6))
@@ -253,21 +255,20 @@ if __name__ == "__main__":
     axes2.plot(reader.getData('DATA', 3))
     axes3.plot(reader.getData('DATA', 4))
 
-#    for i in range(len(reader.getData('OfSc', 1))):
-#        axes0.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
-#        axes1.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
-#        axes2.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
-#        axes3.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
-    newOfSc=readOfSc(reader)
+    #    for i in range(len(reader.getData('OfSc', 1))):
+    #        axes0.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
+    #        axes1.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
+    #        axes2.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
+    #        axes3.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
+    newOfSc = readOfSc(reader)
     for i in range(len(newOfSc)):
-        axes0.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
-        axes1.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
-        axes2.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
-        axes3.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
+        axes0.axvspan(newOfSc[i][0], newOfSc[i][-1] + 1, facecolor='0.5', alpha=0.5)
+        axes1.axvspan(newOfSc[i][0], newOfSc[i][-1] + 1, facecolor='0.5', alpha=0.5)
+        axes2.axvspan(newOfSc[i][0], newOfSc[i][-1] + 1, facecolor='0.5', alpha=0.5)
+        axes3.axvspan(newOfSc[i][0], newOfSc[i][-1] + 1, facecolor='0.5', alpha=0.5)
 
-   # axes1.plot(reader.getData('OfSc', 1), 100, 'k.')
+    # axes1.plot(reader.getData('OfSc', 1), 100, 'k.')
 
     show()
 
-    reader.close() # close the file, since it is kept open
-
+    reader.close()  # close the file, since it is kept open

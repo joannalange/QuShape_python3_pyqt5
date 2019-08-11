@@ -14,6 +14,5 @@ QDoubleSpinBox {font-size: 10px; }
 
 """
 
-#QGroupBox::indicator {width: 11px; height: 11px;}
-#QCheckBox::indicator {width: 11px;height: 11px;}
-
+# QGroupBox::indicator {width: 11px; height: 11px;}
+# QCheckBox::indicator {width: 11px;height: 11px;}

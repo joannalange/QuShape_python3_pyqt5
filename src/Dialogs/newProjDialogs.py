@@ -1,9 +1,11 @@
-from PyQt5 import QtCore, QtWidgets
-
-from .Functions import readShapeData, readBaseFile, DProjectNew
-from .myWidgets import DlgSelectFile, DlgSelectDir, hintLabel
 import shelve
 from copy import deepcopy
+
+from PyQt5 import QtCore, QtWidgets
+
+from .Functions import DProjectNew, readBaseFile, readShapeData
+from .myWidgets import DlgSelectDir, DlgSelectFile, hintLabel
+
 
 class ButtonWizard(QtWidgets.QWidget):
     def __init__(self, parent=None):
@@ -27,24 +29,25 @@ class ButtonWizard(QtWidgets.QWidget):
         self.mainLayout.addLayout(buttonLayout)
         self.setLayout(self.mainLayout)
 
+
 class DlgNewProject0(QtWidgets.QDialog):
     def __init__(self, dProject, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
 
-        self.dProject=dProject
-        self.isApplied=False
+        self.dProject = dProject
+        self.isApplied = False
         self.title = QtWidgets.QLabel(self.tr("<center><b>CREATE NEW PROJECT - STEP 1 OF 3</b></center>"))
-        self.name='New Project'
+        self.name = 'New Project'
 
-        label0=QtWidgets.QLabel('Project Name')
-        self.lineEdit0=QtWidgets.QLineEdit()
+        label0 = QtWidgets.QLabel('Project Name')
+        self.lineEdit0 = QtWidgets.QLineEdit()
         self.lineEdit0.setText(self.dProject['name'])
 
-        self.selectDir0=DlgSelectDir('Directory')
+        self.selectDir0 = DlgSelectDir('Directory')
         self.selectDir0.lineEdit0.setText(self.dProject['dir'])
 
-        self.radioButton0=QtWidgets.QRadioButton('One Sequencing Channel')
-        self.radioButton1=QtWidgets.QRadioButton('Two Sequencing Channels ')
+        self.radioButton0 = QtWidgets.QRadioButton('One Sequencing Channel')
+        self.radioButton1 = QtWidgets.QRadioButton('Two Sequencing Channels ')
 
         if self.dProject['isSeq2']:
             self.radioButton1.setChecked(True)
@@ -52,18 +55,18 @@ class DlgNewProject0(QtWidgets.QDialog):
             self.radioButton0.setChecked(True)
 
         self.groupBox = QtWidgets.QGroupBox(self.tr("Choose the Project Type"))
-        layout0=QtWidgets.QVBoxLayout()
+        layout0 = QtWidgets.QVBoxLayout()
         layout0.addWidget(self.radioButton0)
         layout0.addWidget(self.radioButton1)
         self.groupBox.setLayout(layout0)
 
-        layout0=QtWidgets.QGridLayout()
+        layout0 = QtWidgets.QGridLayout()
         layout0.addWidget(label0, 1, 0)
         layout0.addWidget(self.lineEdit0, 1, 1)
         layout0.addWidget(self.selectDir0, 2, 0, 1, 2)
         layout0.addWidget(self.groupBox, 3, 0, 1, 2)
 
-        self.buttonBox=ButtonWizard()
+        self.buttonBox = ButtonWizard()
         self.buttonBox.backButton.setEnabled(False)
         self.buttonBox.doneButton.setEnabled(False)
         self.buttonBox.nextButton.setDefault(True)
@@ -71,7 +74,7 @@ class DlgNewProject0(QtWidgets.QDialog):
         # self.connect(self.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.clickNext0)
         self.buttonBox.nextButton.clicked.connect(self.clickNext0)
 
-        mainLayout=QtWidgets.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.title)
         mainLayout.addLayout(layout0)
         mainLayout.addStretch()
@@ -79,60 +82,60 @@ class DlgNewProject0(QtWidgets.QDialog):
         self.setLayout(mainLayout)
 
     def clickNext0(self):
-        if self.lineEdit0.text()=='':
+        if self.lineEdit0.text() == '':
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Write a project Name')
-        elif self.selectDir0.lineEdit0.text()=='':
+        elif self.selectDir0.lineEdit0.text() == '':
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Select Project Directory')
         else:
-            self.dProject['name']=str(self.lineEdit0.text())
-            self.dProject['dir']=str(self.selectDir0.lineEdit0.text())
-            self.dProject['fName']=self.dProject['dir']+'/'+self.dProject['name']+'.qushape'
+            self.dProject['name'] = str(self.lineEdit0.text())
+            self.dProject['dir'] = str(self.selectDir0.lineEdit0.text())
+            self.dProject['fName'] = self.dProject['dir'] + '/' + self.dProject['name'] + '.qushape'
 
             if self.radioButton1.isChecked():
-                self.dProject['isSeq2']=True
-                self.dProject['chKeyRS']=['RX', 'BG', 'RXS1', 'BGS1', 'RXS2', 'BGS2']
-                self.dProject['chKeyCC']=['RX', 'RXS1', 'RXS2', 'BG', 'BGS1', 'BGS2']
-                self.dProject['chKeyRX']=['RX', 'RXS1', 'RXS2']
-                self.dProject['chKeyBG']=['BG', 'BGS1', 'BGS2']
+                self.dProject['isSeq2'] = True
+                self.dProject['chKeyRS'] = ['RX', 'BG', 'RXS1', 'BGS1', 'RXS2', 'BGS2']
+                self.dProject['chKeyCC'] = ['RX', 'RXS1', 'RXS2', 'BG', 'BGS1', 'BGS2']
+                self.dProject['chKeyRX'] = ['RX', 'RXS1', 'RXS2']
+                self.dProject['chKeyBG'] = ['BG', 'BGS1', 'BGS2']
             else:
-                self.dProject['isSeq2']=False
-                self.dProject['chKeyRS']=['RX', 'BG', 'RXS1', 'BGS1']
-                self.dProject['chKeyCC']=['RX', 'RXS1', 'BG', 'BGS1']
-                self.dProject['chKeyRX']=['RX', 'RXS1']
-                self.dProject['chKeyBG']=['BG', 'BGS1']
+                self.dProject['isSeq2'] = False
+                self.dProject['chKeyRS'] = ['RX', 'BG', 'RXS1', 'BGS1']
+                self.dProject['chKeyCC'] = ['RX', 'RXS1', 'BG', 'BGS1']
+                self.dProject['chKeyRX'] = ['RX', 'RXS1']
+                self.dProject['chKeyBG'] = ['BG', 'BGS1']
 
             if QtCore.QFile(self.dProject['fName']).exists():
-                reply=QtWidgets.QMessageBox.question(self, "QuShape", 
-                                                 "Saving the file will overwrite the original file on the disk.\n"
-                                                "Do you really want to save?", 
-                                           QtWidgets.QMessageBox.Yes| QtWidgets.QMessageBox.Cancel)
-                if reply==QtWidgets.QMessageBox.Cancel:
+                reply = QtWidgets.QMessageBox.question(self, "QuShape",
+                                                       "Saving the file will overwrite the original file on the disk.\n"
+                                                       "Do you really want to save?",
+                                                       QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.Cancel)
+                if reply == QtWidgets.QMessageBox.Cancel:
                     return False
-                elif reply==QtWidgets.QMessageBox.Yes:
+                elif reply == QtWidgets.QMessageBox.Yes:
                     QtCore.QFile(self.dProject['fName']).remove()
-            self.isApplied=True
+            self.isApplied = True
 
 
 class DlgNewProject1(QtWidgets.QDialog):
     def __init__(self, dProject, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
-        self.name='New Project'
+        self.name = 'New Project'
         self.title = QtWidgets.QLabel(self.tr("<center><b>CREATE NEW PROJECT - STEP 2 OF 3</b></center>"))
 
-        self.dProject=dProject
-        self.isApplied=False
+        self.dProject = dProject
+        self.isApplied = False
 
-        self.fileRead0=DlgSelectFile('(+) Reaction', "ABIF or Text File (*.ab1 *.fsa *.txt)", self.dProject['dir'])
-        self.fileRead1=DlgSelectFile('(-) Reaction', "ABIF or Text File (*.ab1 *.fsa *.txt)", self.dProject['dir'])
-        self.fileRead2=DlgSelectFile('Sequence', "Base Files (*.txt *.fasta *.gbk *.seq )", self.dProject['dir'])
-        self.fileRead3=DlgSelectFile('Ref. Proj.', "Reference Project (*.pyshape *.qushape)", self.dProject['dir'])
+        self.fileRead0 = DlgSelectFile('(+) Reaction', "ABIF or Text File (*.ab1 *.fsa *.txt)", self.dProject['dir'])
+        self.fileRead1 = DlgSelectFile('(-) Reaction', "ABIF or Text File (*.ab1 *.fsa *.txt)", self.dProject['dir'])
+        self.fileRead2 = DlgSelectFile('Sequence', "Base Files (*.txt *.fasta *.gbk *.seq )", self.dProject['dir'])
+        self.fileRead3 = DlgSelectFile('Ref. Proj.', "Reference Project (*.pyshape *.qushape)", self.dProject['dir'])
 
         self.fileRead0.lineEdit0.setText(self.dProject['fNameRX'])
         self.fileRead1.lineEdit0.setText(self.dProject['fNameBG'])
         self.fileRead2.lineEdit0.setText(self.dProject['fNameSeq'])
         self.fileRead3.lineEdit0.setText(self.dProject['fNameRef'])
 
-        text="HINT: Select either Sequence or Reference Project"
+        text = "HINT: Select either Sequence or Reference Project"
         self.hint = hintLabel(text)
 
         layout0 = QtWidgets.QVBoxLayout()
@@ -142,7 +145,7 @@ class DlgNewProject1(QtWidgets.QDialog):
         layout0.addWidget(self.fileRead3)
         layout0.addWidget(self.hint)
 
-        self.buttonBox=ButtonWizard()
+        self.buttonBox = ButtonWizard()
         self.buttonBox.doneButton.setEnabled(False)
         self.buttonBox.nextButton.setDefault(True)
 
@@ -151,7 +154,7 @@ class DlgNewProject1(QtWidgets.QDialog):
         self.buttonBox.backButton.clicked.connect(self.clickBack1)
         self.buttonBox.nextButton.clicked.connect(self.clickNext1)
 
-        mainLayout=QtWidgets.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.title)
         mainLayout.addLayout(layout0)
         mainLayout.addStretch()
@@ -162,53 +165,54 @@ class DlgNewProject1(QtWidgets.QDialog):
         self.readFileNames()
 
     def clickNext1(self):
-        if self.fileRead0.lineEdit0.text()=='':
+        if self.fileRead0.lineEdit0.text() == '':
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Select (+) Reaction File')
-        elif self.fileRead1.lineEdit0.text()=='':
+        elif self.fileRead1.lineEdit0.text() == '':
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Select (+) Reaction File')
-        elif self.fileRead2.lineEdit0.text()=='' and self.fileRead3.lineEdit0.text()=='':
+        elif self.fileRead2.lineEdit0.text() == '' and self.fileRead3.lineEdit0.text() == '':
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Select Sequence or Reference File')
         else:
             self.readFileNames()
 
     def readFileNames(self):
-            self.dProject['fNameRX']=str(self.fileRead0.lineEdit0.text())
-            self.dProject['fNameBG']=str(self.fileRead1.lineEdit0.text())
-            self.dProject['fNameSeq']=str(self.fileRead2.lineEdit0.text())
-            if self.fileRead3.lineEdit0.text()!='':
-                self.dProject['isRef']=True
-                self.dProject['fNameRef']=str(self.fileRead3.lineEdit0.text())
+        self.dProject['fNameRX'] = str(self.fileRead0.lineEdit0.text())
+        self.dProject['fNameBG'] = str(self.fileRead1.lineEdit0.text())
+        self.dProject['fNameSeq'] = str(self.fileRead2.lineEdit0.text())
+        if self.fileRead3.lineEdit0.text() != '':
+            self.dProject['isRef'] = True
+            self.dProject['fNameRef'] = str(self.fileRead3.lineEdit0.text())
 
-            self.isApplied=True
+        self.isApplied = True
+
 
 class DlgNewProject2(QtWidgets.QDialog):
     def __init__(self, dProject, parent=None):
         QtWidgets.QDialog.__init__(self, parent)
-        self.name='New Project'
+        self.name = 'New Project'
         self.title = QtWidgets.QLabel(self.tr("<center><b>CREATE NEW PROJECT - STEP 3 OF 3</b></center>"))
-        self.dProject=dProject
-        self.isApplied=False
+        self.dProject = dProject
+        self.isApplied = False
 
-        self.label0={}
-        self.comboBox0={}
-        choices0=['Channel 1', 'Channel 2', 'Channel 3', 'Channel 4']
+        self.label0 = {}
+        self.comboBox0 = {}
+        choices0 = ['Channel 1', 'Channel 2', 'Channel 3', 'Channel 4']
         for key in self.dProject['chKeyRS']:
-            self.label0[key]=QtWidgets.QLabel(key)
-            self.comboBox0[key]=QtWidgets.QComboBox()
+            self.label0[key] = QtWidgets.QLabel(key)
+            self.comboBox0[key] = QtWidgets.QComboBox()
             self.comboBox0[key].addItems(choices0)
             self.comboBox0[key].setCurrentIndex(self.dProject['chIndex'][key])
 
-        choices2=['ddC', 'ddG', 'ddA', 'ddT']
-        self.comboBox1={}
-        self.comboBox1['RXS1']=QtWidgets.QComboBox()
+        choices2 = ['ddC', 'ddG', 'ddA', 'ddT']
+        self.comboBox1 = {}
+        self.comboBox1['RXS1'] = QtWidgets.QComboBox()
         self.comboBox1['RXS1'].addItems(choices2)
-        self.comboBox1['BGS1']=QtWidgets.QComboBox()
+        self.comboBox1['BGS1'] = QtWidgets.QComboBox()
         self.comboBox1['BGS1'].addItems(choices2)
 
         if self.dProject['isSeq2']:
-            self.comboBox1['RXS2']=QtWidgets.QComboBox()
+            self.comboBox1['RXS2'] = QtWidgets.QComboBox()
             self.comboBox1['RXS2'].addItems(choices2)
-            self.comboBox1['BGS2']=QtWidgets.QComboBox()
+            self.comboBox1['BGS2'] = QtWidgets.QComboBox()
             self.comboBox1['BGS2'].addItems(choices2)
             self.comboBox1['RXS2'].setCurrentIndex(1)
             self.comboBox1['BGS2'].setCurrentIndex(1)
@@ -224,7 +228,7 @@ class DlgNewProject2(QtWidgets.QDialog):
             layout1.addWidget(self.comboBox0['RXS2'], 2, 1)
             layout1.addWidget(self.comboBox1['RXS2'], 2, 2)
 
-        groupBox1=QtWidgets.QGroupBox('Select (+) Reaction Channels')
+        groupBox1 = QtWidgets.QGroupBox('Select (+) Reaction Channels')
         groupBox1.setLayout(layout1)
 
         layout2 = QtWidgets.QGridLayout()
@@ -238,20 +242,20 @@ class DlgNewProject2(QtWidgets.QDialog):
             layout2.addWidget(self.comboBox0['BGS2'], 2, 1)
             layout2.addWidget(self.comboBox1['BGS2'], 2, 2)
 
-        groupBox2=QtWidgets.QGroupBox('Select (-) Reaction Channels')
+        groupBox2 = QtWidgets.QGroupBox('Select (-) Reaction Channels')
         groupBox2.setLayout(layout2)
 
-        self.buttonBox=ButtonWizard()
+        self.buttonBox = ButtonWizard()
         self.buttonBox.nextButton.setText('Apply')
         self.buttonBox.doneButton.setEnabled(False)
         self.buttonBox.nextButton.setDefault(True)
 
         self.buttonBox.backButton.clicked.connect(self.clickBack2)
         self.buttonBox.nextButton.clicked.connect(self.clickNext2)
-        #self.connect(self.buttonBox.backButton, QtCore.SIGNAL("clicked()"), self.clickBack2)
-        #self.connect(self.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.clickNext2)
+        # self.connect(self.buttonBox.backButton, QtCore.SIGNAL("clicked()"), self.clickBack2)
+        # self.connect(self.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.clickNext2)
 
-        mainLayout=QtWidgets.QVBoxLayout()
+        mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.title)
         mainLayout.addWidget(groupBox1)
         mainLayout.addWidget(groupBox2)
@@ -263,91 +267,95 @@ class DlgNewProject2(QtWidgets.QDialog):
         self.comboBox0['RX'].currentIndexChanged.connect(self.changeCombo00)
         self.comboBox0['RXS1'].currentIndexChanged.connect(self.changeCombo01)
         self.comboBox1['RXS1'].currentIndexChanged.connect(self.changeCombo10)
-        #self.connect(self.comboBox0['RX'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo00)
-        #self.connect(self.comboBox0['RXS1'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo01)
-        #self.connect(self.comboBox1['RXS1'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo10)
+        # self.connect(self.comboBox0['RX'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo00)
+        # self.connect(self.comboBox0['RXS1'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo01)
+        # self.connect(self.comboBox1['RXS1'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo10)
         if self.dProject['isSeq2']:
-            #self.connect(self.comboBox0['RXS2'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo02)
-            #self.connect(self.comboBox1['RXS2'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo11)
+            # self.connect(self.comboBox0['RXS2'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo02)
+            # self.connect(self.comboBox1['RXS2'], QtCore.SIGNAL("currentIndexChanged(int)"), self.changeCombo11)
             self.comboBox0['RXS2'].currentIndexChanged.connect(self.changeCombo02)
             self.comboBox1['RXS2'].currentIndexChanged.connect(self.changeCombo11)
 
     def changeCombo00(self):
         self.comboBox0['BG'].setCurrentIndex(self.comboBox0['RX'].currentIndex())
+
     def changeCombo01(self):
         self.comboBox0['BGS1'].setCurrentIndex(self.comboBox0['RXS1'].currentIndex())
+
     def changeCombo02(self):
         self.comboBox0['BGS2'].setCurrentIndex(self.comboBox0['RXS2'].currentIndex())
+
     def changeCombo10(self):
         self.comboBox1['BGS1'].setCurrentIndex(self.comboBox1['RXS1'].currentIndex())
+
     def changeCombo11(self):
         self.comboBox1['BGS2'].setCurrentIndex(self.comboBox1['RXS2'].currentIndex())
 
     def clickBack2(self):
-        self.isApplied=True
+        self.isApplied = True
 
     def clickNext2(self):
-        dataRX, self.dProject['Satd']['RX'], dyesRX=readShapeData(self.dProject['fNameRX'])
-        dataBG, self.dProject['Satd']['BG'], dyesBG=readShapeData(self.dProject['fNameBG'])
-        if self.dProject['fNameSeq']!='':
-            self.dProject['RNA']=readBaseFile(self.dProject['fNameSeq'])
-        if self.dProject['fNameRef']=='':
-            self.dProjRef=DProjectNew()
+        dataRX, self.dProject['Satd']['RX'], dyesRX = readShapeData(self.dProject['fNameRX'])
+        dataBG, self.dProject['Satd']['BG'], dyesBG = readShapeData(self.dProject['fNameBG'])
+        if self.dProject['fNameSeq'] != '':
+            self.dProject['RNA'] = readBaseFile(self.dProject['fNameSeq'])
+        if self.dProject['fNameRef'] == '':
+            self.dProjRef = DProjectNew()
         else:
-            self.dBase=shelve.open(self.dProject['fNameRef'])
-            self.dProjRef=self.dBase['dProject']
-            self.dProject['RNA']= self.dProjRef['RNA']
-            self.dProject['isRef']=True
+            self.dBase = shelve.open(self.dProject['fNameRef'])
+            self.dProjRef = self.dBase['dProject']
+            self.dProject['RNA'] = self.dProjRef['RNA']
+            self.dProject['isRef'] = True
             self.dBase.close()
         for key in self.comboBox0.keys():
-            ind=self.comboBox0[key].currentIndex()
-            self.dProject['chIndex'][key]=ind
-            if key=='RX' or key=='RXS1' or key=='RXS2':
-                self.dProject['dData'][key]=dataRX[:, ind]
-                self.dProject['dyeN'][key]=dyesRX[ind] #str(readerRX.getData('DyeN', ind+1)).replace(' ', '')
+            ind = self.comboBox0[key].currentIndex()
+            self.dProject['chIndex'][key] = ind
+            if key == 'RX' or key == 'RXS1' or key == 'RXS2':
+                self.dProject['dData'][key] = dataRX[:, ind]
+                self.dProject['dyeN'][key] = dyesRX[ind]  # str(readerRX.getData('DyeN', ind+1)).replace(' ', '')
             else:
-                self.dProject['dData'][key]=dataBG[:, ind]
-                self.dProject['dyeN'][key]=dyesBG[ind] #str(readerBG.getData('DyeN', ind+1)).replace(' ', '')
+                self.dProject['dData'][key] = dataBG[:, ind]
+                self.dProject['dyeN'][key] = dyesBG[ind]  # str(readerBG.getData('DyeN', ind+1)).replace(' ', '')
 
-        self.dProject['ddNTP1']=str(self.comboBox1['RXS1'].currentText())
-        nucs=['G', 'C', 'U', 'A']
-        self.dProject['nuc1']=nucs[self.comboBox1['RXS1'].currentIndex()]
+        self.dProject['ddNTP1'] = str(self.comboBox1['RXS1'].currentText())
+        nucs = ['G', 'C', 'U', 'A']
+        self.dProject['nuc1'] = nucs[self.comboBox1['RXS1'].currentIndex()]
         if self.dProject['isSeq2']:
-            self.dProject['ddNTP2']=str(self.comboBox1['RXS2'].currentText())
-            self.dProject['nuc2']=nucs[self.comboBox1['RXS2'].currentIndex()]
-        self.dProjOut=deepcopy(self.dProject)
-        self.isApplied=True
+            self.dProject['ddNTP2'] = str(self.comboBox1['RXS2'].currentText())
+            self.dProject['nuc2'] = nucs[self.comboBox1['RXS2'].currentIndex()]
+        self.dProjOut = deepcopy(self.dProject)
+        self.isApplied = True
+
 
 class DlgProjInfo(QtWidgets.QWidget):
     def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>PROJECT INFORMATION</b></center>"))
-        self.name="ProjInfo"
-        self.toolID=1
+        self.name = "ProjInfo"
+        self.toolID = 1
 
-        self.dProject=dProject
-        self.projInfo=''
-        self.projInfo+='<h3 align=center>QUSHAPE PROJECT INFORMATION</h3>'
-        self.projInfo+='<p><b> Project Name : </b>'+str(dProject['name'])
-        self.projInfo+='<p><b> Working Directory : </b>'+str(dProject['dir'])
-        self.projInfo+='<p><b> RX File: </b>'+ str(self.dProject['fNameRX'])+'</p>'
-        self.projInfo+='<p><b> BG File: </b>'+ str(self.dProject['fNameBG'])+'</p>'
-        self.projInfo+='<p><b> RNA File: </b>'+ str(self.dProject['fNameSeq'])+'</p>'
-        self.projInfo+='<p><b> Reference File: </b>'+ str(self.dProject['fNameRef'])+'</p>'
+        self.dProject = dProject
+        self.projInfo = ''
+        self.projInfo += '<h3 align=center>QUSHAPE PROJECT INFORMATION</h3>'
+        self.projInfo += '<p><b> Project Name : </b>' + str(dProject['name'])
+        self.projInfo += '<p><b> Working Directory : </b>' + str(dProject['dir'])
+        self.projInfo += '<p><b> RX File: </b>' + str(self.dProject['fNameRX']) + '</p>'
+        self.projInfo += '<p><b> BG File: </b>' + str(self.dProject['fNameBG']) + '</p>'
+        self.projInfo += '<p><b> RNA File: </b>' + str(self.dProject['fNameSeq']) + '</p>'
+        self.projInfo += '<p><b> Reference File: </b>' + str(self.dProject['fNameRef']) + '</p>'
 
-        self.projInfo+='<p><b> ddNTP: </b>'+str(self.dProject['ddNTP1'])
+        self.projInfo += '<p><b> ddNTP: </b>' + str(self.dProject['ddNTP1'])
 
-        self.projInfo+='<p><b> Used Dyes: RX: </b>'+str(self.dProject['dyeN']['RX'])
-        self.projInfo+='<b> BG: </b>'+str(self.dProject['dyeN']['BG'])
-        self.projInfo+='<b> RXS1: </b>'+str(self.dProject['dyeN']['RXS1'])
-        self.projInfo+='<b> BGS1: </b>'+str(self.dProject['dyeN']['BGS1'])
+        self.projInfo += '<p><b> Used Dyes: RX: </b>' + str(self.dProject['dyeN']['RX'])
+        self.projInfo += '<b> BG: </b>' + str(self.dProject['dyeN']['BG'])
+        self.projInfo += '<b> RXS1: </b>' + str(self.dProject['dyeN']['RXS1'])
+        self.projInfo += '<b> BGS1: </b>' + str(self.dProject['dyeN']['BGS1'])
 
-        self.projInfo+='<p><b> Channel Index: RX: </b>'+str(self.dProject['chIndex']['RX']+1)
-        self.projInfo+='<b> BG: </b>'+str(self.dProject['chIndex']['BG']+1)
-        self.projInfo+='<b> RXS1: </b>'+str(self.dProject['chIndex']['RXS1']+1)
-        self.projInfo+='<b> BGS1: </b>'+str(self.dProject['chIndex']['BGS1']+1)
-
+        self.projInfo += '<p><b> Channel Index: RX: </b>' + str(self.dProject['chIndex']['RX'] + 1)
+        self.projInfo += '<b> BG: </b>' + str(self.dProject['chIndex']['BG'] + 1)
+        self.projInfo += '<b> RXS1: </b>' + str(self.dProject['chIndex']['RXS1'] + 1)
+        self.projInfo += '<b> BGS1: </b>' + str(self.dProject['chIndex']['BGS1'] + 1)
 
         self.textBrowser = QtWidgets.QTextBrowser()
         self.textBrowser.setHtml(self.projInfo)
@@ -355,4 +363,3 @@ class DlgProjInfo(QtWidgets.QWidget):
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.textBrowser)
         self.setLayout(mainLayout)
-
