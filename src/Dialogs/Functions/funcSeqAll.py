@@ -1,9 +1,10 @@
+import numpy as np
 from copy import deepcopy
 
-from Dialogs.Functions import *
-# from Dialogs.Functions.funcGeneral import averQ, fitLinear, normSimple, smoothRect
-# from .funcPeakAlign import DPeakList, fPeakList, myPeakAlignment
-# from Dialogs.Functions.funcPeakAlign import DPeakAlignParams
+# from Dialogs.Functions import *
+from Dialogs.Functions.funcGeneral import averQ, fitLinear, normSimple, smoothRect
+from Dialogs.Functions.funcPeakAlign import DPeakList, fPeakList, myPeakAlignment
+from Dialogs.Functions.funcPeakAlign import DPeakAlignParams
 
 
 ### SEQEUENCE ALIGNMENT ###

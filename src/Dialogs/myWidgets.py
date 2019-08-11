@@ -32,10 +32,7 @@ class DlgSelectFile(QtWidgets.QWidget):
         self.fName = filename
 
         if self.fName:
-            print("shiitttt, filename: {}".format(self.fName))
             self.lineEdit0.setText(str(self.fName))
-        else:
-            print("shiitttt2")
 
 
 class DlgSelectDir(QtWidgets.QWidget):

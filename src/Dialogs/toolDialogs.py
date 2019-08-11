@@ -1,5 +1,15 @@
-from .Functions import *  # smoothRect, smoothTriangle, smoothGaussian, DData, chKeysRS, enhance, baselineAdjust
-from .myWidgets import *  # GroupBoxROI, ApplyChannel, ToolButton
+# from .Functions import *  # smoothRect, smoothTriangle, smoothGaussian, DData, chKeysRS, enhance, baselineAdjust
+import numpy as np
+from copy import deepcopy
+
+from PyQt5 import QtGui, QtWidgets
+
+from Dialogs.Functions.funcByRef import applyAllToolsAuto1
+from Dialogs.Functions.funcTimeWarp import autoROIwDTW
+
+from Dialogs.Functions import funcToolsAll as fta
+from Dialogs.Functions import funcGeneral as fGen
+from .myWidgets import ApplyChannel, GroupBoxROI, hintLabel, myGridLayout, myVBoxLayout, peakMatchModifyButton, ToolButton
 
 
 class DlgToolsAll(QtWidgets.QWidget):
@@ -115,9 +125,9 @@ class DlgToolsAll(QtWidgets.QWidget):
         ### SATURATION CORRECTION
         if self.checkBox01.isChecked():
             for key in self.dProject['chKeyRX']:
-                self.dOutput[key] = correctSatd(self.dOutput[key], self.dProject['Satd']['RX'])
+                self.dOutput[key] = fta.correctSatd(self.dOutput[key], self.dProject['Satd']['RX'])
             for key in self.dProject['chKeyBG']:
-                self.dOutput[key] = correctSatd(self.dOutput[key], self.dProject['Satd']['BG'])
+                self.dOutput[key] = fta.correctSatd(self.dOutput[key], self.dProject['Satd']['BG'])
             self.dProject['isSatd'] = True
 
         ### SMOOTHING
@@ -125,39 +135,39 @@ class DlgToolsAll(QtWidgets.QWidget):
             self.smoothWindow = self.spinBox2.value()
             for key in self.dProject['dData'].keys():
                 if len(self.dProject['dData'][key]) > 0:
-                    self.dOutput[key] = smoothTriangle(self.dOutput[key], self.smoothWindow)
+                    self.dOutput[key] = fta.smoothTriangle(self.dOutput[key], self.smoothWindow)
 
         ### MOBILITY SHIFT
         if self.checkBox1.isChecked():
             dyeNR = self.dProject['dyeN']['RX']
             dyeNS = self.dProject['dyeN']['RXS1']
-            self.dOutput['RXS1'] = fMobilityShift(self.dOutput['RX'], self.dOutput['RXS1'], dyeNR, dyeNS)
+            self.dOutput['RXS1'] = fta.fMobilityShift(self.dOutput['RX'], self.dOutput['RXS1'], dyeNR, dyeNS)
             if 'RXS2' in self.dProject['dData'].keys():
-                dyeWS = dDyesWL[self.dProject['dyeN']['RXS2']]
-                self.dOutput['RXS2'] = fMobilityShift(self.dOutput['RX'], self.dOutput['RXS2'], dyeNR, dyeNS)
+                dyeWS = fGen.dDyesWL[self.dProject['dyeN']['RXS2']]
+                self.dOutput['RXS2'] = fta.fMobilityShift(self.dOutput['RX'], self.dOutput['RXS2'], dyeNR, dyeNS)
 
             dyeNR = self.dProject['dyeN']['BG']
             dyeNS = self.dProject['dyeN']['BGS1']
-            self.dOutput['BGS1'] = fMobilityShift(self.dOutput['BG'], self.dOutput['BGS1'], dyeNR, dyeNS)
+            self.dOutput['BGS1'] = fta.fMobilityShift(self.dOutput['BG'], self.dOutput['BGS1'], dyeNR, dyeNS)
             if 'BGS2' in self.dProject['dData'].keys():
-                dyeWS = dDyesWL[self.dProject['dyeN']['BGS2']]
-                self.dOutput['BGS2'] = fMobilityShift(self.dOutput['BG'], self.dOutput['BGS2'], dyeNR, dyeNS)
+                dyeWS = fGen.dDyesWL[self.dProject['dyeN']['BGS2']]
+                self.dOutput['BGS2'] = fta.fMobilityShift(self.dOutput['BG'], self.dOutput['BGS2'], dyeNR, dyeNS)
         ### BASELINE ADJUSTMENT
         if self.checkBox2.isChecked():
             self.baselineWindow = self.spinBox4.value()
             for key in self.dProject['dData'].keys():
                 if len(self.dProject['dData'][key]) > 0:
-                    self.dOutput[key] = baselineAdjust(self.dOutput[key], self.baselineWindow)
+                    self.dOutput[key] = fta.baselineAdjust(self.dOutput[key], self.baselineWindow)
         ### SIGNAL DECAY
         if self.checkBox3.isChecked():
             for key in self.dProject['dData'].keys():
-                self.dOutput[key] = autoDecaySum(self.dOutput[key])
+                self.dOutput[key] = fta.autoDecaySum(self.dOutput[key])
         ### SIGNAL ALIGNMENT
         if self.checkBox4.isChecked():
             self.dProjOut['dData'] = self.dOutput.copy()
             usedSeq = ['RXS1', 'BGS1', 'RXS2', 'BGS2']
-            linkX0, linkX1 = dtwAlign2Cap(self.dProjOut, usedSeq)
-            self.dProjOut = splineCap(self.dProjOut, usedSeq, linkX0, linkX1)
+            linkX0, linkX1 = fta.dtwAlign2Cap(self.dProjOut, usedSeq)
+            self.dProjOut = fta.splineCap(self.dProjOut, usedSeq, linkX0, linkX1)
 
         self.isToolApplied = True
 
@@ -266,8 +276,8 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
             self.dProjOut['dData'][key] = self.dProject['dData'][key][self.roi['RX'][0]:self.roi['RX'][1]]
         for key in self.dProject['chKeyBG']:
             self.dProjOut['dData'][key] = self.dProject['dData'][key][self.roi['BG'][0]:self.roi['BG'][1]]
-        self.dProjOut['Satd']['RX'] = fNewSatd(self.dProject['Satd']['RX'], self.roi['RX'][0], self.roi['RX'][1])
-        self.dProjOut['Satd']['BG'] = fNewSatd(self.dProject['Satd']['BG'], self.roi['BG'][0], self.roi['BG'][1])
+        self.dProjOut['Satd']['RX'] = fta.fNewSatd(self.dProject['Satd']['RX'], self.roi['RX'][0], self.roi['RX'][1])
+        self.dProjOut['Satd']['BG'] = fta.fNewSatd(self.dProject['Satd']['BG'], self.roi['BG'][0], self.roi['BG'][1])
 
 
 class DlgSmooth(QtWidgets.QWidget):
@@ -332,9 +342,9 @@ class DlgSmooth(QtWidgets.QWidget):
         try:
             if self.checkBoxSatd.isChecked():
                 for key in self.dProject['chKeyRX']:
-                    self.dProjOut['dData'][key] = correctSatd(self.dProject['dData'][key], self.dProject['Satd']['RX'])
+                    self.dProjOut['dData'][key] = fta.correctSatd(self.dProject['dData'][key], self.dProject['Satd']['RX'])
                 for key in self.dProject['chKeyBG']:
-                    self.dProjOut['dData'][key] = correctSatd(self.dProject['dData'][key], self.dProject['Satd']['BG'])
+                    self.dProjOut['dData'][key] = fta.correctSatd(self.dProject['dData'][key], self.dProject['Satd']['BG'])
                 self.dProject['isSatd'] = True
         except:
             self.dOutput = self.dProject['dData'].copy()
@@ -355,7 +365,7 @@ class DlgSmooth(QtWidgets.QWidget):
                     elif self.radioButton2.isChecked():
                         method = 'gaussian'
 
-                    self.dProjOut['dData'][key][fromP:toP] = fSmooth(self.dProjOut['dData'][key][fromP:toP], winSize, method)
+                    self.dProjOut['dData'][key][fromP:toP] = fta.fSmooth(self.dProjOut['dData'][key][fromP:toP], winSize, method)
         self.isToolApplied = True
 
 
@@ -414,7 +424,7 @@ class DlgBaseline(QtWidgets.QWidget):
                     fromP = 0
                     toP = len(self.dProjOut['dData'][key])
 
-                self.dProjOut['dData'][key][fromP:toP] = baselineAdjust(self.dProject['dData'][key][fromP:toP], windowSize, isSmooth)
+                self.dProjOut['dData'][key][fromP:toP] = fta.baselineAdjust(self.dProject['dData'][key][fromP:toP], windowSize, isSmooth)
         self.isToolApplied = True
 
 
@@ -478,11 +488,11 @@ class DlgSignalDecay(QtWidgets.QWidget):
                     fromP = 0
                     toP = len(self.dProjOut['dData'][key])
                 if self.radioButton0.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP] = autoDecaySum(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP] = fta.autoDecaySum(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton1.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP], self.expF[key] = decayCorrectionExp(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP], self.expF[key] = fta.decayCorrectionExp(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton2.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP] = decaySum(self.dProject['dData'][key][fromP:toP], self.spinBox0.value())
+                    self.dProjOut['dData'][key][fromP:toP] = fta.decaySum(self.dProject['dData'][key][fromP:toP], self.spinBox0.value())
         self.isToolApplied = True
 
 
@@ -514,9 +524,9 @@ class DlgMobilityShift(QtWidgets.QWidget):
         for key in dProject['chKeyRS']:
             self.label0[key] = QtWidgets.QLabel(key)
             self.comboBox0[key] = QtWidgets.QComboBox()
-            self.comboBox0[key].addItems(dyesName)
+            self.comboBox0[key].addItems(fGen.dyesName)
             try:
-                self.comboBox0[key].setCurrentIndex(dyesName.index(dProject['dyeN'][key]))
+                self.comboBox0[key].setCurrentIndex(fGen.dyesName.index(dProject['dyeN'][key]))
             except:
                 pass
             if len(self.dProject['dData'][key]) == 0:
@@ -570,17 +580,17 @@ class DlgMobilityShift(QtWidgets.QWidget):
             method0 = 'posSim'
             if self.radioButton1.isChecked():
                 method0 = 'peakSim'
-            self.dOutput['RXS1'] = fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS1'], dyeNR, dyeNS, method=method0)
+            self.dOutput['RXS1'] = fta.fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS1'], dyeNR, dyeNS, method=method0)
             if self.dProject['isSeq2']:
                 dyeNS = str(self.comboBox0['RXS2'].currentText())
-                self.dOutput['RXS2'] = fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS2'], dyeNR, dyeNS, method=method0)
+                self.dOutput['RXS2'] = fta.fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS2'], dyeNR, dyeNS, method=method0)
         if self.groupBoxBG.isChecked():
             dyeNR = str(self.comboBox0['BG'].currentText())
             dyeNS = str(self.comboBox0['BGS1'].currentText())
-            self.dOutput['BGS1'] = fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS1'], dyeNR, dyeNS, method=method0)
+            self.dOutput['BGS1'] = fta.fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS1'], dyeNR, dyeNS, method=method0)
             if self.dProject['isSeq2']:
                 dyeNS = str(self.comboBox0['BGS2'].currentText())
-                self.dOutput['BGS2'] = fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS2'], dyeNR, dyeNS, method=method0)
+                self.dOutput['BGS2'] = fta.fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS2'], dyeNR, dyeNS, method=method0)
         self.dProjOut['dData'] = self.dOutput.copy()
         self.isToolApplied = True
 
@@ -664,7 +674,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
                 self.usedSeq = ['RXS1', 'BGS1', 'RXS2', 'BGS2']
             else:
                 self.usedSeq = ['RXS2', 'BGS2', 'RXS1', 'BGS1']
-            self.linkXR, self.linkXS = dtwAlign2Cap(self.dProjOut, self.usedSeq)
+            self.linkXR, self.linkXS = fta.dtwAlign2Cap(self.dProjOut, self.usedSeq)
             self.isToolAppliedSigAlign = True
             self.button0.setEnabled(True)
 
@@ -674,5 +684,5 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.linkYR = self.dataR[self.linkXR]
         self.linkYS = self.dataS[self.linkXS]
 
-        self.dProjOut = splineCap(self.dProjOut, self.usedSeq, self.linkXR, self.linkXS)
+        self.dProjOut = fta.splineCap(self.dProjOut, self.usedSeq, self.linkXR, self.linkXS)
         self.isToolApplied = True

@@ -3,7 +3,8 @@ from copy import deepcopy
 
 from PyQt5 import QtCore, QtWidgets
 
-from .Functions import DProjectNew, readBaseFile, readShapeData
+from Dialogs.Functions.funcGeneral import DProjectNew
+from Dialogs.Functions.funcFile import readBaseFile, readShapeData
 from .myWidgets import DlgSelectDir, DlgSelectFile, hintLabel
 
 

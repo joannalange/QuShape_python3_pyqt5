@@ -2,7 +2,7 @@ import shelve
 
 from PyQt5 import QtWidgets
 
-from Dialogs.Functions import readShapeData
+from Dialogs.Functions.funcFile import readShapeData
 from Dialogs.Functions.funcGeneral import *
 from Dialogs.myWidgets import myHBoxLayout
 
