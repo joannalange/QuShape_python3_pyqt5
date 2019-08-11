@@ -710,11 +710,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def addRecentFile(self, fname):
         if fname is None:
             return
-        if  fname in self.recentFiles:
+        if fname in self.recentFiles:
             self.recentFiles.remove(fname)
-            self.recentFiles.insert(str(fname))
+            self.recentFiles.insert(0, str(fname))
         else:
-            self.recentFiles.insert(str(fname))
+            self.recentFiles.insert(0, str(fname))
             while len(self.recentFiles) > 9:
                 self.recentFiles.pop()
         self.updateFileMenu()

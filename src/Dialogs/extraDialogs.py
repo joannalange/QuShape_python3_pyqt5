@@ -166,8 +166,8 @@ class DlgScale(QtWidgets.QWidget):
         vbox.setContentsMargins(0, 0, 0, 0)
         self.groupBox1.setLayout(vbox)
 
-        self.pushButton0=QtWidgets.QPushButton('Scale All to BG')
-        self.connect(self.pushButton0, QtCore.SIGNAL("clicked()"), self.autoScale)
+        # self.pushButton0=QtWidgets.QPushButton('Scale All to BG')
+        # self.connect(self.pushButton0, QtCore.SIGNAL("clicked()"), self.autoScale)
 
 ### Button Box
         self.buttonBox = ToolButton()
