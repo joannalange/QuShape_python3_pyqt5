@@ -18,7 +18,7 @@ var comm_websocket_adapter = function(comm) {
         ws.onmessage(msg['content']['data'])
     });
     return ws;
-}
+};
 
 mpl.mpl_figure_comm = function(comm, msg) {
     // This is the function which gets called when the mpl process
@@ -28,7 +28,7 @@ mpl.mpl_figure_comm = function(comm, msg) {
     // Get hold of the div created by the display call when the Comm
     // socket was opened in Python.
     var element = $("#" + id);
-    var ws_proxy = comm_websocket_adapter(comm)
+    var ws_proxy = comm_websocket_adapter(comm);
 
     function ondownload(figure, format) {
         window.open(figure.imageObj.src);
@@ -49,36 +49,36 @@ mpl.mpl_figure_comm = function(comm, msg) {
         return;
     }
 
-    var output_index = fig.cell_info[2]
+    var output_index = fig.cell_info[2];
     var cell = fig.cell_info[0];
 
 };
 
 mpl.figure.prototype.handle_close = function(fig, msg) {
-    var width = fig.canvas.width/mpl.ratio
-    fig.root.unbind('remove')
+    var width = fig.canvas.width/mpl.ratio;
+    fig.root.unbind('remove');
 
     // Update the output cell to use the data from the current canvas.
     fig.push_to_output();
     var dataURL = fig.canvas.toDataURL();
     // Re-enable the keyboard manager in IPython - without this line, in FF,
     // the notebook keyboard shortcuts fail.
-    IPython.keyboard_manager.enable()
+    IPython.keyboard_manager.enable();
     $(fig.parent_element).html('<img src="' + dataURL + '" width="' + width + '">');
     fig.close_ws(fig, msg);
-}
+};
 
 mpl.figure.prototype.close_ws = function(fig, msg){
     fig.send_message('closing', msg);
     // fig.ws.close()
-}
+};
 
 mpl.figure.prototype.push_to_output = function(remove_interactive) {
     // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width/mpl.ratio
+    var width = this.canvas.width/mpl.ratio;
     var dataURL = this.canvas.toDataURL();
     this.cell_info[1]['text/html'] = '<img src="' + dataURL + '" width="' + width + '">';
-}
+};
 
 mpl.figure.prototype.updated_canvas_event = function() {
     // Tell IPython that the notebook contents must change.
@@ -88,7 +88,7 @@ mpl.figure.prototype.updated_canvas_event = function() {
     // Wait a second, then push the new image to the DOM so
     // that it is saved nicely (might be nice to debounce this).
     setTimeout(function () { fig.push_to_output() }, 1000);
-}
+};
 
 mpl.figure.prototype._init_toolbar = function() {
     var fig = this;
@@ -111,8 +111,9 @@ mpl.figure.prototype._init_toolbar = function() {
         var image = mpl.toolbar_items[toolbar_ind][2];
         var method_name = mpl.toolbar_items[toolbar_ind][3];
 
-        if (!name) { continue; };
-
+        if (!name) {
+            continue;
+        }
         var button = $('<button class="btn btn-default" href="#" title="' + name + '"><i class="fa ' + image + ' fa-lg"></i></button>');
         button.click(method_name, toolbar_event);
         button.mouseover(tooltip, toolbar_mouse_event);
@@ -132,18 +133,18 @@ mpl.figure.prototype._init_toolbar = function() {
     buttongrp.append(button);
     var titlebar = this.root.find($('.ui-dialog-titlebar'));
     titlebar.prepend(buttongrp);
-}
+};
 
 mpl.figure.prototype._root_extra_style = function(el){
-    var fig = this
+    var fig = this;
     el.on("remove", function(){
 	fig.close_ws(fig, {});
     });
-}
+};
 
 mpl.figure.prototype._canvas_extra_style = function(el){
     // this is important to make the div 'focusable
-    el.attr('tabindex', 0)
+    el.attr('tabindex', 0);
     // reach out to IPython and tell the keyboard manager to turn it's self
     // off when our div gets focus
 
@@ -156,7 +157,7 @@ mpl.figure.prototype._canvas_extra_style = function(el){
         IPython.keyboard_manager.register_events(el);
     }
 
-}
+};
 
 mpl.figure.prototype._key_event_extra = function(event, name) {
     var manager = IPython.notebook.keyboard_manager;
@@ -173,11 +174,11 @@ mpl.figure.prototype._key_event_extra = function(event, name) {
         manager.command_mode();
         manager.handle_keydown(event);
     }
-}
+};
 
 mpl.figure.prototype.handle_save = function(fig, msg) {
     fig.ondownload(fig, null);
-}
+};
 
 
 mpl.find_output_cell = function(html_output) {
@@ -202,7 +203,7 @@ mpl.find_output_cell = function(html_output) {
             }
         }
     }
-}
+};
 
 // Register the function which deals with the matplotlib target/channel.
 // The kernel may be null if the page has been refreshed.

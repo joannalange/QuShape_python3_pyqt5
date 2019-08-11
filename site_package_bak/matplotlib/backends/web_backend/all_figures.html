@@ -14,7 +14,7 @@
         $(document).ready(
         function() {
           var main_div = $('div#figures');
-          var figure_div = $('<div id="figure-div"/>')
+          var figure_div = $('<div id="figure-div"/>');
           main_div.append(figure_div);
           var websocket_type = mpl.get_websocket_type();
           var websocket = new websocket_type(
@@ -24,8 +24,12 @@
 
           fig.focus_on_mouseover = true;
 
-          $(fig.canvas).attr('tabindex', {{ fig_id }});
-          }
+          $(fig.canvas).attr('tabindex', {;
+            {
+                fig_id
+            }
+        })
+        }
         );
 
 	{% end %}

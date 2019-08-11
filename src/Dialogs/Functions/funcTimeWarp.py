@@ -483,39 +483,39 @@ def autoROIwDTW(sampleData,refData):
     return start, end
 
 
-if __name__ == "__main__":
-    import os
-
-    fname=os.getcwd()+'/data/hyg_applied_tools.txt'
-    A=np.loadtxt(fname)
-    X=A[:100,0]
-    Y=A[:100,1]
-    bandM=noBand(len(X),len(Y))
-    costM=distancePeak(X,Y,bandM)
-
-    pathX0,pathY0=myDTW(X,Y,derivative=True, costMType='0',bandType = "noband", r=3)
-    pathX1,pathY1=myDTW(X,Y,derivative=True, costMType='1',bandType = "sakoechiba", r=3)
-
-    peakX0,peakY0=peakDetection(X)
-    peakX1,peakY1=peakDetection(Y)
-    peakM=[]
-    for i in peakX0:
-        for j in peakX1:
-            peakM.append([i,j])
-    peakM=np.array(peakM)
-
-    import matplotlib
-    import matplotlib.pyplot as plt
-
-    plt.close('all')
-    fig = plt.figure(1)
-    axes0 = fig.add_subplot(111)
-    axes0.plot(pathX0,pathY0,'r')
-    axes0.plot(pathX1,pathY1,'b')
-    axes0.plot(peakM[:,0],peakM[:,1],'k.')
-
-    axes1.plot(pathNo[:,0],pathNo[:,1],'r')
-#    axes1.plot(dtw2No,dtw3No,'b')
+# if __name__ == "__main__":
+#     import os
+#
+#     fname=os.getcwd()+'/data/hyg_applied_tools.txt'
+#     A=np.loadtxt(fname)
+#     X=A[:100,0]
+#     Y=A[:100,1]
+#     bandM=noBand(len(X),len(Y))
+#     costM=distancePeak(X,Y,bandM)
+#
+#     pathX0,pathY0=myDTW(X,Y,derivative=True, costMType='0',bandType = "noband", r=3)
+#     pathX1,pathY1=myDTW(X,Y,derivative=True, costMType='1',bandType = "sakoechiba", r=3)
+#
+#     peakX0,peakY0=peakDetection(X)
+#     peakX1,peakY1=peakDetection(Y)
+#     peakM=[]
+#     for i in peakX0:
+#         for j in peakX1:
+#             peakM.append([i,j])
+#     peakM=np.array(peakM)
+#
+#     import matplotlib
+#     import matplotlib.pyplot as plt
+#
+#     plt.close('all')
+#     fig = plt.figure(1)
+#     axes0 = fig.add_subplot(111)
+#     axes0.plot(pathX0,pathY0,'r')
+#     axes0.plot(pathX1,pathY1,'b')
+#     axes0.plot(peakM[:,0],peakM[:,1],'k.')
+#
+#     axes1.plot(pathNo[:,0],pathNo[:,1],'r')
+# #    axes1.plot(dtw2No,dtw3No,'b')
 
     plt.show()
 
