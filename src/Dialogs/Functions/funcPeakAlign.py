@@ -1,6 +1,7 @@
 from scipy import interpolate
 
 from .funcGeneral import argmax2, argmax3, deriv1, enhance, max2, max3
+from .funcSeqAll import maxArg4
 
 
 ### PEAK DETECTION ###
@@ -41,6 +42,8 @@ def fPeakList(dataIn, isDel=False, isAdd=False, repType=None):
                 newX, newY, newPos, newAmp = fitPolyToPeak(dataIn, dPeakList['pos'][i], wid=3)
             elif repType == "Amp":
                 newX, newY, newPos, newAmp = peakX[i], peakY[i], dPeakList['pos'][i], peakY[i]
+            else:
+                raise RuntimeError("What is this shit")
 
             dPeakList['pos'][i] = newPos
             dPeakList['amp'][i] = newAmp
@@ -690,7 +693,6 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     from matplotlib.pyplot import figure, show
     from matplotlib.patches import ConnectionPatch
-    import peakDetection
 
     np.set_printoptions(precision=2)
 

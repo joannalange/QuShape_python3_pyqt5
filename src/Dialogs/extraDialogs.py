@@ -144,7 +144,7 @@ class DlgScale(QtWidgets.QWidget):
 
         self.groupBox1 = QtWidgets.QGroupBox(self.tr('Enter Scale Factor'))
 
-        vbox = QtGui.QGridLayout()
+        vbox = QtWidgets.QGridLayout()
         vbox.addWidget(self.label0['RX'], 0, 0)
         vbox.addWidget(self.doubleSpinBox0['RX'], 0, 1)
         vbox.addWidget(self.label0['BG'], 1, 0)
@@ -267,7 +267,7 @@ class DlgOpenSeqFile(QtWidgets.QWidget):
         self.toolID = 1
 
         self.fileRead0 = DlgSelectFile('Seq. File', "Base Files (*.txt *.fasta *.gbk *.seq )")
-        self.listWidget0 = QtGui.QListWidget()
+        self.listWidget0 = QtWidgets.QListWidget()
 
         ### Button Box
         self.buttonBox = ToolButton()

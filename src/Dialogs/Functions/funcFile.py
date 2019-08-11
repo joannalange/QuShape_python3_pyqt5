@@ -165,7 +165,7 @@ def loadTxtFile(fName):
 
 
 def saveCurLaneAsTxt(fileName, dDrawData, dChKeys):
-    from funcGeneral import maxLenF
+    from .funcGeneral import maxLenF
     fileName = str(fileName)
     if fileName.split('.')[-1] != "txt":
         fileName = fileName + '.txt'
