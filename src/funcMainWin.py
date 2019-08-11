@@ -1,9 +1,11 @@
 import shelve
 
-from PyQt5 import QtWidgets
+from copy import deepcopy
+
+from PyQt5 import QtCore, QtWidgets
 
 from Dialogs.Functions.funcFile import readShapeData
-from Dialogs.Functions.funcGeneral import *
+from Dialogs.Functions import funcGeneral as fGen
 from Dialogs.myWidgets import myHBoxLayout
 
 msgAbout = """<b>QuShape</b> v %s
@@ -34,7 +36,7 @@ def openProjFile(projFileName):
     extFile = QtCore.QFileInfo(projFileName).suffix()
     if extFile == 'txt' or extFile == 'fsa':
         data, Satd, dyes = readShapeData(str(projFileName))
-        dProject = DProjectNew()
+        dProject = fGen.DProjectNew()
         dProject['dData']['RX'] = data[:, 0]
         dProject['dData']['BG'] = data[:, 1]
         dProject['dData']['RXS1'] = data[:, 2]
@@ -48,8 +50,8 @@ def openProjFile(projFileName):
 
         dProject['scriptList'].append("New Project")
 
-        dProjRef = DProjectNew()
-        dVar = DVar(dProject['chKeyRS'])
+        dProjRef = fGen.DProjectNew()
+        dVar = fGen.DVar(dProject['chKeyRS'])
         intervalData = []
         intervalData.append(deepcopy(dProject))
     else:
@@ -65,16 +67,16 @@ def openProjFile(projFileName):
         if 'dProjRef' in dBase.keys():
             dProjRef = deepcopy(dBase['dProjRef'])
         else:
-            dProjRef = DProjectNew()
+            dProjRef = fGen.DProjectNew()
 
         if 'dVar' in dBase.keys():
             dVar = deepcopy(dBase['dVar'])
         else:
-            dVar = DVar(dProject['chKeyRS'])
+            dVar = fGen.DVar(dProject['chKeyRS'])
 
-        for key in DVar(dProject['chKeyRS']).keys():
+        for key in fGen.DVar(dProject['chKeyRS']).keys():
             if key not in dVar.keys():
-                dVar[key] = DVar(dProject['chKeyRS'])[key]
+                dVar[key] = fGen.DVar(dProject['chKeyRS'])[key]
         dBase.close()
 
     dProject['fName'] = str(projFileName)
@@ -88,7 +90,7 @@ class MainTopWidget(QtWidgets.QWidget):
 
         layoutDataTrack = myHBoxLayout()
         self.labelCh = {}
-        for key in chKeysRS:
+        for key in fGen.chKeysRS:
             self.labelCh[key] = QtWidgets.QLabel(self.tr(key))
             self.labelCh[key].setFixedWidth(30)
             self.labelCh[key].setAlignment(QtCore.Qt.AlignCenter)
