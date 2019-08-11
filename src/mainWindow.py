@@ -1,10 +1,22 @@
 import os
+import sys
+
 from matplotlib import rcParams
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import setp
 
-from Dialogs import *
+from Dialogs.myStyleSheet import myStyleSheet
+from Dialogs.myWidgets import myListWidget
+from Dialogs import editDialogs as edit_dialogs
+from Dialogs import extraDialogs as extra_dialogs
+from Dialogs import newProjDialogs as np_dialogs
+from Dialogs import seqDialogs as seq_dialogs
+from Dialogs import toolDialogs as tool_dialogs
+from Dialogs import myWidgets as my_widgets
+from Dialogs.Functions.funcFile import saveCurLaneAsTxt
+from Dialogs.Functions.funcSeqAll import fitFuncG
+
 from drawClass import *
 from funcMainWin import *
 
@@ -650,14 +662,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.nextStep(self.dlg.name)
 
     def newProject0(self):
-        self.dlg = DlgNewProject0(self.dlg.dProject)
+        self.dlg = np_dialogs.DlgNewProject0(self.dlg.dProject)
         # self.connect(self.dlg.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.newProject1)
         self.dlg.buttonBox.nextButton.clicked.connect(self.newProject1)
         self.dockTool.setWidget(self.dlg)
 
     def newProject1(self):
         if self.dlg.isApplied:
-            self.dlg = DlgNewProject1(self.dlg.dProject)
+            self.dlg = np_dialogs.DlgNewProject1(self.dlg.dProject)
             self.dlg.buttonBox.nextButton.clicked.connect(self.newProject2)
             self.dlg.buttonBox.backButton.clicked.connect(self.newProject0)
             # self.connect(self.dlg.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.newProject2)
@@ -666,7 +678,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def newProject2(self):
         if self.dlg.isApplied:
-            self.dlg = DlgNewProject2(self.dlg.dProject)
+            self.dlg = np_dialogs.DlgNewProject2(self.dlg.dProject)
             self.dlg.buttonBox.nextButton.clicked.connect(self.applyNewProject)
             self.dlg.buttonBox.backButton.clicked.connect(self.newProject1)
             self.dlg.buttonBox.doneButton.clicked.connect(self.doneNewProject)
@@ -679,7 +691,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.checkClickedApply()
         if not self.okToContinue():
             return
-        self.dlg = DlgNewProject0(DProjectNew())
+        self.dlg = np_dialogs.DlgNewProject0(DProjectNew())
         self.newProject0()
 
     def setOpenProject(self):
@@ -788,7 +800,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.fig.savefig(str(fname))
 
     def projInfo(self):
-        self.dockTool.setWidget(DlgProjInfo(self.dProject))
+        self.dockTool.setWidget(np_dialogs.DlgProjInfo(self.dProject))
 
     def closeEvent(self, event):
         if self.okToContinue():
@@ -984,7 +996,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def setAction(self):
         self.dVar['flag'] = deepcopy(self.dVarDefault['flag'])
         if self.curScript == 'Region of Interest':
-            self.dlg = DlgRegionOfInterest(self.dProject, self.dProjRef)
+            self.dlg = tool_dialogs.DlgRegionOfInterest(self.dProject, self.dProjRef)
             self.spanROI = {}
             self.rectRX = self.chAxes['RX'].axvspan(self.dlg.roi['RX'][0], self.dlg.roi['RX'][1], visible=True, facecolor='0.8')
             self.rectRXS1 = self.chAxes['RXS1'].axvspan(self.dlg.roi['RX'][0], self.dlg.roi['RX'][1], visible=True, facecolor='0.8')
@@ -992,22 +1004,22 @@ class MainWindow(QtWidgets.QMainWindow):
             self.rectBGS1 = self.chAxes['BGS1'].axvspan(self.dlg.roi['BG'][0], self.dlg.roi['BG'][1], visible=True, facecolor='0.8')
             self.drawROISpan()
         elif self.curScript == 'Smoothing':
-            self.dlg = DlgSmooth(self.dProject)
+            self.dlg = tool_dialogs.DlgSmooth(self.dProject)
         elif self.curScript == 'Baseline Adjustment':
-            self.dlg = DlgBaseline(self.dProject)
+            self.dlg = tool_dialogs.DlgBaseline(self.dProject)
         elif self.curScript == 'Signal Decay Correction':
-            self.dlg = DlgSignalDecay(self.dProject)
+            self.dlg = tool_dialogs.DlgSignalDecay(self.dProject)
         elif self.curScript == 'Mobility Shift':
-            self.dlg = DlgMobilityShift(self.dProject)
+            self.dlg = tool_dialogs.DlgMobilityShift(self.dProject)
         elif self.curScript == 'Signal Alignment':
-            self.dlg = DlgSignalAlign(self.dProject)
+            self.dlg = tool_dialogs.DlgSignalAlign(self.dProject)
             # self.connect(self.dlg.button0, QtCore.SIGNAL("clicked()"), self.drawSignalAlignModify)
             self.dlg.button0.clicked.connect(self.drawSignalAlignModify)
         elif self.curScript == 'Apply All Tools':
-            self.dlg = DlgToolsAll(self.dProject, self.dProjRef)
+            self.dlg = tool_dialogs.DlgToolsAll(self.dProject, self.dProjRef)
         elif self.curScript == 'Sequence Alignment':
             self.mainTopWidget.spinBoxWidth.setValue(200)
-            self.dlg = DlgSeqAlign(self.dProject)
+            self.dlg = seq_dialogs.DlgSeqAlign(self.dProject)
             # self.connect(self.dlg.checkBoxLineDraw, QtCore. SIGNAL("toggled(bool)"), self.drawDlgApply)
             self.dlg.checkBoxLineDraw.toggled.connect(self.drawDlgApply)
         elif self.curScript == 'Reactivity':
@@ -1016,7 +1028,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 QtWidgets.QMessageBox.warning(self, "QuShape - ", msg)
                 return
 
-            self.dlg = DlgReactivity(self.dProject, self.dProjRef)
+            self.dlg = seq_dialogs.DlgReactivity(self.dProject, self.dProjRef)
             self.dlg.pushButton0.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton1.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton2.clicked.connect(self.drawReactivityPressed)
@@ -1025,7 +1037,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # self.connect(self.dlg.pushButton2, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             self.dlg.initialize()
         elif self.curScript == 'Sequence Alignment by Reference':
-            self.dlg = DlgSeqAlignRef(self.dProject, self.dProjRef)
+            self.dlg = seq_dialogs.DlgSeqAlignRef(self.dProject, self.dProjRef)
             self.dlg.button0.connect(self.drawSignalAlignModify)
             self.dlg.button1.connect(self.drawPeakLinkRefModify)
             # self.connect(self.dlg.button0, QtCore.SIGNAL("clicked()"), self.drawSignalAlignModify)
@@ -1036,7 +1048,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 QtWidgets.QMessageBox.warning(self, "QuShape - ", msg)
                 return
 
-            self.dlg = DlgReactivityRef(self.dProject, self.dProjRef)
+            self.dlg = seq_dialogs.DlgReactivityRef(self.dProject, self.dProjRef)
             # self.connect(self.dlg.pushButton0, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             # self.connect(self.dlg.pushButton1, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             # self.connect(self.dlg.pushButton2, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
@@ -1047,7 +1059,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dlg.initialize()
 
         elif self.curScript == 'Automated Analysis by Reference':
-            self.dlg = DlgApplyAutoRef(self.dProject, self.dProjRef)
+            self.dlg = seq_dialogs.DlgApplyAutoRef(self.dProject, self.dProjRef)
             # self.connect(self.dlg.pushButton0, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             # self.connect(self.dlg.pushButton1, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             # self.connect(self.dlg.pushButton2, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
@@ -1056,24 +1068,24 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dlg.pushButton2.clicked.connect(self.drawReactivityPressed)
 
         elif self.curScript == 'Scale':
-            self.dlg = DlgScale(self.dProject)
+            self.dlg = extra_dialogs.DlgScale(self.dProject)
         elif self.curScript == 'Channel Swap':
-            self.dlg = DlgSwap(self.dProject)
+            self.dlg = extra_dialogs.DlgSwap(self.dProject)
         elif self.curScript == 'Manual Signal Alignment':
-            self.dlg = DlgManualSignalAlign(self.dProject)
+            self.dlg = extra_dialogs.DlgManualSignalAlign(self.dProject)
             # self.connect(self.dlg.button0, QtCore.SIGNAL("clicked()"), self.drawSignalAlignModify)
             self.dlg.button0.clicked.connect(self.drawSignalAlignModify)
         elif self.curScript == "Some Useful Functions":
-            self.dlg = DlgVariousTools(self.dProject)
+            self.dlg = extra_dialogs.DlgVariousTools(self.dProject)
         elif self.curScript == "Open ShapeFinder File":
-            self.dlg = DlgOpenShapeFinder()
+            self.dlg = extra_dialogs.DlgOpenShapeFinder()
         elif self.curScript == "Open ABIF File":
-            self.dlg = DlgOpenABIFFile()
+            self.dlg = extra_dialogs.DlgOpenABIFFile()
         elif self.curScript == "Open Sequence File":
-            self.dlg = DlgOpenSeqFile()
+            self.dlg = extra_dialogs.DlgOpenSeqFile()
 
         else:
-            self.dlg = DlgNoTool()
+            self.dlg = my_widgets.DlgNoTool()
         self.setToolDlg()
         self.defineDrawType(self.dlg)
 
@@ -1083,7 +1095,7 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QMessageBox.warning(self, "QuShape - ", msg)
             return
 
-        self.dlg = DlgReportTable(self.dProject)
+        self.dlg = seq_dialogs.DlgReportTable(self.dProject)
         self.dockTool.setWidget(self.dlg)
         self.dDrawData = deepcopy(self.dProject)
         self.dVar['flag']['isSeqAlign'] = True
@@ -1391,7 +1403,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dirty = True
 
     def editLineProps(self):
-        self.dlgChannel = DlgLineProps(self.dVar, self.dProject['chKeyRS'])
+        self.dlgChannel = edit_dialogs.DlgLineProps(self.dVar, self.dProject['chKeyRS'])
         # self.connect(self.dlgChannel.buttonBox.button(QtGui.QDialogButtonBox.Apply), QtCore.SIGNAL("clicked()"), self.applyEditLineProps)
         self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.applyEditLineProps)
         self.dlgChannel.show()
@@ -1410,7 +1422,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.resizeFigure()
 
     def editFigSet(self):
-        self.dlgChannel = DlgFigureSet(self.dVar, self.dProject['chKeyRS'])
+        self.dlgChannel = edit_dialogs.DlgFigureSet(self.dVar, self.dProject['chKeyRS'])
         # self.connect(self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply), QtCore.SIGNAL("clicked()"), self.applyFigSet)
         self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.applyFigSet)
         self.dlgChannel.show()
