@@ -2,36 +2,36 @@ import numpy as np
 from PyQt5 import QtGui, QtCore
 from copy import deepcopy
 
-#chKeysCC=['RX','RXS1','RXS2','BG','BGS1','BGS2']
-chKeysRS=['RX','BG','RXS1','BGS1','RXS2','BGS2']
-#chKeysRX=['RX','RXS1','RXS2']
-#chKeysBG=['BG','BGS1','BGS2']
+#chKeysCC=['RX', 'RXS1', 'RXS2', 'BG', 'BGS1', 'BGS2']
+chKeysRS=['RX', 'BG', 'RXS1', 'BGS1', 'RXS2', 'BGS2']
+#chKeysRX=['RX', 'RXS1', 'RXS2']
+#chKeysBG=['BG', 'BGS1', 'BGS2']
 
 def DData(isSeq2=False):
     if isSeq2:
-        keys=['RX','BG','RXS1','BGS1','RXS2','BGS2']
+        keys=['RX', 'BG', 'RXS1', 'BGS1', 'RXS2', 'BGS2']
     else:
-        keys=['RX','BG','RXS1','BGS1']
+        keys=['RX', 'BG', 'RXS1', 'BGS1']
     dData={}
     for key in keys:
-        dData[key]=np.array([],dtype='f4')
+        dData[key]=np.array([], dtype='f4')
     return dData
 
 def DProjectNew():
     dProjectNew={}
 ## NEW PROJECT RESULTS
-    dProjectNew['dData']=DData() #DData(dChKeys['RS'])# {'RX':np.array([0]),'BG':np.array([0]),'RXS':np.array([0]),'BGS':np.array([0])}
+    dProjectNew['dData']=DData() #DData(dChKeys['RS'])# {'RX':np.array([0]), 'BG':np.array([0]), 'RXS':np.array([0]), 'BGS':np.array([0])}
     dProjectNew['dir']= QtCore.QDir.homePath()# '' # Working directory "/Users/fethullah/example4"
     dProjectNew['name']='' #''  # Project Name
     dProjectNew['fName']='' # Project file name
     dProjectNew['fNameRX']='' # Project file name
     dProjectNew['fNameBG']='' # Project file name
     dProjectNew['fNameSeq']='' # Project file name
-    dProjectNew['chIndex']={'RX':0, 'RXS1':1,'RXS2':2,'BG':0, 'BGS1':1,'BGS2':2 }
+    dProjectNew['chIndex']={'RX':0, 'RXS1':1, 'RXS2':2, 'BG':0, 'BGS1':1, 'BGS2':2 }
     dProjectNew['isRef']=False
     dProjectNew['fNameRef']='' # Project file name
-    dProjectNew['Satd']={'RX':[],'BG':[]}
-    dProjectNew['dyeN']=DData() #dict(zip(chKeys,['6-FAM','VIC','NED','6-FAM','VIC','NED']))
+    dProjectNew['Satd']={'RX':[], 'BG':[]}
+    dProjectNew['dyeN']=DData() #dict(zip(chKeys, ['6-FAM', 'VIC', 'NED', '6-FAM', 'VIC', 'NED']))
     dProjectNew['isSeq2']=False
     dProjectNew['RNA']=''  # Official RNA sequence
     dProjectNew['ddNTP1']='ddC' # ddNTP type of the sequences, RX BG
@@ -39,7 +39,7 @@ def DProjectNew():
     dProjectNew['nuc1']='G'  # Nucleotide type of sequences
     dProjectNew['nuc2']='A'  # Nucleotide type of sequence
     dProjectNew['chKeyRS']=['RX', 'BG', 'RXS1', 'BGS1']
-    dProjectNew['chKeyCC']=['RX', 'RXS1','BG', 'BGS1']
+    dProjectNew['chKeyCC']=['RX', 'RXS1', 'BG', 'BGS1']
     dProjectNew['chKeyRX']=['RX', 'RXS1']
     dProjectNew['chKeyBG']=['BG', 'BGS1']
     dProjectNew['scriptList']=[]
@@ -47,15 +47,15 @@ def DProjectNew():
     
 ## SEQUENCE ALIGNMENT RESULTS
     dProjectNew['seqRNA']=''
-    dProjectNew['seqX0']=np.array([],dtype='i4') # X value of nuc, above threshold 
+    dProjectNew['seqX0']=np.array([], dtype='i4') # X value of nuc, above threshold 
     dProjectNew['seq0']='' #Detected sequence
-    dProjectNew['seqX']=np.array([],dtype='i4') # X value of completed seq
+    dProjectNew['seqX']=np.array([], dtype='i4') # X value of completed seq
     dProjectNew['usedCh1']='BGS1' # used channel RXS1 or BGS1
     dProjectNew['usedCh2']='BGS2' # used channel RXS1 or BGS1
     dProjectNew['start']=0  # start point in RNA, roi 
     dProjectNew['end']=0# end point in RNA, roi 
-    dProjectNew['seqNum']=np.array([],int)# end point in RNA, roi 
-    dProjectNew['scrNuc']=np.array([],dtype='f4')
+    dProjectNew['seqNum']=np.array([], int)# end point in RNA, roi 
+    dProjectNew['scrNuc']=np.array([], dtype='f4')
     
 ## REACTIVITY RESULTS 
     dProjectNew['dPeakRX']=DPeakList()
@@ -63,8 +63,8 @@ def DProjectNew():
  #   dProjectNew['dPeakBG']=DPeakList()
     
     dProjectNew['scaleFactor']=np.array([1])
-    dProjectNew['areaDiff']=np.array([],dtype='f4')
-    dProjectNew['normDiff']=np.array([],dtype='f4')
+    dProjectNew['areaDiff']=np.array([], dtype='f4')
+    dProjectNew['normDiff']=np.array([], dtype='f4')
     
   
     return dProjectNew
@@ -72,19 +72,19 @@ def DProjectNew():
 def DPeakList():
     dPeakList={}
     dPeakList['NPeak']=0
-    dPeakList['pos']=np.array([],dtype='i4')
-    dPeakList['amp']=np.array([],dtype='f4')
-    dPeakList['wid']=np.array([],dtype='f4')
-    dPeakList['area']=np.array([],dtype='f4')
-    dPeakList['averW']=np.array([],dtype='f4')
-    dPeakList['minW']=np.array([],dtype='f4')
-    dPeakList['maxW']=np.array([],dtype='f4')
+    dPeakList['pos']=np.array([], dtype='i4')
+    dPeakList['amp']=np.array([], dtype='f4')
+    dPeakList['wid']=np.array([], dtype='f4')
+    dPeakList['area']=np.array([], dtype='f4')
+    dPeakList['averW']=np.array([], dtype='f4')
+    dPeakList['minW']=np.array([], dtype='f4')
+    dPeakList['maxW']=np.array([], dtype='f4')
     
     return dPeakList
 
 def DVar(chKeyRS):
-    colors=[QtGui.QColor('red').name(),QtGui.QColor('blue').name(),QtGui.QColor('green').name(),
-            QtGui.QColor('magenta').name(),QtGui.QColor('orange').name(),QtGui.QColor('cyan').name()]
+    colors=[QtGui.QColor('red').name(), QtGui.QColor('blue').name(), QtGui.QColor('green').name(), 
+            QtGui.QColor('magenta').name(), QtGui.QColor('orange').name(), QtGui.QColor('cyan').name()]
     dVar={}
     dVar
     dVar['lineVisible']={}
@@ -134,7 +134,7 @@ def DVar(chKeyRS):
     
 def globalVars():
     dGlobalVars={}
-    dGlobalVars['dye']={'5-FAM':517,'6-FAM':522,'TET':538,'HEX':553,'JOE':554,'VIC':555,'NED':575,'TAMRA':583,'PET':595,'ROX':607,'LIZ':655}
+    dGlobalVars['dye']={'5-FAM':517, '6-FAM':522, 'TET':538, 'HEX':553, 'JOE':554, 'VIC':555, 'NED':575, 'TAMRA':583, 'PET':595, 'ROX':607, 'LIZ':655}
     return dGlobalVars
        
 def maxLenF(dData):
@@ -169,34 +169,34 @@ def setNucColor(nuc):
         clr='m'
     return clr
         
-def clickedSeqAlign(x,dProject,eventKey,conFromBGToRX,conFromSeqToBG,chAxes):
+def clickedSeqAlign(x, dProject, eventKey, conFromBGToRX, conFromSeqToBG, chAxes):
     diff=np.abs(dProject['seqX0']-x)
     peakInd= int(np.argmin(diff))
     if eventKey== QtCore.Qt.Key_A:
         if x>dProject['seqX0'][peakInd]:
             peakInd=peakInd+1
-        dProject['seq0'].insert(peakInd,'N')
-        dProject['seqX0']=np.insert(dProject['seqX0'],peakInd,x)
+        dProject['seq0'].insert(peakInd, 'N')
+        dProject['seqX0']=np.insert(dProject['seqX0'], peakInd, x)
         
-        argmax=argmax3(dProject['dData']['RX'][x-1],dProject['dData']['RX'][x],dProject['dData']['RX'][x+1])
+        argmax=argmax3(dProject['dData']['RX'][x-1], dProject['dData']['RX'][x], dProject['dData']['RX'][x+1])
         x=x-1+argmax
-        dProject['dPeakRX']['pos']=np.insert(dProject['dPeakRX']['pos'],peakInd,x)
-        dProject['dPeakRX']['amp']=np.insert(dProject['dPeakRX']['amp'],peakInd,dProject['dData']['RX'][x])
+        dProject['dPeakRX']['pos']=np.insert(dProject['dPeakRX']['pos'], peakInd, x)
+        dProject['dPeakRX']['amp']=np.insert(dProject['dPeakRX']['amp'], peakInd, dProject['dData']['RX'][x])
         dProject['dPeakRX']['NPeak']=dProject['dPeakRX']['NPeak']+1
         
-        argmax=argmax3(dProject['dData']['BG'][x-1],dProject['dData']['BG'][x],dProject['dData']['BG'][x+1])
+        argmax=argmax3(dProject['dData']['BG'][x-1], dProject['dData']['BG'][x], dProject['dData']['BG'][x+1])
         x=x-1+argmax
-        dProject['dPeakBG']['pos']=np.insert(dProject['dPeakBG']['pos'],peakInd,x)
-        dProject['dPeakBG']['amp']=np.insert(dProject['dPeakBG']['amp'],peakInd,dProject['dData']['BG'][x])
+        dProject['dPeakBG']['pos']=np.insert(dProject['dPeakBG']['pos'], peakInd, x)
+        dProject['dPeakBG']['amp']=np.insert(dProject['dPeakBG']['amp'], peakInd, dProject['dData']['BG'][x])
         dProject['dPeakBG']['NPeak']=dProject['dPeakBG']['NPeak']+1 
     elif eventKey== QtCore.Qt.Key_D:
         del dProject['seq0'][peakInd]
-        dProject['seqX0']=np.delete(dProject['seqX0'],peakInd)  
-        dProject['dPeakRX']['pos']=np.delete(dProject['dPeakRX']['pos'],peakInd)
-        dProject['dPeakRX']['amp']=np.delete(dProject['dPeakRX']['amp'],peakInd)
+        dProject['seqX0']=np.delete(dProject['seqX0'], peakInd)  
+        dProject['dPeakRX']['pos']=np.delete(dProject['dPeakRX']['pos'], peakInd)
+        dProject['dPeakRX']['amp']=np.delete(dProject['dPeakRX']['amp'], peakInd)
         dProject['dPeakRX']['NPeak']=dProject['dPeakRX']['NPeak']-1
-        dProject['dPeakBG']['pos']=np.delete(dProject['dPeakBG']['pos'],peakInd)
-        dProject['dPeakBG']['amp']=np.delete(dProject['dPeakBG']['amp'],peakInd)
+        dProject['dPeakBG']['pos']=np.delete(dProject['dPeakBG']['pos'], peakInd)
+        dProject['dPeakBG']['amp']=np.delete(dProject['dPeakBG']['amp'], peakInd)
         dProject['dPeakBG']['NPeak']=dProject['dPeakBG']['NPeak']-1      
     else:
         if dProject['seq0'][peakInd]=='N':
@@ -214,17 +214,17 @@ def clickedSeqAlign(x,dProject,eventKey,conFromBGToRX,conFromSeqToBG,chAxes):
     if eventKey== QtCore.Qt.Key_A:
         xyA=(dProject['dPeakBG']['pos'][peakInd], dProject['dPeakBG']['amp'][peakInd])
         xyB=(dProject['dPeakRX']['pos'][peakInd], dProject['dPeakRX']['amp'][peakInd])
-        con0 = ConnectionPatch(xyA,xyB,coordsA="data",coordsB="data",axesA=chAxes['BG'], axesB=chAxes['RX'],
-                                  arrowstyle="<|-|>",ec='0.3')
+        con0 = ConnectionPatch(xyA, xyB, coordsA="data", coordsB="data", axesA=chAxes['BG'], axesB=chAxes['RX'], 
+                                  arrowstyle="<|-|>", ec='0.3')
         chAxes['BG'].add_artist(con0)
-        conFromBGToRX.insert(peakInd,con0)
+        conFromBGToRX.insert(peakInd, con0)
                     
         xyA=(dProject['seqX0'][peakInd], dProject['dData']['BGS1'][dProject['seqX0'][peakInd]])
         xyB=(dProject['dPeakBG']['pos'][peakInd], dProject['dPeakBG']['amp'][peakInd])
-        con1 = ConnectionPatch(xyA,xyB,coordsA="data",coordsB="data",axesA=chAxes['BGS1'], axesB=chAxes['BG'],
-                      arrowstyle="<|-|>",ec='0.3')
+        con1 = ConnectionPatch(xyA, xyB, coordsA="data", coordsB="data", axesA=chAxes['BGS1'], axesB=chAxes['BG'], 
+                      arrowstyle="<|-|>", ec='0.3')
         chAxes['BGS1'].add_artist(con1)
-        conFromSeqToBG.insert(peakInd,con1)  
+        conFromSeqToBG.insert(peakInd, con1)  
 #      canvas.draw()
     if eventKey== QtCore.Qt.Key_D:
         conFromBGToRX[peakInd].remove()
@@ -232,34 +232,34 @@ def clickedSeqAlign(x,dProject,eventKey,conFromBGToRX,conFromSeqToBG,chAxes):
         del  conFromBGToRX[peakInd]
         del  conFromSeqToBG[peakInd]
                     
-    return dProject,peakInd,conFromBGToRX,conFromSeqToBG
+    return dProject, peakInd, conFromBGToRX, conFromSeqToBG
 
 
-def clickLines(x,chAxes,eventAxes,dPeakM,conFromBGToRX,isArrowSelectedRX, isArrowSelectedBG):
+def clickLines(x, chAxes, eventAxes, dPeakM, conFromBGToRX, isArrowSelectedRX, isArrowSelectedBG):
     if eventAxes==chAxes['RX']:
         if isArrowSelectedRX==False:
-            diff=np.abs(dPeakM['RX'][:,0]-x)
+            diff=np.abs(dPeakM['RX'][:, 0]-x)
             clickedPeakInd= np.argmin(diff)
             conFromBGToRX[clickedPeakInd].set_ec('c')
             conFromBGToRX[clickedPeakInd].set_fc('c')
             isArrowSelectedRX=True
     elif eventAxes==chAxes['BG']:
         if isArrowSelectedBG==False:
-            diff=np.abs(dPeakM['BG'][:,0]-x)
+            diff=np.abs(dPeakM['BG'][:, 0]-x)
             clickedPeakInd= np.argmin(diff)
             conFromBGToRX[clickedPeakInd].set_ec('c')
             conFromBGToRX[clickedPeakInd].set_fc('c')
             isArrowSelectedBG=True
-    return  conFromBGToRX,isArrowSelectedRX,isArrowSelectedBG
+    return  conFromBGToRX, isArrowSelectedRX, isArrowSelectedBG
 
-def findAxesYLim(dData,drawType):
+def findAxesYLim(dData, drawType):
     minData={}
     maxData={}
     dAxesYLim={}
     for key in dData.keys():
         minData[key]=np.min(dData[key])
         maxData[key]=np.max(dData[key])
-        dAxesYLim[key]=[minData[key],maxData[key]]
+        dAxesYLim[key]=[minData[key], maxData[key]]
     if 'RXS2' in dData.keys():
         if minData['RXS2']<minData['RXS1']:
             minData['RXS1']=minData['RXS2']
@@ -271,24 +271,24 @@ def findAxesYLim(dData,drawType):
         if maxData['BGS2']>maxData['BGS1']:
             maxData['BGS1']=maxData['BGS2']       
     if drawType==1:
-        dAxesYLim['RX'][0]=np.min(np.array([minData['RX'],minData['BG']]))
-        dAxesYLim['RX'][1]=np.max(np.array([maxData['RX'],maxData['BG']]))
+        dAxesYLim['RX'][0]=np.min(np.array([minData['RX'], minData['BG']]))
+        dAxesYLim['RX'][1]=np.max(np.array([maxData['RX'], maxData['BG']]))
         dAxesYLim['BG']=dAxesYLim['RX']
-        dAxesYLim['RXS1'][0]=np.min(np.array([minData['RXS1'],minData['BGS1']]))
-        dAxesYLim['RXS1'][1]=np.max(np.array([maxData['RXS1'],maxData['BGS1']]))
+        dAxesYLim['RXS1'][0]=np.min(np.array([minData['RXS1'], minData['BGS1']]))
+        dAxesYLim['RXS1'][1]=np.max(np.array([maxData['RXS1'], maxData['BGS1']]))
         dAxesYLim['BGS1']=dAxesYLim['RXS1']
     if drawType==2:
-        dAxesYLim['RX'][0]=np.min(np.array([minData['RX'],minData['BG'],minData['RXS1'],minData['BGS1']]))
-        dAxesYLim['RX'][1]=np.max(np.array([maxData['RX'],maxData['BG'],maxData['RXS1'],maxData['BGS1']]))
+        dAxesYLim['RX'][0]=np.min(np.array([minData['RX'], minData['BG'], minData['RXS1'], minData['BGS1']]))
+        dAxesYLim['RX'][1]=np.max(np.array([maxData['RX'], maxData['BG'], maxData['RXS1'], maxData['BGS1']]))
         dAxesYLim['BG']=dAxesYLim['RX']
         dAxesYLim['RXS1']=dAxesYLim['RX']
         dAxesYLim['RXS1']=dAxesYLim['RX']
     if drawType==3:
-        dAxesYLim['RX'][0]=np.min(np.array([minData['RX'],minData['RXS1']]))
-        dAxesYLim['RX'][1]=np.max(np.array([maxData['RX'],maxData['RXS1']]))
+        dAxesYLim['RX'][0]=np.min(np.array([minData['RX'], minData['RXS1']]))
+        dAxesYLim['RX'][1]=np.max(np.array([maxData['RX'], maxData['RXS1']]))
         dAxesYLim['RXS1']=dAxesYLim['RX']
-        dAxesYLim['BG'][0]=np.min(np.array([minData['BG'],minData['BGS1']]))
-        dAxesYLim['BG'][1]=np.max(np.array([maxData['BG'],maxData['BGS1']]))
+        dAxesYLim['BG'][0]=np.min(np.array([minData['BG'], minData['BGS1']]))
+        dAxesYLim['BG'][1]=np.max(np.array([maxData['BG'], maxData['BGS1']]))
         dAxesYLim['BGS1']=dAxesYLim['BG']    
     return dAxesYLim
 
@@ -304,9 +304,9 @@ def setRcParams(rcParams):
     rcParams['figure.dpi']=100
     return True
  
-dyesName=['5-FAM','6-FAM','TET','HEX','JOE','NED','VIC','TAMRA','PET','ROX']#,'LIZ']
-dyesWL=[517,522,538,553,554,555,575,583,595,607]#,655]
-dDyesWL=dict(zip(dyesName,dyesWL))#  {'5-FAM':517,'6-FAM':522,'TET':538,'HEX':553,'JOE':554,'VIC':555,'NED':575,'TAMRA':583,'PET':595,'ROX':607}#,'LIZ':655}
+dyesName=['5-FAM', '6-FAM', 'TET', 'HEX', 'JOE', 'NED', 'VIC', 'TAMRA', 'PET', 'ROX']#, 'LIZ']
+dyesWL=[517, 522, 538, 553, 554, 555, 575, 583, 595, 607]#, 655]
+dDyesWL=dict(zip(dyesName, dyesWL))#  {'5-FAM':517, '6-FAM':522, 'TET':538, 'HEX':553, 'JOE':554, 'VIC':555, 'NED':575, 'TAMRA':583, 'PET':595, 'ROX':607}#, 'LIZ':655}
 #print dDyesWL
 
 def deriv2(array):
@@ -314,7 +314,7 @@ def deriv2(array):
     d=np.zeros(n)
     d[0]=d[1]
     d[n-1]=d[n-2]
-    for j in np.arange(1,n-1):
+    for j in np.arange(1, n-1):
         d[j]=array[j+1]-2*array[j]+array[j-1]
     return d
 
@@ -324,11 +324,11 @@ def deriv1(array):
     d=np.zeros(n)
     d[0]=array[1]-array[0]
     d[n-1]=array[n-1]-array[n-2]
-    for j in np.arange(1,n-1):
+    for j in np.arange(1, n-1):
         d[j]=(array[j+1]-array[j-1])/2
     return d
 
-def min3(a,b,c):
+def min3(a, b, c):
     minvalue = a
     if b < minvalue:
         minvalue = b
@@ -336,7 +336,7 @@ def min3(a,b,c):
         minvalue = c
     return minvalue
 
-def argmin3(a,b,c):
+def argmin3(a, b, c):
     minvalue = a
     argmin=0
     if b < minvalue:
@@ -347,7 +347,7 @@ def argmin3(a,b,c):
     return argmin
 
 
-def max3(a,b,c):
+def max3(a, b, c):
     maxvalue = a
     if b > maxvalue:
         maxvalue = b
@@ -355,7 +355,7 @@ def max3(a,b,c):
         maxvalue = c
     return maxvalue
 
-def argmax3(a,b,c):
+def argmax3(a, b, c):
     maxvalue = a
     argmax=0
     if b > maxvalue:
@@ -367,13 +367,13 @@ def argmax3(a,b,c):
 
 
 
-def max2(a,b):
+def max2(a, b):
     maxvalue = a
     if b > maxvalue:
         maxvalue = b
     return maxvalue
 
-def argmax2(a,b):
+def argmax2(a, b):
     maxvalue = a
     argmax=0
     if b > maxvalue:
@@ -398,24 +398,24 @@ def averQ(dataIn):
     
     return aver
 
-def findClickedInd(x,array):
+def findClickedInd(x, array):
     diff=np.abs(array-x)
     clickedInd=int(np.argmin(diff))
     return clickedInd
 
-def fitLinear(x,y,NData):
+def fitLinear(x, y, NData):
     fittedData=np.zeros(NData)
     fittedData[0:x[0]]=y[0]
     fittedData[x[-1]:]=y[-1]
     NPoint=len(x)
     
     for i in range(NPoint-1):
-        x1=np.array([x[i],x[i+1]])
-        y1=np.array([y[i],y[i+1]])
-        coeff=np.polyfit(x1,y1,1)
+        x1=np.array([x[i], x[i+1]])
+        y1=np.array([y[i], y[i+1]])
+        coeff=np.polyfit(x1, y1, 1)
         poly=np.poly1d(coeff)
-        xNew=np.arange(x[i],x[i+1])
-        xNew=np.array(xNew,int)
+        xNew=np.arange(x[i], x[i+1])
+        xNew=np.array(xNew, int)
         yNew=np.polyval(poly, xNew)
         fittedData[xNew]=yNew
     
@@ -423,7 +423,7 @@ def fitLinear(x,y,NData):
 
 def equalLen(dDataIn):
     dDataOut=deepcopy(dDataIn)
-    minLen=minLenF(dDataIn)#  np.min(np.array([len(dData['RX']),len(dData['BG']),len(dData['RXS']),len(dData['BGS'])]))
+    minLen=minLenF(dDataIn)#  np.min(np.array([len(dData['RX']), len(dData['BG']), len(dData['RXS']), len(dData['BGS'])]))
     for key in dDataIn.keys():
         dDataOut[key]=dDataIn[key][:minLen]
     return dDataOut
@@ -439,23 +439,23 @@ def normSimple(dataIn, POutlier=2.0, PAver=10.0):
     dataNormed=dataIn/aver
     return dataNormed, aver 
 
-def smoothRect(dataIn,degree=1):
+def smoothRect(dataIn, degree=1):
     NData=len(dataIn)  
     dataOut=np.zeros(NData)
     window=degree*2+1
     for i in range(degree):
         dataOut[i]=np.average(dataIn[:i+degree+1])
-    for i in range(1,degree+1):
+    for i in range(1, degree+1):
         dataOut[-i]=np.average(dataIn[-(i+degree):])
-    for i in range(degree,NData-degree):
+    for i in range(degree, NData-degree):
         dataOut[i]=np.average(dataIn[i-degree:i+degree+1])
     return dataOut  
 
             ### RESOLUTION ENHANCEMENT
-def enhance(array,factor=1):
+def enhance(array, factor=1):
     enhanced=array.copy()
     secderiv=deriv2(array)
-    secderiv=smoothRect(secderiv,1)
+    secderiv=smoothRect(secderiv, 1)
     enhanced=array-(factor*secderiv)
     return enhanced
 

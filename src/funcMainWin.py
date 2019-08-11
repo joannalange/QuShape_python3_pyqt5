@@ -16,7 +16,7 @@ msgAbout = """<b>QuShape</b> v %s
             nucleic acid reactivity information """
 
             #<p>Python %s - Qt %s - PyQt %s on %s""" % (
-            #    __version__, platform.python_version(),
+            #    __version__, platform.python_version(), 
             #    QtCore.QT_VERSION_STR, QtCore.PYQT_VERSION_STR, platform.system())
 
 
@@ -34,12 +34,12 @@ def myGetOpenFileName(workingDir):
 def openProjFile(projFileName):
     extFile=QtCore.QFileInfo(projFileName).suffix()
     if extFile=='txt' or extFile=='fsa':
-        data,Satd,dyes=readShapeData(str(projFileName))
+        data, Satd, dyes=readShapeData(str(projFileName))
         dProject=DProjectNew()
-        dProject['dData']['RX']=data[:,0]
-        dProject['dData']['BG']=data[:,1]
-        dProject['dData']['RXS1']=data[:,2]
-        dProject['dData']['BGS1']=data[:,3]
+        dProject['dData']['RX']=data[:, 0]
+        dProject['dData']['BG']=data[:, 1]
+        dProject['dData']['RXS1']=data[:, 2]
+        dProject['dData']['BGS1']=data[:, 3]
         dProject['Satd']['RX']=Satd
         dProject['Satd']['BG']=Satd
         dProject['dyeN']['RX']=dyes[0]
@@ -93,7 +93,7 @@ class MainTopWidget(QtWidgets.QWidget):
             self.labelCh[key]=QtWidgets.QLabel(self.tr(key))
             self.labelCh[key].setFixedWidth(30)
             self.labelCh[key].setAlignment(QtCore.Qt.AlignCenter)
-           # self.labelCh[key].setFixedSize(30,20)
+           # self.labelCh[key].setFixedSize(30, 20)
 
             layoutDataTrack.addWidget(self.labelCh[key])
 
@@ -101,14 +101,14 @@ class MainTopWidget(QtWidgets.QWidget):
         groupBoxDataTrack.setLayout(layoutDataTrack)
 
         self.splitComboBox=QtWidgets.QComboBox()
-        self.splitComboBox.addItems(["Standard","Reaction/Seqencing", "One Panel", "By Capillary"])
+        self.splitComboBox.addItems(["Standard", "Reaction/Seqencing", "One Panel", "By Capillary"])
         self.splitComboBox.setToolTip("Split the Channels")
         self.splitComboBox.setWhatsThis(
                                         'This combo box is used to draw the data in difference view. '
                                         ' (1) Standard: The channels are plotted separately'
-                                        ' (2) Reaction/Sequencing: The Reagent channels (RX and BG) is plotted in one axes,'
+                                        ' (2) Reaction/Sequencing: The Reagent channels (RX and BG) is plotted in one axes, '
                                         'The sequencing channels are drawn in the same axis'
-                                        ' (3) By Capillary : (+) Capillary (RX, RXS and RXS1) and (-) Capillary (BG,BGS1,BGS2) is ploteed in seperate axisi'
+                                        ' (3) By Capillary : (+) Capillary (RX, RXS and RXS1) and (-) Capillary (BG, BGS1, BGS2) is ploteed in seperate axisi'
                                         ' (4) One Panel: All channels are plotted in one axes')
 
         layoutSplitCombo=myHBoxLayout()
@@ -138,7 +138,7 @@ class MainTopWidget(QtWidgets.QWidget):
 
         labelZoom = QtWidgets.QLabel("Z")
         self.spinBoxZoom=QtWidgets.QSpinBox()
-        self.spinBoxZoom.setRange(1,999)
+        self.spinBoxZoom.setRange(1, 999)
         self.spinBoxZoom.setValue(100)
         self.spinBoxZoom.setSingleStep(25)
         self.spinBoxZoom.setSuffix(" %")
@@ -168,13 +168,13 @@ class MainTopWidget(QtWidgets.QWidget):
         self.setLayout(layoutTop)
 
 class ToolDock(QtWidgets.QDockWidget):
-    def __init__(self,label, parent=None):
+    def __init__(self, label, parent=None):
         QtWidgets.QDockWidget.__init__(self, parent)
         self.setWindowTitle('Tool Inspector')
-     #   self.setFixedSize(250,350)
+     #   self.setFixedSize(250, 350)
         self.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea| QtCore.Qt.RightDockWidgetArea)
         print(dir(self))
-        # self.connect(self,QtCore.SIGNAL("topLevelChanged(bool)"),self.dockToolLocationChanged)
+        # self.connect(self, QtCore.SIGNAL("topLevelChanged(bool)"), self.dockToolLocationChanged)
         self.topLevelChanged.connect(self.dockToolLocationChanged)
 
     def  dockToolLocationChanged(self):
@@ -182,7 +182,7 @@ class ToolDock(QtWidgets.QDockWidget):
             self.setMinimumSize(300, 400)
             self.setMaximumSize(600, 800)
         else:
-            self.setFixedSize(300,400)
+            self.setFixedSize(300, 400)
 
 
 

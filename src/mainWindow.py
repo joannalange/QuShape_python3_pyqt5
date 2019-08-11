@@ -34,8 +34,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.mainFrame = QtWidgets.QWidget()
         self.fig = Figure()
         self.fig.set_facecolor('0.8')
-        self.fig.suptitle('Welcome to QuShape',x=0.5,y=0.7, horizontalalignment='center', fontsize=32,color='b')
-        self.fig.text(0.5, 0.4, 'Quantification of Nucleic Acid Probing Information', horizontalalignment='center', fontsize=20,color='b')
+        self.fig.suptitle('Welcome to QuShape', x=0.5, y=0.7, horizontalalignment='center', fontsize=32, color='b')
+        self.fig.text(0.5, 0.4, 'Quantification of Nucleic Acid Probing Information', horizontalalignment='center', fontsize=20, color='b')
 
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.mainFrame)
@@ -64,9 +64,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.qSettings = QtCore.QSettings()
         try:
             self.recentFiles = self.qSettings.value("RecentFiles").toStringList()
-            size = self.qSettings.value("MainWindow/Size",QtCore.QVariant(QtCore.QSize(600, 500))).toSize()
+            size = self.qSettings.value("MainWindow/Size", QtCore.QVariant(QtCore.QSize(600, 500))).toSize()
             self.resize(size)
-            position = self.qSettings.value("MainWindow/Position",QtCore.QVariant(QtCore.QPoint(0, 0))).toPoint()
+            position = self.qSettings.value("MainWindow/Position", QtCore.QVariant(QtCore.QPoint(0, 0))).toPoint()
             self.move(position)
             self.restoreState(self.qSettings.value("MainWindow/State").toByteArray())
             self.workingDir=self.qSettings.value("workingDir").toString()
@@ -82,13 +82,13 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.recentFiles else QtCore.QVariant()
         self.qSettings.setValue("RecentFiles", recentFiles)
         self.qSettings.setValue("MainWindow/Size", QtCore.QVariant(self.size()))
-        self.qSettings.setValue("MainWindow/Position",
+        self.qSettings.setValue("MainWindow/Position", 
                                 QtCore.QVariant(self.pos()))
         self.qSettings.setValue("MainWindow/State", QtCore.QVariant(self.saveState()))
         self.qSettings.setValue("workingDir", QtCore.QVariant(self.workingDir))
 
     def createDockWidgets(self):
-        self.dockTool = ToolDock("Tool Inspector", self) #QtGui.QDockWidget("Tool Inspector",self)
+        self.dockTool = ToolDock("Tool Inspector", self) #QtGui.QDockWidget("Tool Inspector", self)
         self.dockTool.setObjectName("dockToolInspector")
         self.newProject()
 
@@ -102,7 +102,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dockTool)
         self.addDockWidget(QtCore.Qt.RightDockWidgetArea, self.dockScript)
 
-        # self.connect(self.scriptList, QtCore.SIGNAL("itemDoubleClicked(QListWidgetItem*)"),self.clickedScriptList)
+        # self.connect(self.scriptList, QtCore.SIGNAL("itemDoubleClicked(QListWidgetItem*)"), self.clickedScriptList)
         self.scriptList.itemDoubleClicked.connect(self.clickedScriptList)
 
     def createMenu(self):
@@ -113,50 +113,50 @@ class MainWindow(QtWidgets.QMainWindow):
         iconSaveAs= self.currentDir+"/Icons/filesaveAs.png"
         iconQuit= self.currentDir+"/Icons/filequit.png"
 
-        newProjectAct = self.createAction("&New Project", self.newProject,QtGui.QKeySequence.New,iconNew)
-        openProjectAct = self.createAction("&Open Project", self.openProjectDlg,QtGui.QKeySequence.Open,iconOpen)
-        saveProjectAct = self.createAction("Save Project", self.saveProject,QtGui.QKeySequence.Save,iconSave)
-        saveProjectAsAct = self.createAction("Save Project As", self.saveProjectAs,QtGui.QKeySequence.SaveAs,iconSaveAs)
+        newProjectAct = self.createAction("&New Project", self.newProject, QtGui.QKeySequence.New, iconNew)
+        openProjectAct = self.createAction("&Open Project", self.openProjectDlg, QtGui.QKeySequence.Open, iconOpen)
+        saveProjectAct = self.createAction("Save Project", self.saveProject, QtGui.QKeySequence.Save, iconSave)
+        saveProjectAsAct = self.createAction("Save Project As", self.saveProjectAs, QtGui.QKeySequence.SaveAs, iconSaveAs)
         projInfoAct = self.createAction("Project Info", self.projInfo)
         saveFigureAct = self.createAction("Save Figure ", self.saveFigure)
         saveCurLaneAct= self.createAction("Save Current Lane", self.saveCurLane)
-        quitAct = self.createAction("Close", self.close,"Ctrl+Q", iconQuit)
-        self.fileMenuActions= (newProjectAct,openProjectAct,saveProjectAct,saveProjectAsAct,saveCurLaneAct,saveFigureAct,
-                                            projInfoAct,None,quitAct)
+        quitAct = self.createAction("Close", self.close, "Ctrl+Q", iconQuit)
+        self.fileMenuActions= (newProjectAct, openProjectAct, saveProjectAct, saveProjectAsAct, saveCurLaneAct, saveFigureAct, 
+                                            projInfoAct, None, quitAct)
 
         self.fileMenu = self.menuBar().addMenu("&File")
-    #    self.connect(self.fileMenu, QtCore.SIGNAL("aboutToShow()"),self.updateFileMenu)
+    #    self.connect(self.fileMenu, QtCore.SIGNAL("aboutToShow()"), self.updateFileMenu)
         self.addActions(self.fileMenu, self.fileMenuActions[:2])
 
         self.recentFilesMenu = self.fileMenu.addMenu("Recent Files")
-        self.addActions(self.recentFilesMenu,(None,None))
+        self.addActions(self.recentFilesMenu, (None, None))
         self.addActions(self.fileMenu, self.fileMenuActions[2:])
 
     ### EDIT MENU
         iconUndo= self.currentDir+"/Icons/EditUndo.png"
         editUndo = self.createAction("&Undo", self.undo, "Ctrl+Z", iconUndo)
-        #editRedo = self.createAction("&Redo", self.redo,shortcut="Ctrl+Y", tip="Redo")
+        #editRedo = self.createAction("&Redo", self.redo, shortcut="Ctrl+Y", tip="Redo")
         editLinePropAct = self.createAction("Line Properties", self.editLineProps)
         editFigSetAct = self.createAction("Figure Setting ", self.editFigSet)
 
-        editDrawSatdAction = self.createAction("Draw Saturated Points",self.drawSatd)#, None,None,None, True, "toggled(bool)")
-        editDrawSelected = self.createAction("Draw Selected Area", self.drawSelectedArea)#,None,None,None, True, "toggled(bool)")
-        editDrawDefault = self.createAction("Draw Default", self.drawFigure)#,None,None,None, True, "toggled(bool)")
+        editDrawSatdAction = self.createAction("Draw Saturated Points", self.drawSatd)#, None, None, None, True, "toggled(bool)")
+        editDrawSelected = self.createAction("Draw Selected Area", self.drawSelectedArea)#, None, None, None, True, "toggled(bool)")
+        editDrawDefault = self.createAction("Draw Default", self.drawFigure)#, None, None, None, True, "toggled(bool)")
 
-        editMenuActs=(editUndo,editLinePropAct,editFigSetAct,None,editDrawSatdAction,editDrawSelected,editDrawDefault)
+        editMenuActs=(editUndo, editLinePropAct, editFigSetAct, None, editDrawSatdAction, editDrawSelected, editDrawDefault)
         self.editMenu = self.menuBar().addMenu("&Edit")
-        self.addActions(self.editMenu,editMenuActs)
+        self.addActions(self.editMenu, editMenuActs)
     #### TOOLS MENU#####
         toolRoiAct = self.createAction("Region of Interest", self.toolActions)
-        toolSmoothEnhanceAct = self.createAction("Smoothing", self.toolActions,)
+        toolSmoothEnhanceAct = self.createAction("Smoothing", self.toolActions, )
         toolBaselineAct = self.createAction("Baseline Adjustment", self.toolActions)
         toolSignalAlignmentAct = self.createAction("Signal Alignment", self.toolActions)
         toolSignalDecayAct = self.createAction("Signal Decay Correction", self.toolActions)
         toolMobilityShiftAct = self.createAction("Mobility Shift", self.toolActions)
         toolApplyAllAct = self.createAction("Apply All Tools", self.toolActions)
 
-        toolsMenuActs=(toolRoiAct, toolSmoothEnhanceAct,toolBaselineAct, toolSignalDecayAct,toolMobilityShiftAct,
-                       toolSignalAlignmentAct,None,toolApplyAllAct)
+        toolsMenuActs=(toolRoiAct, toolSmoothEnhanceAct, toolBaselineAct, toolSignalDecayAct, toolMobilityShiftAct, 
+                       toolSignalAlignmentAct, None, toolApplyAllAct)
 
         self.toolsMenu = self.menuBar().addMenu("&Tools")
         self.addActions(self.toolsMenu, toolsMenuActs)
@@ -170,12 +170,12 @@ class MainWindow(QtWidgets.QMainWindow):
         reactAlignRefAct = self.createAction("Reactivity by Reference", self.toolActions)
         applyAllSeqAct = self.createAction("Automated Analysis by Reference", self.toolActions)
 
-        seqMenuActs=(seqAlignAct,reactivityAct,viewReportAct,None,seqAlignRefAct,reactAlignRefAct,applyAllSeqAct)
+        seqMenuActs=(seqAlignAct, reactivityAct, viewReportAct, None, seqAlignRefAct, reactAlignRefAct, applyAllSeqAct)
         self.seqMenu = self.menuBar().addMenu("&Sequence")
         self.addActions(self.seqMenu, seqMenuActs)
 
       #  referenceMenu = self.seqMenu.addMenu("Analyze By Reference")
-      #  self.addActions(referenceMenu,(sigAlignRefAct,scaleRefAct,seqAlignRefAct))
+      #  self.addActions(referenceMenu, (sigAlignRefAct, scaleRefAct, seqAlignRefAct))
 
 ### EXTRAS
         toolsScaleAct = self.createAction("Scale", self.toolActions)
@@ -188,16 +188,16 @@ class MainWindow(QtWidgets.QMainWindow):
         openFileSeqAct = self.createAction("Open Sequence File", self.toolActions)
 
 
-        optionaToolMenuActs=(toolsScaleAct,toolsSwapAct,toolsManualSignalAct,toolsVariousToolsAct,None,
-                             openShapeFinderAct,openAbifFileAct,openFileSeqAct)
+        optionaToolMenuActs=(toolsScaleAct, toolsSwapAct, toolsManualSignalAct, toolsVariousToolsAct, None, 
+                             openShapeFinderAct, openAbifFileAct, openFileSeqAct)
 
         self.optionalToolsMenu = self.menuBar().addMenu("&Extras")
         self.addActions(self.optionalToolsMenu, optionaToolMenuActs)
 
     ###HELP MENU
-        helpAboutAct = self.createAction("&About PyShape",self.helpAbout)
+        helpAboutAct = self.createAction("&About PyShape", self.helpAbout)
         iconHelp= self.currentDir+"/Icons/HelpIcon.png"
-        helpHelpAct = self.createAction("&Help", self.helpHelp,QtGui.QKeySequence.HelpContents,iconHelp)
+        helpHelpAct = self.createAction("&Help", self.helpHelp, QtGui.QKeySequence.HelpContents, iconHelp)
         helpMenuActs=(helpAboutAct, helpHelpAct)
 
         helpMenu = self.menuBar().addMenu("&Help")
@@ -207,11 +207,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
         fileToolbar = self.addToolBar("File")
         fileToolbar.setObjectName("FileToolBar")
-        self.addActions(fileToolbar, (newProjectAct,openProjectAct,saveProjectAct,saveProjectAsAct))
+        self.addActions(fileToolbar, (newProjectAct, openProjectAct, saveProjectAct, saveProjectAsAct))
 
         editToolbar = self.addToolBar("Edit")
         editToolbar.setObjectName("EditToolBar")
-        self.addActions(editToolbar, (editUndo,))
+        self.addActions(editToolbar, (editUndo, ))
 
         settingToolbar = self.addToolBar("Setting")
         settingToolbar.setObjectName("SettingToolBar")
@@ -219,14 +219,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         helpToolbar = self.addToolBar("Help")
         helpToolbar.setObjectName("HelpToolBar")
-        self.addActions(helpToolbar, (helpHelpAct,))
+        self.addActions(helpToolbar, (helpHelpAct, ))
 
         #self.toolBar=Qt.QToolBar(self)
         self.toolBar = self.addToolBar("WhatsThis")
         self.toolBar.setObjectName("WhatsThis")
        # self.toolBar.addAction(Qt.QWhatsThis.createAction(self.toolBar))
 
-    def createAction(self, text, slot=None, shortcut=None, icon=None,
+    def createAction(self, text, slot=None, shortcut=None, icon=None, 
                      tip=None, checkable=False, signal="triggered()"):
         action = QtWidgets.QAction(text, self)
         if icon is not None:
@@ -260,11 +260,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 action = QtGui.QAction(QtGui.QIcon(":/icon.png"), "&%d %s" % (
                         i + 1, QtCore.QFileInfo(fname).fileName()), self)
                 action.setData(QtCore.QVariant(fname))
-                # self.connect(action, QtCore.SIGNAL("triggered()"),self.openProject)
+                # self.connect(action, QtCore.SIGNAL("triggered()"), self.openProject)
                 action.triggered.connect(self.openProject)
                 self.recentFilesMenu.addAction(action)
         self.fileMenu.addSeparator()
-        self.addActions(self.fileMenu,self.fileMenuActions[2:])
+        self.addActions(self.fileMenu, self.fileMenuActions[2:])
 
     def loadInitialFile(self):
         settings = QtCore.QSettings()
@@ -274,11 +274,11 @@ class MainWindow(QtWidgets.QMainWindow):
             self.openProject(self.projFileName)
 
     def mainWindowConnect(self):
-        # self.connect(self.mainTopWidget.spinBoxZoom,QtCore.SIGNAL("valueChanged(int)"),self.setAxesYLim)
-        # self.connect(self.mainTopWidget.spinBoxWidth,QtCore.SIGNAL("valueChanged(int)"),self.resizeFigure)
-        # self.connect(self.mainTopWidget.spinBoxHeight,QtCore.SIGNAL("valueChanged(int)"),self.resizeFigure)
-        # self.connect(self.mainTopWidget.checkBoxFitWindow,QtCore.SIGNAL("toggled(bool)"),self.resizeFigure)
-        # self.connect(self.mainTopWidget.splitComboBox, QtCore.SIGNAL("currentIndexChanged(int)"),self.applySplitCombo)
+        # self.connect(self.mainTopWidget.spinBoxZoom, QtCore.SIGNAL("valueChanged(int)"), self.setAxesYLim)
+        # self.connect(self.mainTopWidget.spinBoxWidth, QtCore.SIGNAL("valueChanged(int)"), self.resizeFigure)
+        # self.connect(self.mainTopWidget.spinBoxHeight, QtCore.SIGNAL("valueChanged(int)"), self.resizeFigure)
+        # self.connect(self.mainTopWidget.checkBoxFitWindow, QtCore.SIGNAL("toggled(bool)"), self.resizeFigure)
+        # self.connect(self.mainTopWidget.splitComboBox, QtCore.SIGNAL("currentIndexChanged(int)"), self.applySplitCombo)
         self.mainTopWidget.spinBoxZoom.valueChanged.connect(self.setAxesYLim)
         self.mainTopWidget.spinBoxWidth.valueChanged.connect(self.resizeFigure)
         self.mainTopWidget.spinBoxHeight.valueChanged.connect(self.resizeFigure)
@@ -296,15 +296,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.mpl_connect('axes_enter_event', self.enter_axes)
         self.canvas.mpl_connect('axes_leave_event', self.leave_axes)
 
-    def enter_axes(self,event):
+    def enter_axes(self, event):
         self.isMouseOnAxes=True
-    def leave_axes(self,event):
+    def leave_axes(self, event):
         self.isMouseOnAxes=False
-    def onFigureEnterEvent(self,event):
+    def onFigureEnterEvent(self, event):
         self.isMouseOnFigure=True
-    def onFigureLeaveEvent(self,event):
+    def onFigureLeaveEvent(self, event):
         self.isMouseOnFigure=False
-    def onScrollEvent(self,event):
+    def onScrollEvent(self, event):
         self.scrollArea.horizontalScrollBar().setValue(int(self.scrollArea.horizontalScrollBar().value() + event.step*self.scrollArea.horizontalScrollBar().pageStep()/4))
     def resizeEvent(self, event):
         self.resizeFigure()
@@ -356,7 +356,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.progressBar = QtWidgets.QProgressBar(self.mainFrame)
         self.progressBar.setMaximum(100)
         self.progressBar.setFixedWidth(200)
-        self.labelXY=QtWidgets.QLabel('X,Y')
+        self.labelXY=QtWidgets.QLabel('X, Y')
         self.statusBar().addPermanentWidget(self.labelXY)
         self.statusBar().addPermanentWidget(self.progressBar)
         self.timer = QtCore.QTimer(self)
@@ -388,30 +388,30 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if  self.dlg.name=="Sequence Alignment": #or self.lastScript=="Align and Integrate":
             if event.inaxes==self.axesSeq:
-                self.dlg.dProjOut,self.peakInd,self.conFromBGToRX,self.conFromSeqToBG=clickedSeqAlign(x,self.dlg.dProjOut,self.eventKey,self.conFromBGToRX,self.conFromSeqToBG,self.chAxes)
+                self.dlg.dProjOut, self.peakInd, self.conFromBGToRX, self.conFromSeqToBG=clickedSeqAlign(x, self.dlg.dProjOut, self.eventKey, self.conFromBGToRX, self.conFromSeqToBG, self.chAxes)
                 self.dlg.applyFastSeqAlign()
                 self.updateSeqAxes(self.dlg.dProjOut)
                 self.dDrawData=deepcopy(self.dlg.dProjOut)
             elif self.eventKey==QtCore.Qt.Key_Shift and event.inaxes==self.chAxes['RX']:
-                self.clickedPeakInd=findClickedInd(x,self.dlg.dProjOut['dPeakRX']['pos'])
+                self.clickedPeakInd=findClickedInd(x, self.dlg.dProjOut['dPeakRX']['pos'])
                 self.isArrowSelectedRX=True
             elif self.eventKey==QtCore.Qt.Key_Shift and event.inaxes==self.chAxes['BG']:
-                self.clickedPeakInd=findClickedInd(x,self.dlg.dProjOut['dPeakBG']['pos'])
+                self.clickedPeakInd=findClickedInd(x, self.dlg.dProjOut['dPeakBG']['pos'])
                 self.isArrowSelectedBG=True
 
         elif  self.dVar['flag']['isPeakLinkRefModify']:
             if self.eventKey==QtCore.Qt.Key_Shift and event.inaxes==self.chAxes['BG']:
-                self.clickedPeakInd=findClickedInd(x,self.dlg.dProjOut['dPeakRX']['pos'])
+                self.clickedPeakInd=findClickedInd(x, self.dlg.dProjOut['dPeakRX']['pos'])
                 self.isArrowSelectedRX=True
             elif self.eventKey==QtCore.Qt.Key_Shift and event.inaxes==self.chAxes['BGS1']:
-                self.clickedPeakInd=findClickedInd(x,self.dlg.dProjOut['dPeakBG']['pos'])
+                self.clickedPeakInd=findClickedInd(x, self.dlg.dProjOut['dPeakBG']['pos'])
                 self.isArrowSelectedBG=True
 
         elif  self.dVar['flag']['isPeakMatchModify']:
             if event.inaxes==self.axesR:
-                self.clickedPeakInd=findClickedInd(x,self.dlg.linkXR)
+                self.clickedPeakInd=findClickedInd(x, self.dlg.linkXR)
             elif event.inaxes==self.axesS:
-                self.clickedPeakInd=findClickedInd(x,self.dlg.linkXS)
+                self.clickedPeakInd=findClickedInd(x, self.dlg.linkXS)
             else:
                 return True
             if self.eventKey==QtCore.Qt.Key_Shift and event.inaxes==self.axesR:
@@ -430,19 +430,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 if event.inaxes==self.axesS:
                     self.clickedXS=x
                 if self.clickedXR!=None and self.clickedXS!=None:
-                    self.clickedPeakIndR=findClickedInd(self.clickedXR,self.dlg.linkXR)
-                    self.clickedPeakIndS=findClickedInd(self.clickedXS,self.dlg.linkXS)
+                    self.clickedPeakIndR=findClickedInd(self.clickedXR, self.dlg.linkXR)
+                    self.clickedPeakIndS=findClickedInd(self.clickedXS, self.dlg.linkXS)
                     if self.clickedPeakIndR == self.clickedPeakIndS:
-                        self.dlg.linkXR=np.insert(self.dlg.linkXR, self.clickedPeakInd,self.clickedXR)
-                        self.dlg.linkXS=np.insert(self.dlg.linkXS, self.clickedPeakInd,self.clickedXS)
+                        self.dlg.linkXR=np.insert(self.dlg.linkXR, self.clickedPeakInd, self.clickedXR)
+                        self.dlg.linkXS=np.insert(self.dlg.linkXS, self.clickedPeakInd, self.clickedXS)
                         xyB=(self.clickedXR, self.dlg.dataR[self.clickedXR])
                         xyA=(self.clickedXS, self.dlg.dataS[self.clickedXS])
-                        con = ConnectionPatch(xyA,xyB,coordsA="data",coordsB="data",axesA=self.axesS, axesB=self.axesR,
-                                              arrowstyle="<|-|>",ec='0.3')
-                        self.conFromRtoS.insert(self.clickedPeakInd,con)
+                        con = ConnectionPatch(xyA, xyB, coordsA="data", coordsB="data", axesA=self.axesS, axesB=self.axesR, 
+                                              arrowstyle="<|-|>", ec='0.3')
+                        self.conFromRtoS.insert(self.clickedPeakInd, con)
                         self.axesS.add_artist(con)
                         self.canvas.draw()
-                        self.clickedXR,self.clickedXS=None, None
+                        self.clickedXR, self.clickedXS=None, None
 
         elif self.dlg.name=="Region of Interest":
             if event.inaxes==self.chAxes['RX'] or event.inaxes==self.chAxes['RXS1']:
@@ -460,14 +460,14 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.dlg.spinBoxMinusTo.setValue(x)
                     self.clickedApply()
         elif self.dlg.name=="Report":
-            self.clickedPeakInd=findClickedInd(x,self.dlg.dReport['posSeq'])
+            self.clickedPeakInd=findClickedInd(x, self.dlg.dReport['posSeq'])
             self.dlg.table.selectRow(self.clickedPeakInd)
 
     def onMove(self, event):
         if event.inaxes is None: return
         self.mouseX=int(event.xdata)
         self.mouseMoveX=int(event.xdata)
-        text='X:'+str(np.round(event.xdata,2))+', Y:'+str(np.round(event.ydata,2))
+        text='X:'+str(np.round(event.xdata, 2))+', Y:'+str(np.round(event.ydata, 2))
         self.labelXY.setText(text)
 
         self.canvas.restore_region(self.background)
@@ -492,33 +492,33 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if  self.dlg.name=="Sequence Alignment":# "Sequence Alignment":#self.dlg.title=="Align and Integrate" or self.lastScript=="Align and Integrate":
             if self.isArrowSelectedRX and event.inaxes==self.chAxes['RX']:
-                self.conFromBGToRX[self.clickedPeakInd].xy2=(event.xdata,self.dlg.dProjOut['dData']['RX'][event.xdata])
+                self.conFromBGToRX[self.clickedPeakInd].xy2=(event.xdata, self.dlg.dProjOut['dData']['RX'][event.xdata])
                 self.chAxes['BG'].draw_artist(self.conFromBGToRX[self.clickedPeakInd])
             if self.isArrowSelectedBG and event.inaxes==self.chAxes['BG']:
-                self.conFromBGToRX[self.clickedPeakInd].xy1=(event.xdata,self.dlg.dProjOut['dData']['BG'][event.xdata])
-                self.conFromSeqToBG[self.clickedPeakInd].xy2=(event.xdata,self.dlg.dProjOut['dData']['BG'][event.xdata])
+                self.conFromBGToRX[self.clickedPeakInd].xy1=(event.xdata, self.dlg.dProjOut['dData']['BG'][event.xdata])
+                self.conFromSeqToBG[self.clickedPeakInd].xy2=(event.xdata, self.dlg.dProjOut['dData']['BG'][event.xdata])
                 self.chAxes['BG'].draw_artist(self.conFromBGToRX[self.clickedPeakInd])
                 self.chAxes['BGS1'].draw_artist(self.conFromSeqToBG[self.clickedPeakInd])
 
         elif  self.dVar['flag']['isPeakLinkRefModify']:
             if self.isArrowSelectedRX and event.inaxes==self.chAxes['BG']:
-                self.conRX[self.clickedPeakInd].xy1=(event.xdata,self.dlg.dProjOut['dData']['RX'][event.xdata])
+                self.conRX[self.clickedPeakInd].xy1=(event.xdata, self.dlg.dProjOut['dData']['RX'][event.xdata])
                 self.chAxes['BG'].draw_artist(self.conRX[self.clickedPeakInd])
             if self.isArrowSelectedBG and event.inaxes==self.chAxes['BGS1']:
-                self.conBG[self.clickedPeakInd].xy1=(event.xdata,self.dlg.dProjOut['dData']['BG'][event.xdata])
+                self.conBG[self.clickedPeakInd].xy1=(event.xdata, self.dlg.dProjOut['dData']['BG'][event.xdata])
                 self.chAxes['BGS1'].draw_artist(self.conBG[self.clickedPeakInd])
 
         elif  self.dVar['flag']['isPeakMatchModify']:
             if self.isArrowSelectedR and event.inaxes==self.axesR:
-                self.conFromRtoS[self.clickedPeakInd].xy2=(event.xdata,self.dlg.dataR[event.xdata])
+                self.conFromRtoS[self.clickedPeakInd].xy2=(event.xdata, self.dlg.dataR[event.xdata])
                 self.axesR.draw_artist(self.conFromRtoS[self.clickedPeakInd])
             if self.isArrowSelectedS and event.inaxes==self.axesS:
-                self.conFromRtoS[self.clickedPeakInd].xy1=(event.xdata,self.dlg.dataS[event.xdata])
+                self.conFromRtoS[self.clickedPeakInd].xy1=(event.xdata, self.dlg.dataS[event.xdata])
                 self.axesS.draw_artist(self.conFromRtoS[self.clickedPeakInd])
 
         self.canvas.blit(self.canvas.figure.bbox)
 
-    def onRelease(self,event):
+    def onRelease(self, event):
         self.isMouseClick=False
         if event.inaxes is None: return
         self.eventKey=None
@@ -533,26 +533,26 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.dlg.name=="Sequence Alignment": #"Sequence Alignment":
             if self.isArrowSelectedRX:
                 if event.inaxes==self.chAxes['RX']:
-                    argmax=argmax3(self.dlg.dProjOut['dData']['RX'][self.mouseX-1],self.dlg.dProjOut['dData']['RX'][self.mouseX],self.dlg.dProjOut['dData']['RX'][self.mouseX+1])
+                    argmax=argmax3(self.dlg.dProjOut['dData']['RX'][self.mouseX-1], self.dlg.dProjOut['dData']['RX'][self.mouseX], self.dlg.dProjOut['dData']['RX'][self.mouseX+1])
                     self.mouseX=self.mouseX-1+argmax
-                    self.conFromBGToRX[self.clickedPeakInd].xy2=(self.mouseX,self.dlg.dProjOut['dData']['RX'][self.mouseX])
+                    self.conFromBGToRX[self.clickedPeakInd].xy2=(self.mouseX, self.dlg.dProjOut['dData']['RX'][self.mouseX])
                     self.dlg.dProjOut['dPeakRX']['pos'][self.clickedPeakInd]=self.mouseX
                     self.dlg.dProjOut['dPeakRX']['amp'][self.clickedPeakInd]=self.dlg.dProjOut['dData']['RX'][self.mouseX]
                 else:
-                    self.conFromBGToRX[self.clickedPeakInd].xy2=(self.dlg.dProjOut['dPeakRX']['pos'][self.clickedPeakInd],self.dlg.dProjOut['dPeakRX']['amp'][self.clickedPeakInd])
+                    self.conFromBGToRX[self.clickedPeakInd].xy2=(self.dlg.dProjOut['dPeakRX']['pos'][self.clickedPeakInd], self.dlg.dProjOut['dPeakRX']['amp'][self.clickedPeakInd])
                 self.dDrawData=deepcopy(self.dlg.dProjOut)
                 self.canvas.draw()
                 self.isArrowSelectedRX=False
             if self.isArrowSelectedBG:
                 if event.inaxes==self.chAxes['BG']:
-                    argmax=argmax3(self.dlg.dProjOut['dData']['BG'][self.mouseX-1],self.dlg.dProjOut['dData']['BG'][self.mouseX],self.dlg.dProjOut['dData']['BG'][self.mouseX+1])
+                    argmax=argmax3(self.dlg.dProjOut['dData']['BG'][self.mouseX-1], self.dlg.dProjOut['dData']['BG'][self.mouseX], self.dlg.dProjOut['dData']['BG'][self.mouseX+1])
                     self.mouseX=self.mouseX-1+argmax
-                    self.conFromBGToRX[self.clickedPeakInd].xy1=(self.mouseX,self.dlg.dProjOut['dData']['BG'][self.mouseX])
-                    self.conFromSeqToBG[self.clickedPeakInd].xy2=(self.mouseX,self.dlg.dProjOut['dData']['BG'][self.mouseX])
+                    self.conFromBGToRX[self.clickedPeakInd].xy1=(self.mouseX, self.dlg.dProjOut['dData']['BG'][self.mouseX])
+                    self.conFromSeqToBG[self.clickedPeakInd].xy2=(self.mouseX, self.dlg.dProjOut['dData']['BG'][self.mouseX])
                     self.dlg.dProjOut['dPeakBG']['pos'][self.clickedPeakInd]=self.mouseX
                     self.dlg.dProjOut['dPeakBG']['amp'][self.clickedPeakInd]=self.dlg.dProjOut['dData']['BG'][self.mouseX]
                 else:
-                    self.conFromBGToRX[self.clickedPeakInd].xy1=(self.dlg.dProjOut['dPeakBG']['pos'][self.clickedPeakInd],self.dlg.dProjOut['dPeakBG']['amp'][self.clickedPeakInd])
+                    self.conFromBGToRX[self.clickedPeakInd].xy1=(self.dlg.dProjOut['dPeakBG']['pos'][self.clickedPeakInd], self.dlg.dProjOut['dPeakBG']['amp'][self.clickedPeakInd])
                 self.dDrawData=deepcopy(self.dlg.dProjOut)
                 self.canvas.draw()
                 self.isArrowSelectedBG=False
@@ -560,38 +560,38 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.dVar['flag']['isPeakLinkRefModify']: #"Sequence Alignment":
             if self.isArrowSelectedRX:
                 if event.inaxes==self.chAxes['BG']:
-                    self.conRX[self.clickedPeakInd].xy1=(self.mouseX,self.dlg.dProjOut['dData']['RX'][self.mouseX])
+                    self.conRX[self.clickedPeakInd].xy1=(self.mouseX, self.dlg.dProjOut['dData']['RX'][self.mouseX])
                     self.dlg.dProjOut['dPeakRX']['pos'][self.clickedPeakInd]=self.mouseX
                     self.dlg.dProjOut['dPeakRX']['amp'][self.clickedPeakInd]=self.dlg.dProjOut['dData']['RX'][self.mouseX]
                 else:
-                    self.conRX[self.clickedPeakInd].xy1=(self.dlg.dProjOut['dPeakRX']['pos'][self.clickedPeakInd],self.dlg.dProjOut['dPeakRX']['amp'][self.clickedPeakInd])
+                    self.conRX[self.clickedPeakInd].xy1=(self.dlg.dProjOut['dPeakRX']['pos'][self.clickedPeakInd], self.dlg.dProjOut['dPeakRX']['amp'][self.clickedPeakInd])
                 self.dDrawData=deepcopy(self.dlg.dProjOut)
                 self.canvas.draw()
                 self.isArrowSelectedRX=False
             if self.isArrowSelectedBG:
                 if event.inaxes==self.chAxes['BGS1']:
-                    self.conBG[self.clickedPeakInd].xy1=(self.mouseX,self.dlg.dProjOut['dData']['BG'][self.mouseX])
+                    self.conBG[self.clickedPeakInd].xy1=(self.mouseX, self.dlg.dProjOut['dData']['BG'][self.mouseX])
                     self.dlg.dProjOut['dPeakBG']['pos'][self.clickedPeakInd]=self.mouseX
                     self.dlg.dProjOut['dPeakBG']['amp'][self.clickedPeakInd]=self.dlg.dProjOut['dData']['BG'][self.mouseX]
                 else:
-                    self.conBG[self.clickedPeakInd].xy1=(self.dlg.dProjOut['dPeakBG']['pos'][self.clickedPeakInd],self.dlg.dProjOut['dPeakBG']['amp'][self.clickedPeakInd])
+                    self.conBG[self.clickedPeakInd].xy1=(self.dlg.dProjOut['dPeakBG']['pos'][self.clickedPeakInd], self.dlg.dProjOut['dPeakBG']['amp'][self.clickedPeakInd])
                 self.dDrawData=deepcopy(self.dlg.dProjOut)
                 self.canvas.draw()
                 self.isArrowSelectedBG=False
 
         if  self.dVar['flag']['isPeakMatchModify']:
             if self.isArrowSelectedR and event.inaxes==self.axesR:
-                self.conFromRtoS[self.clickedPeakInd].xy2=(self.mouseX,self.dlg.dataR[self.mouseX])
+                self.conFromRtoS[self.clickedPeakInd].xy2=(self.mouseX, self.dlg.dataR[self.mouseX])
                 self.dlg.linkXR[self.clickedPeakInd]=self.mouseX
                 self.canvas.draw()
                 self.isArrowSelectedR=False
             if self.isArrowSelectedS and event.inaxes==self.axesS:
-                self.conFromRtoS[self.clickedPeakInd].xy1=(self.mouseX,self.dlg.dataS[self.mouseX])
+                self.conFromRtoS[self.clickedPeakInd].xy1=(self.mouseX, self.dlg.dataS[self.mouseX])
                 self.dlg.linkXS[self.clickedPeakInd]=self.mouseX
                 self.canvas.draw()
                 self.isArrowSelectedS=False
 
-    def onDrawEvent(self,event):
+    def onDrawEvent(self, event):
         self.background = self.canvas.copy_from_bbox(self.canvas.figure.bbox)
 
     def keyPressEvent(self, event):
@@ -601,16 +601,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
 #        if self.eventKey== QtCore.Qt.Key_A and self.dVar['flag']['isPeakMatchModify']:
 #            if self.clickedXR!=None and self.clickedXS!=None:
-#                self.dlg.linkXR=np.insert(self.dlg.linkXR, self.clickedPeakInd,self.clickedXR)
-#                self.dlg.linkXS=np.insert(self.dlg.linkXS, self.clickedPeakInd,self.clickedXS)
+#                self.dlg.linkXR=np.insert(self.dlg.linkXR, self.clickedPeakInd, self.clickedXR)
+#                self.dlg.linkXS=np.insert(self.dlg.linkXS, self.clickedPeakInd, self.clickedXS)
 #                xyB=(self.clickedXR, self.dlg.dataR[self.clickedXR])
 #                xyA=(self.clickedXS, self.dlg.dataS[self.clickedXS])
-#                con = ConnectionPatch(xyA,xyB,coordsA="data",coordsB="data",axesA=self.axesS, axesB=self.axesR,
-#                                      arrowstyle="<|-|>",ec='0.3')
-#                self.conFromRtoS.insert(self.clickedPeakInd,con)
+#                con = ConnectionPatch(xyA, xyB, coordsA="data", coordsB="data", axesA=self.axesS, axesB=self.axesR, 
+#                                      arrowstyle="<|-|>", ec='0.3')
+#                self.conFromRtoS.insert(self.clickedPeakInd, con)
 #                self.axesS.add_artist(con)
 #                self.canvas.draw()
-#        self.clickedXR,self.clickedXS=None, None
+#        self.clickedXR, self.clickedXS=None, None
 #        self.statusBar().showMessage("The Key Released")
 
         self.eventKey=None
@@ -636,7 +636,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def newProject0(self):
         self.dlg=DlgNewProject0(self.dlg.dProject)
-        # self.connect(self.dlg.buttonBox.nextButton,QtCore.SIGNAL("clicked()"),self.newProject1)
+        # self.connect(self.dlg.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.newProject1)
         self.dlg.buttonBox.nextButton.clicked.connect(self.newProject1)
         self.dockTool.setWidget(self.dlg)
     def newProject1(self):
@@ -644,8 +644,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dlg=DlgNewProject1(self.dlg.dProject)
             self.dlg.buttonBox.nextButton.clicked.connect(self.newProject2)
             self.dlg.buttonBox.backButton.clicked.connect(self.newProject0)
-            # self.connect(self.dlg.buttonBox.nextButton,QtCore.SIGNAL("clicked()"),self.newProject2)
-            # self.connect(self.dlg.buttonBox.backButton,QtCore.SIGNAL("clicked()"),self.newProject0)
+            # self.connect(self.dlg.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.newProject2)
+            # self.connect(self.dlg.buttonBox.backButton, QtCore.SIGNAL("clicked()"), self.newProject0)
             self.dockTool.setWidget(self.dlg)
     def newProject2(self):
         if self.dlg.isApplied:
@@ -653,9 +653,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dlg.buttonBox.nextButton.clicked.connect(self.applyNewProject)
             self.dlg.buttonBox.backButton.clicked.connect(self.newProject1)
             self.dlg.buttonBox.doneButton.clicked.connect(self.doneNewProject)
-            #self.connect(self.dlg.buttonBox.nextButton,QtCore.SIGNAL("clicked()"),self.applyNewProject)
-            #self.connect(self.dlg.buttonBox.backButton,QtCore.SIGNAL("clicked()"),self.newProject1)
-            #self.connect(self.dlg.buttonBox.doneButton,QtCore.SIGNAL("clicked()"),self.doneNewProject)
+            #self.connect(self.dlg.buttonBox.nextButton, QtCore.SIGNAL("clicked()"), self.applyNewProject)
+            #self.connect(self.dlg.buttonBox.backButton, QtCore.SIGNAL("clicked()"), self.newProject1)
+            #self.connect(self.dlg.buttonBox.doneButton, QtCore.SIGNAL("clicked()"), self.doneNewProject)
             self.dockTool.setWidget(self.dlg)
 
     def newProject(self):
@@ -676,7 +676,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def openProjectDlg(self):
         self.checkClickedApply()
         if self.okToContinue():
-            self.projFileName=QtWidgets.QFileDialog.getOpenFileName(self,"Select a file",self.workingDir,("QuShape project file (*.qushape *.pyshape *.txt *.fsa )"))
+            self.projFileName=QtWidgets.QFileDialog.getOpenFileName(self, "Select a file", self.workingDir, ("QuShape project file (*.qushape *.pyshape *.txt *.fsa )"))
             #if not self.projFileName.isEmpty():
             if self.projFileName:
                 self.projFileName=str(self.projFileName)
@@ -684,9 +684,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.openProject(self.projFileName)
                 except:
                     msg="Selected files is not appropriate to open in QuShape."
-                    QtWidgets.QMessageBox.warning(self,"QuShape - ",msg)
+                    QtWidgets.QMessageBox.warning(self, "QuShape - ", msg)
 
-    def openProject(self,projFile=None):
+    def openProject(self, projFile=None):
         if projFile is None:
             action = self.sender()
             if isinstance(action, QtGui.QAction):
@@ -703,8 +703,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setOpenProject()
 
         self.lastScript=self.dProject['scriptList'][-1]
-        if self.lastScript not in ["Reactivity","Reactivity by Reference"]:
-            self.checkScriptDraw(self.lastScript,self.intervalData[-1])
+        if self.lastScript not in ["Reactivity", "Reactivity by Reference"]:
+            self.checkScriptDraw(self.lastScript, self.intervalData[-1])
         self.nextStep(self.lastScript)
 
     def addRecentFile(self, fname):
@@ -722,14 +722,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def clickedScriptList(self):
         row = self.scriptList.currentRow()
         script=self.dProject['scriptList'][row]# str(item.text())
-        self.checkScriptDraw(script,self.intervalData[row])
+        self.checkScriptDraw(script, self.intervalData[row])
 
-    def checkScriptDraw(self,script,interData):
+    def checkScriptDraw(self, script, interData):
         self.dVar['flag']=deepcopy(self.dVarDefault['flag'])
-        if script in ['Sequence Alignment','Sequence Alignment by Reference'] :
+        if script in ['Sequence Alignment', 'Sequence Alignment by Reference'] :
             self.dVar['flag']['isSeqAlign']=True
             self.dVar['flag']['isDrawLine']=True
-        elif script in ["Reactivity","Reactivity by Reference"]:
+        elif script in ["Reactivity", "Reactivity by Reference"]:
             self.drawReactivityFig(interData)
             return
         self.dDrawData=deepcopy(interData)
@@ -748,7 +748,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dirty = False
 
     def saveProjectAs(self):
-        fName= QtWidgets.QFileDialog.getSaveFileName(self,"Save As", self.dProject['dir'],'')
+        fName= QtWidgets.QFileDialog.getSaveFileName(self, "Save As", self.dProject['dir'], '')
         if fName:
             if isinstance(fName, tuple):
                 fName = fName[0]
@@ -758,11 +758,11 @@ class MainWindow(QtWidgets.QMainWindow):
             self.setWindowTitle(self.windowTitle +' - '+self.dProject['name'])
             self.saveProject()
     def saveCurLane(self):
-        fileName = QtWidgets.QFileDialog.getSaveFileName(self,"Save As", self.dProject['dir'], "Text Files (*.txt)")
+        fileName = QtWidgets.QFileDialog.getSaveFileName(self, "Save As", self.dProject['dir'], "Text Files (*.txt)")
         if fileName:
-            saveCurLaneAsTxt(fileName,self.dDrawData['dData'],self.dProject['chKeyRS'])
+            saveCurLaneAsTxt(fileName, self.dDrawData['dData'], self.dProject['chKeyRS'])
     def saveFigure(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, " ",self.dProject['dir'])
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, " ", self.dProject['dir'])
         if fname:
             #self.canvas.print_figure(str(fname))
             self.fig.savefig(str(fname))
@@ -777,7 +777,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def okToContinue(self):
         if self.dirty:
             msg="Do you want to save the changes you made to "+str(self.dProject['name'])+' project?'
-            reply = QtWidgets.QMessageBox.question(self, "PyShape - Unsaved Changes",msg,
+            reply = QtWidgets.QMessageBox.question(self, "PyShape - Unsaved Changes", msg, 
                             QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No|QtWidgets.QMessageBox.Cancel)
             if reply == QtWidgets.QMessageBox.Cancel:
                 return False
@@ -796,14 +796,14 @@ class MainWindow(QtWidgets.QMainWindow):
             del self.intervalData[-1]
             self.dProject=deepcopy(self.intervalData[-1])
             self.lastScript=self.dProject['scriptList'][-1]
-            self.checkScriptDraw(self.lastScript,self.intervalData[-1])
+            self.checkScriptDraw(self.lastScript, self.intervalData[-1])
             self.nextStep(self.lastScript)
 
 ##### TOOLS  FUNCTIONS #####
     def checkClickedApply(self):
         if self.isClickedApply:
             msg="You have applied a tool.Do you want to save the changes you made"
-            reply = QtWidgets.QMessageBox.question(self,"QuShape - Unsaved Changes",msg,
+            reply = QtWidgets.QMessageBox.question(self, "QuShape - Unsaved Changes", msg, 
                             QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No) #|QtWidgets.QMessageBox.Cancel)
             if reply == QtWidgets.QMessageBox.No:
                 self.isClickedApply=False
@@ -827,13 +827,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dVar['flag']['isPeakMatchModify']=False
         self.dVar['flag']['isPeakLinkRefModify']=False
 
-    def defineDrawType(self,dlg):
+    def defineDrawType(self, dlg):
         if dlg.name=='Signal Alignment':
             self.mainTopWidget.splitComboBox.setCurrentIndex(1)
         elif dlg.name=='Mobility Shift':
             self.mainTopWidget.splitComboBox.setCurrentIndex(3)
         else:
-   #     elif dlg.name in ['Sequence Alignment','Sequence Alignment by Reference']:
+   #     elif dlg.name in ['Sequence Alignment', 'Sequence Alignment by Reference']:
             self.mainTopWidget.splitComboBox.setCurrentIndex(0)
 #        else:
 #            self.mainTopWidget.splitComboBox.setCurrentIndex(0)
@@ -873,7 +873,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.drawFigure()
 
-    def clickedDone(self,next=True):
+    def clickedDone(self, next=True):
         if self.dlg.name=="Open ABIF File":
             return True
         elif self.dlg.name=="Region of Interest":
@@ -904,7 +904,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.isClickedApply=False
         self.nextStep(self.dlg.name)
 
-    def nextStep(self,script):
+    def nextStep(self, script):
         if script=='New Project':
             self.curScript='Region of Interest'
         elif script=='Region of Interest':
@@ -947,9 +947,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dlg.buttonBox.applyButton.clicked.connect(self.clickedApply)
         self.dlg.buttonBox.doneButton.clicked.connect(self.clickedDone)
         self.dlg.buttonBox.skipButton.clicked.connect(self.clickedSkip)
-        # self.connect(self.dlg.buttonBox.applyButton,QtCore.SIGNAL("clicked()"),self.clickedApply)
-        # self.connect(self.dlg.buttonBox.doneButton,QtCore.SIGNAL("clicked()"),self.clickedDone)
-        # self.connect(self.dlg.buttonBox.skipButton,QtCore.SIGNAL("clicked()"),self.clickedSkip)
+        # self.connect(self.dlg.buttonBox.applyButton, QtCore.SIGNAL("clicked()"), self.clickedApply)
+        # self.connect(self.dlg.buttonBox.doneButton, QtCore.SIGNAL("clicked()"), self.clickedDone)
+        # self.connect(self.dlg.buttonBox.skipButton, QtCore.SIGNAL("clicked()"), self.clickedSkip)
         self.dockTool.setWidget(self.dlg)
 
     def toolActions(self):
@@ -961,12 +961,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def setAction(self):
         self.dVar['flag']=deepcopy(self.dVarDefault['flag'])
         if self.curScript=='Region of Interest':
-            self.dlg=DlgRegionOfInterest(self.dProject,self.dProjRef)
+            self.dlg=DlgRegionOfInterest(self.dProject, self.dProjRef)
             self.spanROI={}
-            self.rectRX=self.chAxes['RX'].axvspan(self.dlg.roi['RX'][0],self.dlg.roi['RX'][1],visible=True,facecolor='0.8')
-            self.rectRXS1=self.chAxes['RXS1'].axvspan(self.dlg.roi['RX'][0],self.dlg.roi['RX'][1],visible=True,facecolor='0.8')
-            self.rectBG=self.chAxes['BG'].axvspan(self.dlg.roi['BG'][0],self.dlg.roi['BG'][1],visible=True,facecolor='0.8')
-            self.rectBGS1=self.chAxes['BGS1'].axvspan(self.dlg.roi['BG'][0],self.dlg.roi['BG'][1],visible=True,facecolor='0.8')
+            self.rectRX=self.chAxes['RX'].axvspan(self.dlg.roi['RX'][0], self.dlg.roi['RX'][1], visible=True, facecolor='0.8')
+            self.rectRXS1=self.chAxes['RXS1'].axvspan(self.dlg.roi['RX'][0], self.dlg.roi['RX'][1], visible=True, facecolor='0.8')
+            self.rectBG=self.chAxes['BG'].axvspan(self.dlg.roi['BG'][0], self.dlg.roi['BG'][1], visible=True, facecolor='0.8')
+            self.rectBGS1=self.chAxes['BGS1'].axvspan(self.dlg.roi['BG'][0], self.dlg.roi['BG'][1], visible=True, facecolor='0.8')
             self.drawROISpan()
         elif self.curScript=='Smoothing':
             self.dlg = DlgSmooth(self.dProject)
@@ -985,24 +985,24 @@ class MainWindow(QtWidgets.QMainWindow):
         elif  self.curScript=='Sequence Alignment':
             self.mainTopWidget.spinBoxWidth.setValue(200)
             self.dlg=DlgSeqAlign(self.dProject)
-            # self.connect(self.dlg.checkBoxLineDraw,QtCore. SIGNAL("toggled(bool)"),self.drawDlgApply)
+            # self.connect(self.dlg.checkBoxLineDraw, QtCore. SIGNAL("toggled(bool)"), self.drawDlgApply)
             self.dlg.checkBoxLineDraw.toggled.connect(self.drawDlgApply)
         elif  self.curScript=='Reactivity':
             if self.dVar['isDoneSeqAlign']==False:
                 msg="You have to apply Sequence Alignment before Reactivity "
-                QtWidgets.QMessageBox.warning(self,"QuShape - ",msg)
+                QtWidgets.QMessageBox.warning(self, "QuShape - ", msg)
                 return
 
-            self.dlg = DlgReactivity(self.dProject,self.dProjRef)
+            self.dlg = DlgReactivity(self.dProject, self.dProjRef)
             self.dlg.pushButton0.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton1.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton2.clicked.connect(self.drawReactivityPressed)
-            # self.connect(self.dlg.pushButton0,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
-            # self.connect(self.dlg.pushButton1,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
-            # self.connect(self.dlg.pushButton2,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
+            # self.connect(self.dlg.pushButton0, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
+            # self.connect(self.dlg.pushButton1, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
+            # self.connect(self.dlg.pushButton2, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             self.dlg.initialize()
         elif  self.curScript=='Sequence Alignment by Reference':
-            self.dlg=DlgSeqAlignRef(self.dProject,self.dProjRef)
+            self.dlg=DlgSeqAlignRef(self.dProject, self.dProjRef)
             self.dlg.button0.connect(self.drawSignalAlignModify)
             self.dlg.button1.connect(self.drawPeakLinkRefModify)
             #self.connect(self.dlg.button0, QtCore.SIGNAL("clicked()"), self.drawSignalAlignModify)
@@ -1010,13 +1010,13 @@ class MainWindow(QtWidgets.QMainWindow):
         elif  self.curScript=='Reactivity by Reference':
             if self.dVar['isDoneSeqAlignRef']==False:
                 msg="You have to apply Sequence Alignment before Reactivity "
-                QtWidgets.QMessageBox.warning(self,"QuShape - ",msg)
+                QtWidgets.QMessageBox.warning(self, "QuShape - ", msg)
                 return
 
-            self.dlg=DlgReactivityRef(self.dProject,self.dProjRef)
-            #self.connect(self.dlg.pushButton0,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
-            #self.connect(self.dlg.pushButton1,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
-            #self.connect(self.dlg.pushButton2,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
+            self.dlg=DlgReactivityRef(self.dProject, self.dProjRef)
+            #self.connect(self.dlg.pushButton0, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
+            #self.connect(self.dlg.pushButton1, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
+            #self.connect(self.dlg.pushButton2, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             self.dlg.pushButton0.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton1.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton2.clicked.connect(self.drawReactivityPressed)
@@ -1024,10 +1024,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dlg.initialize()
 
         elif  self.curScript=='Automated Analysis by Reference':
-            self.dlg=DlgApplyAutoRef(self.dProject,self.dProjRef)
-            #self.connect(self.dlg.pushButton0,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
-            #self.connect(self.dlg.pushButton1,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
-            #self.connect(self.dlg.pushButton2,QtCore.SIGNAL("clicked()"),self.drawReactivityPressed)
+            self.dlg=DlgApplyAutoRef(self.dProject, self.dProjRef)
+            #self.connect(self.dlg.pushButton0, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
+            #self.connect(self.dlg.pushButton1, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
+            #self.connect(self.dlg.pushButton2, QtCore.SIGNAL("clicked()"), self.drawReactivityPressed)
             self.dlg.pushButton0.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton1.clicked.connect(self.drawReactivityPressed)
             self.dlg.pushButton2.clicked.connect(self.drawReactivityPressed)
@@ -1057,7 +1057,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def viewReport(self):
         if self.dVar['isDoneReactivity']==False:
                 msg="You have to apply Reactivity tools"
-                QtWidgets.QMessageBox.warning(self,"QuShape - ",msg)
+                QtWidgets.QMessageBox.warning(self, "QuShape - ", msg)
                 return
 
         self.dlg=DlgReportTable(self.dProject)
@@ -1072,7 +1072,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def showSelectedNucInReport(self):
         self.canvas.restore_region(self.background)
-        nucPos=self.dlg.dReport['posSeq'][self.dlg.table.currentRow()] #self.dlg.table.item(curRow,1)
+        nucPos=self.dlg.dReport['posSeq'][self.dlg.table.currentRow()] #self.dlg.table.item(curRow, 1)
         for ax, rect in zip(self.fig.get_axes(), self.spanRect):
             rect.set_width(11)
             rect.set_x(nucPos-5)
@@ -1087,14 +1087,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.rectRXS1.set_visible(False)
         self.rectBG.set_visible(False)
         self.rectBGS1.set_visible(False)
-        self.rectRX=self.chAxes['RX'].axvspan(self.dlg.roi['RX'][0],self.dlg.roi['RX'][1],visible=True,facecolor='0.8')
-        self.rectRXS1=self.chAxes['RXS1'].axvspan(self.dlg.roi['RX'][0],self.dlg.roi['RX'][1],visible=True,facecolor='0.8')
-        self.rectBG=self.chAxes['BG'].axvspan(self.dlg.roi['BG'][0],self.dlg.roi['BG'][1],visible=True,facecolor='0.8')
-        self.rectBGS1=self.chAxes['BGS1'].axvspan(self.dlg.roi['BG'][0],self.dlg.roi['BG'][1],visible=True,facecolor='0.8')
+        self.rectRX=self.chAxes['RX'].axvspan(self.dlg.roi['RX'][0], self.dlg.roi['RX'][1], visible=True, facecolor='0.8')
+        self.rectRXS1=self.chAxes['RXS1'].axvspan(self.dlg.roi['RX'][0], self.dlg.roi['RX'][1], visible=True, facecolor='0.8')
+        self.rectBG=self.chAxes['BG'].axvspan(self.dlg.roi['BG'][0], self.dlg.roi['BG'][1], visible=True, facecolor='0.8')
+        self.rectBGS1=self.chAxes['BGS1'].axvspan(self.dlg.roi['BG'][0], self.dlg.roi['BG'][1], visible=True, facecolor='0.8')
         self.canvas.draw()
 
     def drawSignalAlignModify(self):
-        self.conFromRtoS,self.axesR,self.axesS=drawPeakLinkModifyFig(self.fig,self.dlg.dataR,self.dlg.dataS,self.dlg.linkXR,self.dlg.linkXS)
+        self.conFromRtoS, self.axesR, self.axesS=drawPeakLinkModifyFig(self.fig, self.dlg.dataR, self.dlg.dataS, self.dlg.linkXR, self.dlg.linkXS)
         self.dVar['flag']['isPeakMatchModify']=True
       #  self.verticalLines = createVerticalLines(self.fig.get_axes())
         self.dlg.isMatchedPeaksChanged=True
@@ -1110,13 +1110,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dDrawData['dData']['BGS1']=self.dlg.dProjOut['dData']['BG']
         self.dVar['flag']['isSeqAlign']=True
         self.drawFigure()
-        self.axesSeq =self.fig.add_axes([self.dFigMargin['L'],0.035,self.dFigMargin['R']-self.dFigMargin['L'],0.035])#,axisbg='#FFFFCC')
+        self.axesSeq =self.fig.add_axes([self.dFigMargin['L'], 0.035, self.dFigMargin['R']-self.dFigMargin['L'], 0.035])#, axisbg='#FFFFCC')
         self.updateSeqAxes(self.dlg.dProjRef)
 
-        self.chAxes['RX'].legend(['RX Reference'],loc=2)
-        self.chAxes['BG'].legend(['RX Sample'],loc=2)
-        self.chAxes['RXS1'].legend(['BG Reference'],loc=2)
-        self.chAxes['BGS1'].legend(['BG Sample'],loc=2)
+        self.chAxes['RX'].legend(['RX Reference'], loc=2)
+        self.chAxes['BG'].legend(['RX Sample'], loc=2)
+        self.chAxes['RXS1'].legend(['BG Reference'], loc=2)
+        self.chAxes['BGS1'].legend(['BG Sample'], loc=2)
 
         pos0=self.dlg.dProjOut['dPeakRX']['pos']
         amp0=self.dlg.dProjOut['dPeakRX']['amp']
@@ -1124,7 +1124,7 @@ class MainWindow(QtWidgets.QMainWindow):
         amp1=self.dlg.dProjRef['dData']['RX'][pos1]
         ax0=self.chAxes['BG']
         ax1=self.chAxes['RX']
-        self.conRX=drawMatchLines0(pos0,amp0,pos1,amp1,ax0,ax1)
+        self.conRX=drawMatchLines0(pos0, amp0, pos1, amp1, ax0, ax1)
 
         pos0=self.dlg.dProjOut['dPeakBG']['pos']
         amp0=self.dlg.dProjOut['dPeakBG']['amp']
@@ -1132,42 +1132,42 @@ class MainWindow(QtWidgets.QMainWindow):
         amp1=self.dlg.dProjRef['dData']['BG'][pos1]
         ax0=self.chAxes['BGS1']
         ax1=self.chAxes['RXS1']
-        self.conBG=drawMatchLines0(pos0,amp0,pos1,amp1,ax0,ax1)
+        self.conBG=drawMatchLines0(pos0, amp0, pos1, amp1, ax0, ax1)
         self.canvas.draw()
 
-    def drawGaussFit(self,dProject):
-        keys=['RX','BG']
+    def drawGaussFit(self, dProject):
+        keys=['RX', 'BG']
         for key in keys:
             key0=str('dPeak'+key)
             for i in range(len(dProject[key0]['pos'])):
-                x=np.arange(dProject[key0]['pos'][i]-2*dProject[key0]['wid'][i],dProject[key0]['pos'][i]+2*dProject[key0]['wid'][i])
-                A1=fitFuncG(x,dProject[key0]['pos'][i],dProject[key0]['amp'][i],dProject[key0]['wid'][i])
-                self.chAxes[key].plot(x,A1,'k-',lw=1.5)
+                x=np.arange(dProject[key0]['pos'][i]-2*dProject[key0]['wid'][i], dProject[key0]['pos'][i]+2*dProject[key0]['wid'][i])
+                A1=fitFuncG(x, dProject[key0]['pos'][i], dProject[key0]['amp'][i], dProject[key0]['wid'][i])
+                self.chAxes[key].plot(x, A1, 'k-', lw=1.5)
 
-    def drawMatchLines(self,dProject):
-        self.conFromBGToRX=drawMatchLines0(dProject['dPeakBG']['pos'],dProject['dPeakBG']['amp'],dProject['dPeakRX']['pos'],dProject['dPeakRX']['amp'],self.chAxes['BG'],self.chAxes['RX'])
-        self.conFromSeqToBG=drawMatchLines0(dProject['seqX'],dProject['dData']['BGS1'][dProject['seqX']],dProject['dPeakBG']['pos'],dProject['dPeakBG']['amp'],self.chAxes['BGS1'],self.chAxes['BG'])
+    def drawMatchLines(self, dProject):
+        self.conFromBGToRX=drawMatchLines0(dProject['dPeakBG']['pos'], dProject['dPeakBG']['amp'], dProject['dPeakRX']['pos'], dProject['dPeakRX']['amp'], self.chAxes['BG'], self.chAxes['RX'])
+        self.conFromSeqToBG=drawMatchLines0(dProject['seqX'], dProject['dData']['BGS1'][dProject['seqX']], dProject['dPeakBG']['pos'], dProject['dPeakBG']['amp'], self.chAxes['BGS1'], self.chAxes['BG'])
         self.canvas.draw()
 
-    def updateSeqAxes(self,dProject):
+    def updateSeqAxes(self, dProject):
         self.axesSeq.clear()
         self.axesSeqText=[]
         for i in range(len(dProject['seqRNA'])):
             clr=setNucColor(dProject['seqRNA'][i])
-            self.axesSeq.text(dProject['seqX'][i],0,dProject['seqRNA'][i],fontsize=8,color=clr, horizontalalignment='center')
+            self.axesSeq.text(dProject['seqX'][i], 0, dProject['seqRNA'][i], fontsize=8, color=clr, horizontalalignment='center')
         for i in range(len(dProject['seqX0'])):
             clr=setNucColor(dProject['seq0'][i])
-            self.axesSeq.text(dProject['seqX0'][i],-1,dProject['seq0'][i],fontsize=8,color=clr, horizontalalignment='center')
+            self.axesSeq.text(dProject['seqX0'][i], -1, dProject['seq0'][i], fontsize=8, color=clr, horizontalalignment='center')
 
-        xticks, xlabels=[],[]
-        for i in range(0,len(dProject['seqX']),10):
+        xticks, xlabels=[], []
+        for i in range(0, len(dProject['seqX']), 10):
             xticks.append(int(dProject['seqX'][i]))
             xlabels.append(int(dProject['seqNum'][i]))
         self.axesSeq.set_xticks((xticks))
         self.axesSeq.set_xticklabels((xlabels))
-        self.axesSeq.set_xlim(0,self.dVar['maxLen'])
-        self.axesSeq.set_ylim(-1,1)
-        setp(self.axesSeq.get_yticklabels(),visible=False)
+        self.axesSeq.set_xlim(0, self.dVar['maxLen'])
+        self.axesSeq.set_ylim(-1, 1)
+        setp(self.axesSeq.get_yticklabels(), visible=False)
         self.canvas.draw()
 
     def drawReactivityPressed(self):
@@ -1188,7 +1188,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.dVar['flag']['isDrawGauss']=True
                 self.drawFigure()
             else:
-                self.drawReactivityFig(self.dlg.dProjOut,self.dlg.radio5to3.isChecked(),self.drawReactivityType)
+                self.drawReactivityFig(self.dlg.dProjOut, self.dlg.radio5to3.isChecked(), self.drawReactivityType)
         if self.dlg.name=='Reactivity by Reference' or self.dlg.name=='Automated by Reference':
             if self.drawReactivityType==2:
                 self.dDrawData=deepcopy(self.dlg.dProjOut)
@@ -1197,26 +1197,26 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.drawFigure()
                 self.drawRefData(self.dlg.dProjRef)
             else:
-                self.drawReactivityRef(self.dlg.dProjOut,self.dlg.dProjRef,self.drawReactivityType)
+                self.drawReactivityRef(self.dlg.dProjOut, self.dlg.dProjRef, self.drawReactivityType)
 
-    def drawReactivityRef(self,dProject,dProjRef,drawType=0):
-        drawReactivityRef(self.fig,dProject,dProjRef,drawType)
+    def drawReactivityRef(self, dProject, dProjRef, drawType=0):
+        drawReactivityRef(self.fig, dProject, dProjRef, drawType)
         self.verticalLines=createVerticalLines(self.fig.get_axes())
         self.spanRect=createRects(self.fig.get_axes())
         self.canvas.draw()
 
-    def drawReactivityFig(self,dProject,is5to3=False,drawType=0):
-        createReactivityFig(self.fig,dProject,is5to3,drawType)
+    def drawReactivityFig(self, dProject, is5to3=False, drawType=0):
+        createReactivityFig(self.fig, dProject, is5to3, drawType)
         self.verticalLines=createVerticalLines(self.fig.get_axes())
         self.spanRect=createRects(self.fig.get_axes())
         self.canvas.draw()
 
 #### PLOT  FUNCTIONS
-    def drawPeaks(self,dProject):
+    def drawPeaks(self, dProject):
         self.dLinePeak={}
         for key in dProject['chKeyRS']:
             key1=str('dPeak'+key)
-            self.dLinePeak[key],=self.chAxes[key].plot(dProject[key1]['pos'],dProject[key1]['amp'])
+            self.dLinePeak[key], =self.chAxes[key].plot(dProject[key1]['pos'], dProject[key1]['amp'])
             self.dLinePeak[key].set_color(str(self.dVar['lineColor'][key]))
             self.dLinePeak[key].set_visible(self.dVar['lineVisible'][key])
             self.dLinePeak[key].set_marker('s')
@@ -1224,12 +1224,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setAxesXLim()
         self.canvas.draw()
 
-    def drawRefData(self,refData):
+    def drawRefData(self, refData):
         try:
             self.mainTopWidget.splitComboBox.setCurrentIndex(0)
             for key in refData['dData'].keys():
                 factor=np.average(self.dDrawData['dData'][key])/np.average(refData['dData'][key])
-                line,=self.chAxes[key].plot(refData['dData'][key]*factor)#,'0.5')
+                line, =self.chAxes[key].plot(refData['dData'][key]*factor)#, '0.5')
                 line.set_color(str(self.dVar['lineColor'][key]))
                 line.set_alpha(0.5)
             self.dVar['flag']['isDrawRef']=True
@@ -1240,24 +1240,24 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def drawFigure(self):
         self.fig.clf()
-        self.dFigMargin={'L':0.0,'R':1,'T':1,'B':0.01}
+        self.dFigMargin={'L':0.0, 'R':1, 'T':1, 'B':0.01}
         if self.dVar['flag']['isSeqAlign']:
             self.dFigMargin['B']=0.07
-        self.fig.subplots_adjust(self.dFigMargin['L'],self.dFigMargin['B'],self.dFigMargin['R'],self.dFigMargin['T'],0.0,0.0)
+        self.fig.subplots_adjust(self.dFigMargin['L'], self.dFigMargin['B'], self.dFigMargin['R'], self.dFigMargin['T'], 0.0, 0.0)
         self.dVar['drawType']=self.mainTopWidget.splitComboBox.currentIndex()
         self.dVar['maxLen']=maxLenF(self.dDrawData['dData'])
 
-        self.chAxes=createAxes(self.fig,self.dVar,self.dDrawData['dData'].keys())
+        self.chAxes=createAxes(self.fig, self.dVar, self.dDrawData['dData'].keys())
 
         self.dLineData={}
         for key in self.dDrawData['dData'].keys():
-            self.dLineData[key],=self.chAxes[key].plot(self.dDrawData['dData'][key])
-            setp(self.chAxes[key].get_xticklabels(),visible=False)
-            setp(self.chAxes[key].get_yticklabels(),visible=False)
+            self.dLineData[key], =self.chAxes[key].plot(self.dDrawData['dData'][key])
+            setp(self.chAxes[key].get_xticklabels(), visible=False)
+            setp(self.chAxes[key].get_yticklabels(), visible=False)
 
         if self.dVar['flag']['isSeqAlign']:
             self.isSequenceAlignment=True
-            self.axesSeq =self.fig.add_axes([self.dFigMargin['L'],0.035,self.dFigMargin['R']-self.dFigMargin['L'],0.035])#,axisbg='#FFFFCC')
+            self.axesSeq =self.fig.add_axes([self.dFigMargin['L'], 0.035, self.dFigMargin['R']-self.dFigMargin['L'], 0.035])#, axisbg='#FFFFCC')
             self.updateSeqAxes(self.dDrawData)
             if self.dVar['flag']['isDrawLine']:
                 self.drawMatchLines(self.dDrawData)
@@ -1266,7 +1266,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.dVar['flag']['isDrawStad']:
             self.drawSatd()
         try:
-            self.dAxesYLim=findAxesYLim(self.dDrawData['dData'],self.dVar['drawType'])
+            self.dAxesYLim=findAxesYLim(self.dDrawData['dData'], self.dVar['drawType'])
         except:
             pass
 
@@ -1288,12 +1288,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dLineData[key].set_linestyle(self.dVar['lineStyle'][key])
     def setAxesXLim(self):
         for key in self.dDrawData['dData'].keys():
-            self.chAxes[key].set_xlim(0,self.dVar['maxLen'])
+            self.chAxes[key].set_xlim(0, self.dVar['maxLen'])
     def setAxesYLim(self):
         for key in self.dDrawData['dData'].keys():
             y0=self.dAxesYLim[key][0]
             y1=self.dAxesYLim[key][1]/(self.mainTopWidget.spinBoxZoom.value()*0.01)
-            self.chAxes[key].set_ylim(y0,y1)
+            self.chAxes[key].set_ylim(y0, y1)
         self.canvas.draw()
 
     def drawSatd(self):
@@ -1302,7 +1302,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.chAxes['RXS1'].axvline(self.dDrawData['Satd']['RX'][i], alpha=0.3, color='red')
         for i in range(len(self.dDrawData['Satd']['BG'])):
             self.chAxes['BG'].axvline(self.dDrawData['Satd']['BG'][i], alpha=0.3, color='red')
-            self.chAxes['BGS1'].axvline(self.dDrawData['Satd']['BG'][i],alpha=0.3, color='red')
+            self.chAxes['BGS1'].axvline(self.dDrawData['Satd']['BG'][i], alpha=0.3, color='red')
         self.canvas.draw()
 
     def drawSelectedArea(self):
@@ -1311,13 +1311,13 @@ class MainWindow(QtWidgets.QMainWindow):
         x0=self.spanRect[0].get_x() # self.dVar['maxLen']/3
         x1=x0+self.spanRect[0].get_width() #elf.dVar['maxLen']/2
         for key in self.dDrawData['dData'].keys():
-            self.chAxes[key].set_xlim(x0,x1)
+            self.chAxes[key].set_xlim(x0, x1)
         #    y0=np.min(self.dDrawData['dData'][key][x0:x1])
         #    y1=np.max(self.dDrawData['dData'][key][x0:x1])
-        #    self.chAxes[key].set_ylim(y0,y1)
+        #    self.chAxes[key].set_ylim(y0, y1)
         if self.dVar['flag']['isSeqAlign']:
-            self.axesSeq.set_xlim(x0,x1)
-        self.canvas.resize(2*self.spanRect[0].get_width(),self.canvas.size().height())
+            self.axesSeq.set_xlim(x0, x1)
+        self.canvas.resize(2*self.spanRect[0].get_width(), self.canvas.size().height())
         self.canvas.draw()
 
 ### SPLIT CHANNELS
@@ -1348,7 +1348,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # width and height must each be below  32768
         if w>16000:
             w=16000
-        self.canvas.resize(w,h)
+        self.canvas.resize(w, h)
 
 ### CHANNEL ATTRIBUTES
     def setLineColor(self):
@@ -1362,24 +1362,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.draw()
         self.dirty=True
     def editLineProps(self):
-        self.dlgChannel = DlgLineProps(self.dVar,self.dProject['chKeyRS'])
-        # self.connect(self.dlgChannel.buttonBox.button(QtGui.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.applyEditLineProps)
+        self.dlgChannel = DlgLineProps(self.dVar, self.dProject['chKeyRS'])
+        # self.connect(self.dlgChannel.buttonBox.button(QtGui.QDialogButtonBox.Apply), QtCore.SIGNAL("clicked()"), self.applyEditLineProps)
         self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.applyEditLineProps)
         self.dlgChannel.show()
     def applyFigSet(self):
         self.dlgChannel.apply()
         self.dVar=self.dlgChannel.dVar.copy()
         self.setFigureProps(self.dVar)
-    def setFigureProps(self,dVar):
-        self.fig.subplots_adjust(left=dVar['left'],right=dVar['right'],bottom=dVar['bottom'],top=dVar['top'])
+    def setFigureProps(self, dVar):
+        self.fig.subplots_adjust(left=dVar['left'], right=dVar['right'], bottom=dVar['bottom'], top=dVar['top'])
         self.mainTopWidget.spinBoxWidth.setValue(self.dVar['widthP'])
         self.mainTopWidget.spinBoxHeight.setValue(self.dVar['heightP'])
         self.mainTopWidget.checkBoxFitWindow.setChecked(self.dVar['isFit'])
         self.fig.set_dpi(dVar['dpi'])
         self.resizeFigure()
     def editFigSet(self):
-        self.dlgChannel = DlgFigureSet(self.dVar,self.dProject['chKeyRS'])
-        #self.connect(self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.applyFigSet)
+        self.dlgChannel = DlgFigureSet(self.dVar, self.dProject['chKeyRS'])
+        #self.connect(self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply), QtCore.SIGNAL("clicked()"), self.applyFigSet)
         self.dlgChannel.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.applyFigSet)
         self.dlgChannel.show()
 

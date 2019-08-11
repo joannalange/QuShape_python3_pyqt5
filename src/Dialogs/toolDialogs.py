@@ -1,11 +1,11 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 
-from .myWidgets import * #GroupBoxROI,ApplyChannel,ToolButton
-from .Functions import * # smoothRect, smoothTriangle, smoothGaussian,DData,chKeysRS,enhance,baselineAdjust
+from .myWidgets import * #GroupBoxROI, ApplyChannel, ToolButton
+from .Functions import * # smoothRect, smoothTriangle, smoothGaussian, DData, chKeysRS, enhance, baselineAdjust
 
 
 class DlgToolsAll(QtWidgets.QWidget):
-    def __init__(self,dProject,dProjRef,parent=None):
+    def __init__(self, dProject, dProjRef, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>APPLY ALL TOOLS</b></center>"))
@@ -18,7 +18,7 @@ class DlgToolsAll(QtWidgets.QWidget):
 
         label0 = QtWidgets.QLabel("Start Point")
         label1 = QtWidgets.QLabel("End Point")
-        start,end=0,len(self.dProject['dData']['RX']) # findRoi(self.dCurData['RXS'])
+        start, end=0, len(self.dProject['dData']['RX']) # findRoi(self.dCurData['RXS'])
 
         self.spinBox0 = QtWidgets.QSpinBox()
         self.spinBox0.setRange(0, len(self.dProject['dData']['RX']))
@@ -64,14 +64,14 @@ class DlgToolsAll(QtWidgets.QWidget):
         self.spinBox4.setSingleStep(1)
 
         layout1=QtGui.QGridLayout()
-        layout1.addWidget(self.checkBox01,0,0)
-        layout1.addWidget(self.checkBox0,1,0)
-        layout1.addWidget(self.spinBox2,1,1)
-        layout1.addWidget(self.checkBox1,2,0)
-        layout1.addWidget(self.checkBox2,3,0)
-        layout1.addWidget(self.spinBox4,3,1)
-        layout1.addWidget(self.checkBox3,4,0)
-        layout1.addWidget(self.checkBox4,5,0)
+        layout1.addWidget(self.checkBox01, 0, 0)
+        layout1.addWidget(self.checkBox0, 1, 0)
+        layout1.addWidget(self.spinBox2, 1, 1)
+        layout1.addWidget(self.checkBox1, 2, 0)
+        layout1.addWidget(self.checkBox2, 3, 0)
+        layout1.addWidget(self.spinBox4, 3, 1)
+        layout1.addWidget(self.checkBox3, 4, 0)
+        layout1.addWidget(self.checkBox4, 5, 0)
         groupBox1=QtWidgets.QGroupBox('Select Tools')
         groupBox1.setLayout(layout1)
 
@@ -94,10 +94,10 @@ class DlgToolsAll(QtWidgets.QWidget):
 #        self.dOutput=self.dProjOut['dData']
 #
 #        key='BG'
-#        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key],self.dProjOut['Satd'][key])
+#        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key], self.dProjOut['Satd'][key])
 #
 #        key='RX'
-#        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key],self.dProjOut['Satd'][key])
+#        self.dProjOut['dData'][key], dataR = applyAllToolsAuto0(self.dProjOut['dData'][key], self.dProjRef['dData'][key], self.dProjOut['Satd'][key])
         self.isToolApplied=True
 
     def apply(self):
@@ -115,9 +115,9 @@ class DlgToolsAll(QtWidgets.QWidget):
 ### SATURATION CORRECTION
         if self.checkBox01.isChecked():
                 for key in self.dProject['chKeyRX']:
-                    self.dOutput[key]=correctSatd(self.dOutput[key],self.dProject['Satd']['RX'])
+                    self.dOutput[key]=correctSatd(self.dOutput[key], self.dProject['Satd']['RX'])
                 for key in self.dProject['chKeyBG']:
-                    self.dOutput[key]=correctSatd(self.dOutput[key],self.dProject['Satd']['BG'])
+                    self.dOutput[key]=correctSatd(self.dOutput[key], self.dProject['Satd']['BG'])
                 self.dProject['isSatd']=True
 
 ### SMOOTHING
@@ -125,29 +125,29 @@ class DlgToolsAll(QtWidgets.QWidget):
             self.smoothWindow=self.spinBox2.value()
             for key in self.dProject['dData'].keys():
                 if len(self.dProject['dData'][key])>0:
-                    self.dOutput[key]=smoothTriangle(self.dOutput[key],self.smoothWindow)
+                    self.dOutput[key]=smoothTriangle(self.dOutput[key], self.smoothWindow)
 
 ### MOBILITY SHIFT
         if self.checkBox1.isChecked():
             dyeNR=self.dProject['dyeN']['RX']
             dyeNS=self.dProject['dyeN']['RXS1']
-            self.dOutput['RXS1']=fMobilityShift(self.dOutput['RX'],self.dOutput['RXS1'],dyeNR,dyeNS)
+            self.dOutput['RXS1']=fMobilityShift(self.dOutput['RX'], self.dOutput['RXS1'], dyeNR, dyeNS)
             if 'RXS2' in self.dProject['dData'].keys():
                 dyeWS=dDyesWL[self.dProject['dyeN']['RXS2']]
-                self.dOutput['RXS2']=fMobilityShift(self.dOutput['RX'],self.dOutput['RXS2'],dyeNR,dyeNS)
+                self.dOutput['RXS2']=fMobilityShift(self.dOutput['RX'], self.dOutput['RXS2'], dyeNR, dyeNS)
 
             dyeNR=self.dProject['dyeN']['BG']
             dyeNS=self.dProject['dyeN']['BGS1']
-            self.dOutput['BGS1']=fMobilityShift(self.dOutput['BG'],self.dOutput['BGS1'],dyeNR,dyeNS)
+            self.dOutput['BGS1']=fMobilityShift(self.dOutput['BG'], self.dOutput['BGS1'], dyeNR, dyeNS)
             if 'BGS2' in self.dProject['dData'].keys():
                 dyeWS=dDyesWL[self.dProject['dyeN']['BGS2']]
-                self.dOutput['BGS2']=fMobilityShift(self.dOutput['BG'],self.dOutput['BGS2'],dyeNR,dyeNS)
+                self.dOutput['BGS2']=fMobilityShift(self.dOutput['BG'], self.dOutput['BGS2'], dyeNR, dyeNS)
 ### BASELINE ADJUSTMENT
         if self.checkBox2.isChecked():
             self.baselineWindow=self.spinBox4.value()
             for key in self.dProject['dData'].keys():
                 if len(self.dProject['dData'][key])>0:
-                    self.dOutput[key]=baselineAdjust(self.dOutput[key],self.baselineWindow)
+                    self.dOutput[key]=baselineAdjust(self.dOutput[key], self.baselineWindow)
 ### SIGNAL DECAY
         if self.checkBox3.isChecked():
             for key in self.dProject['dData'].keys():
@@ -155,15 +155,15 @@ class DlgToolsAll(QtWidgets.QWidget):
 ### SIGNAL ALIGNMENT
         if self.checkBox4.isChecked():
             self.dProjOut['dData']=self.dOutput.copy()
-            usedSeq=['RXS1','BGS1','RXS2','BGS2']
-            linkX0,linkX1=dtwAlign2Cap(self.dProjOut,usedSeq)
-            self.dProjOut=splineCap(self.dProjOut,usedSeq,linkX0,linkX1)
+            usedSeq=['RXS1', 'BGS1', 'RXS2', 'BGS2']
+            linkX0, linkX1=dtwAlign2Cap(self.dProjOut, usedSeq)
+            self.dProjOut=splineCap(self.dProjOut, usedSeq, linkX0, linkX1)
 
         self.isToolApplied=True
 
 
 class DlgRegionOfInterest(QtWidgets.QWidget):
-    def __init__(self, dProject,dProjRef,parent=None):
+    def __init__(self, dProject, dProjRef, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>REGION OF INTEREST</b></center>"))
@@ -183,7 +183,7 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
 
         self.roi={}
         for key in self.dProject['chKeyRS']:
-            self.roi[key]=[0,len(self.dProject['dData'][key])]
+            self.roi[key]=[0, len(self.dProject['dData'][key])]
 
         labelFrom = QtWidgets.QLabel("From ")
         labelTo = QtWidgets.QLabel("To   ")
@@ -191,32 +191,32 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
         labelPlus=QtWidgets.QLabel('(+) Reaction')
         self.spinBoxPlusFrom=QtWidgets.QSpinBox()
         self.spinBoxPlusTo=QtWidgets.QSpinBox()
-        self.spinBoxPlusFrom.setRange(0,len(self.dProject['dData']['RX']))
-        self.spinBoxPlusTo.setRange(0,len(self.dProject['dData']['RX']))
+        self.spinBoxPlusFrom.setRange(0, len(self.dProject['dData']['RX']))
+        self.spinBoxPlusTo.setRange(0, len(self.dProject['dData']['RX']))
         self.spinBoxPlusTo.setValue(len(self.dProject['dData']['RX']))
 
         labelMinus=QtWidgets.QLabel('(-) Reaction')
         self.spinBoxMinusFrom=QtWidgets.QSpinBox()
         self.spinBoxMinusTo=QtWidgets.QSpinBox()
-        self.spinBoxMinusFrom.setRange(0,len(self.dProject['dData']['BG']))
-        self.spinBoxMinusTo.setRange(0,len(self.dProject['dData']['BG']))
+        self.spinBoxMinusFrom.setRange(0, len(self.dProject['dData']['BG']))
+        self.spinBoxMinusTo.setRange(0, len(self.dProject['dData']['BG']))
         self.spinBoxMinusTo.setValue(len(self.dProject['dData']['BG']))
 
         layout0=myGridLayout()
-        layout0.addWidget(labelFrom,0,1)
-        layout0.addWidget(labelTo,0,2)
-        layout0.addWidget(labelPlus,1,0)
-        layout0.addWidget( self.spinBoxPlusFrom,1,1)
-        layout0.addWidget( self.spinBoxPlusTo,1,2)
-        layout0.addWidget(labelMinus,2,0)
-        layout0.addWidget( self.spinBoxMinusFrom,2,1)
-        layout0.addWidget( self.spinBoxMinusTo,2,2)
+        layout0.addWidget(labelFrom, 0, 1)
+        layout0.addWidget(labelTo, 0, 2)
+        layout0.addWidget(labelPlus, 1, 0)
+        layout0.addWidget( self.spinBoxPlusFrom, 1, 1)
+        layout0.addWidget( self.spinBoxPlusTo, 1, 2)
+        layout0.addWidget(labelMinus, 2, 0)
+        layout0.addWidget( self.spinBoxMinusFrom, 2, 1)
+        layout0.addWidget( self.spinBoxMinusTo, 2, 2)
 
         self.groupBox0=QtWidgets.QGroupBox()
         self.groupBox0.setLayout(layout0)
 
         self.buttunAuto=QtWidgets.QPushButton('Auto ROI by Reference')
-        self.connect(self.buttunAuto,QtCore.SIGNAL("clicked()"),self.autoFindROI)
+        self.connect(self.buttunAuto, QtCore.SIGNAL("clicked()"), self.autoFindROI)
 
         if not self.dProject['isRef']:
             self.buttunAuto.setEnabled(False)
@@ -235,18 +235,18 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
     def autoFindROI(self):
         data0=self.dProject['dData']['RXS1']
         data1=self.dProjRef['dData']['RXS1']
-        startRX,endRX=autoROIwDTW(data0,data1)
+        startRX, endRX=autoROIwDTW(data0, data1)
         self.spinBoxPlusFrom.setValue(startRX)
         self.spinBoxPlusTo.setValue(endRX)
 
         data0=self.dProject['dData']['BGS1']
         data1=self.dProjRef['dData']['BGS1']
-        startBG,endBG=autoROIwDTW(data0,data1)
+        startBG, endBG=autoROIwDTW(data0, data1)
         self.spinBoxMinusFrom.setValue(startBG)
         self.spinBoxMinusTo.setValue(endBG)
 
     def apply(self):
-        for key in ['RX','BG']:
+        for key in ['RX', 'BG']:
             if key=='RX':# in self.dProject['chKeyRX']:
                 start=self.spinBoxPlusFrom.value()
                 end=self.spinBoxPlusTo.value()
@@ -255,9 +255,9 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
                 end=self.spinBoxMinusTo.value()
             if end<start:
                 message="Start should be lower than End"
-                QtWidgets.QMessageBox.warning(self,'Warning', message)
+                QtWidgets.QMessageBox.warning(self, 'Warning', message)
             else:
-                self.roi[key]=[start,end]
+                self.roi[key]=[start, end]
         self.isToolApplied=True
 
     def done(self):
@@ -265,11 +265,11 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
             self.dProjOut['dData'][key]=self.dProject['dData'][key][self.roi['RX'][0]:self.roi['RX'][1]]
         for key in self.dProject['chKeyBG']:
                 self.dProjOut['dData'][key]=self.dProject['dData'][key][self.roi['BG'][0]:self.roi['BG'][1]]
-        self.dProjOut['Satd']['RX'] = fNewSatd(self.dProject['Satd']['RX'],self.roi['RX'][0],self.roi['RX'][1])
-        self.dProjOut['Satd']['BG'] = fNewSatd(self.dProject['Satd']['BG'],self.roi['BG'][0],self.roi['BG'][1])
+        self.dProjOut['Satd']['RX'] = fNewSatd(self.dProject['Satd']['RX'], self.roi['RX'][0], self.roi['RX'][1])
+        self.dProjOut['Satd']['BG'] = fNewSatd(self.dProject['Satd']['BG'], self.roi['BG'][0], self.roi['BG'][1])
 
 class DlgSmooth(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SMOOTHING</b></center>"))
@@ -297,11 +297,11 @@ class DlgSmooth(QtWidgets.QWidget):
         self.spinBox1.setSingleStep(1)
 
         layout1 = myGridLayout()
-        layout1.addWidget(self.radioButton0,0,0,1,2)
-        layout1.addWidget(self.radioButton1,1,0,1,2)
-        layout1.addWidget(self.radioButton2,2,0,1,2)
-        layout1.addWidget(windowSizeLabel,3,0)
-        layout1.addWidget(self.spinBox1,3,1)
+        layout1.addWidget(self.radioButton0, 0, 0, 1, 2)
+        layout1.addWidget(self.radioButton1, 1, 0, 1, 2)
+        layout1.addWidget(self.radioButton2, 2, 0, 1, 2)
+        layout1.addWidget(windowSizeLabel, 3, 0)
+        layout1.addWidget(self.spinBox1, 3, 1)
 
         self.groupBox0 = QtWidgets.QGroupBox(self.tr("Smoothing"))
         self.groupBox0.setCheckable(True)
@@ -331,9 +331,9 @@ class DlgSmooth(QtWidgets.QWidget):
         try:
             if self.checkBoxSatd.isChecked():
                 for key in self.dProject['chKeyRX']:
-                    self.dProjOut['dData'][key]=correctSatd(self.dProject['dData'][key],self.dProject['Satd']['RX'])
+                    self.dProjOut['dData'][key]=correctSatd(self.dProject['dData'][key], self.dProject['Satd']['RX'])
                 for key in self.dProject['chKeyBG']:
-                    self.dProjOut['dData'][key]=correctSatd(self.dProject['dData'][key],self.dProject['Satd']['BG'])
+                    self.dProjOut['dData'][key]=correctSatd(self.dProject['dData'][key], self.dProject['Satd']['BG'])
                 self.dProject['isSatd']=True
         except:
             self.dOutput=self.dProject['dData'].copy()
@@ -354,11 +354,11 @@ class DlgSmooth(QtWidgets.QWidget):
                     elif self.radioButton2.isChecked():
                         method='gaussian'
 
-                    self.dProjOut['dData'][key][fromP:toP]=fSmooth(self.dProjOut['dData'][key][fromP:toP],winSize,method)
+                    self.dProjOut['dData'][key][fromP:toP]=fSmooth(self.dProjOut['dData'][key][fromP:toP], winSize, method)
         self.isToolApplied=True
 
 class DlgBaseline(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>BASELINE ADJUSTMENT</b></center>"))
@@ -370,7 +370,7 @@ class DlgBaseline(QtWidgets.QWidget):
 #### Window Size
         windowLabel = QtWidgets.QLabel("Baseline Window:")
         self.spinBox0 = QtWidgets.QSpinBox()
-        self.spinBox0.setRange(0,200)
+        self.spinBox0.setRange(0, 200)
         self.spinBox0.setValue(60)
         self.spinBox0.setSingleStep(1)
 
@@ -378,9 +378,9 @@ class DlgBaseline(QtWidgets.QWidget):
         #self.smoothCheckBox.setChecked(True)
 
         layout2=myGridLayout()
-        layout2.addWidget(windowLabel,0,0)
-        layout2.addWidget(self.spinBox0,0,1)
-        layout2.addWidget(self.smoothCheckBox,1,0)
+        layout2.addWidget(windowLabel, 0, 0)
+        layout2.addWidget(self.spinBox0, 0, 1)
+        layout2.addWidget(self.smoothCheckBox, 1, 0)
         groupBoxParameter = QtWidgets.QGroupBox()
         groupBoxParameter.setLayout(layout2)
 
@@ -413,12 +413,12 @@ class DlgBaseline(QtWidgets.QWidget):
                     toP=len(self.dProjOut['dData'][key])
 
 
-                self.dProjOut['dData'][key][fromP:toP]=baselineAdjust(self.dProject['dData'][key][fromP:toP],windowSize,isSmooth)
+                self.dProjOut['dData'][key][fromP:toP]=baselineAdjust(self.dProject['dData'][key][fromP:toP], windowSize, isSmooth)
         self.isToolApplied=True
 
 
 class DlgSignalDecay(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SIGNAL DECAY CORRECTION</b></center>"))
@@ -432,7 +432,7 @@ class DlgSignalDecay(QtWidgets.QWidget):
 
 
         self.spinBox0=QtWidgets.QDoubleSpinBox()
-        self.spinBox0.setRange(0,2.0)
+        self.spinBox0.setRange(0, 2.0)
         self.spinBox0.setValue(0.2)
         self.spinBox0.setSingleStep(0.1)
 
@@ -444,10 +444,10 @@ class DlgSignalDecay(QtWidgets.QWidget):
         self.radioButton0.setChecked(True)
 
         layout0 = myGridLayout()
-        layout0.addWidget(self.radioButton0,0,0)
-        layout0.addWidget(self.radioButton1,1,0)
-        layout0.addWidget(self.radioButton2,2,0)
-        layout0.addWidget(self.spinBox0,2,1)
+        layout0.addWidget(self.radioButton0, 0, 0)
+        layout0.addWidget(self.radioButton1, 1, 0)
+        layout0.addWidget(self.radioButton2, 2, 0)
+        layout0.addWidget(self.spinBox0, 2, 1)
         groupBox0 = QtWidgets.QGroupBox(self.tr("Select a method"))
         groupBox0.setLayout(layout0)
 
@@ -480,12 +480,12 @@ class DlgSignalDecay(QtWidgets.QWidget):
                 if self.radioButton0.isChecked():
                     self.dProjOut['dData'][key][fromP:toP]=autoDecaySum(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton1.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP],self.expF[key]=decayCorrectionExp(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP], self.expF[key]=decayCorrectionExp(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton2.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP]=decaySum(self.dProject['dData'][key][fromP:toP],self.spinBox0.value())
+                    self.dProjOut['dData'][key][fromP:toP]=decaySum(self.dProject['dData'][key][fromP:toP], self.spinBox0.value())
         self.isToolApplied=True
 class DlgMobilityShift(QtWidgets.QWidget):
-    def __init__(self,dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>MOBILITY SHIFT</b></center>"))
@@ -568,22 +568,22 @@ class DlgMobilityShift(QtWidgets.QWidget):
             method0='posSim'
             if self.radioButton1.isChecked():
                 method0='peakSim'
-            self.dOutput['RXS1']=fMobilityShift(self.dProject['dData']['RX'],self.dProject['dData']['RXS1'],dyeNR,dyeNS,method=method0)
+            self.dOutput['RXS1']=fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS1'], dyeNR, dyeNS, method=method0)
             if self.dProject['isSeq2']:
                 dyeNS=str(self.comboBox0['RXS2'].currentText())
-                self.dOutput['RXS2']=fMobilityShift(self.dProject['dData']['RX'],self.dProject['dData']['RXS2'],dyeNR,dyeNS,method=method0)
+                self.dOutput['RXS2']=fMobilityShift(self.dProject['dData']['RX'], self.dProject['dData']['RXS2'], dyeNR, dyeNS, method=method0)
         if self.groupBoxBG.isChecked():
             dyeNR=str(self.comboBox0['BG'].currentText())
             dyeNS=str(self.comboBox0['BGS1'].currentText())
-            self.dOutput['BGS1']=fMobilityShift(self.dProject['dData']['BG'],self.dProject['dData']['BGS1'],dyeNR,dyeNS,method=method0)
+            self.dOutput['BGS1']=fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS1'], dyeNR, dyeNS, method=method0)
             if self.dProject['isSeq2']:
                 dyeNS=str(self.comboBox0['BGS2'].currentText())
-                self.dOutput['BGS2']=fMobilityShift(self.dProject['dData']['BG'],self.dProject['dData']['BGS2'],dyeNR,dyeNS,method=method0)
+                self.dOutput['BGS2']=fMobilityShift(self.dProject['dData']['BG'], self.dProject['dData']['BGS2'], dyeNR, dyeNS, method=method0)
         self.dProjOut['dData']=self.dOutput.copy()
         self.isToolApplied=True
 
 class DlgSignalAlign(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.title = QtWidgets.QLabel(self.tr("<center><b>SIGNAL ALIGNMENT</b></center>"))
@@ -593,8 +593,8 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.dProject=dProject
         self.dOutput=dProject['dData'].copy()
         self.dProjOut=deepcopy(dProject)
-        self.linkXR,self.linkXS=np.array([]),np.array([])
-        self.dataR,self.dataS=np.array([]),np.array([])
+        self.linkXR, self.linkXS=np.array([]), np.array([])
+        self.dataR, self.dataS=np.array([]), np.array([])
         self.isToolApplied=False
 ### Group of ComboBoxes
         label1=QtWidgets.QLabel("Seq. Channels")
@@ -602,7 +602,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.comboBox0=QtWidgets.QComboBox()
         self.comboBox0.setCurrentIndex(0)
         if self.dProject['isSeq2']:
-            choices0= ['RXS1 - BGS1','RXS2 - BGS2']
+            choices0= ['RXS1 - BGS1', 'RXS2 - BGS2']
         else:
             choices0= ['RXS1 - BGS1']
         self.comboBox0.addItems(choices0)
@@ -622,7 +622,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
 #        self.button0=QtWidgets.QPushButton('Modify Matched Peaks')
 #        self.button0.setEnabled(False)
 #
-#        self.hint = QtWidgets.QLabel(self.tr("HINT: When the matched peaks are modified,"
+#        self.hint = QtWidgets.QLabel(self.tr("HINT: When the matched peaks are modified, "
 #                                         "Press Key 'A' button and click both plots to add a Peak. "
 #                                         "Press Key 'D' button and click to delete a Peak. "
 #                                         "Press Key 'Shift' button and select a peak in BGS to change position. "
@@ -647,7 +647,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
         self.isToolAppliedSigAlign=False
-        self.connect(self.comboBox0,QtCore.SIGNAL('currentIndexChanged(int)'), self.comboChanged)
+        self.connect(self.comboBox0, QtCore.SIGNAL('currentIndexChanged(int)'), self.comboChanged)
 
     def comboChanged(self):
         self.isToolAppliedSigAlign=False
@@ -655,10 +655,10 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.dProjOut=deepcopy(self.dProject)
         if self.isToolAppliedSigAlign==False:
             if self.comboBox0.currentIndex()==0:
-                self.usedSeq=['RXS1','BGS1','RXS2','BGS2']
+                self.usedSeq=['RXS1', 'BGS1', 'RXS2', 'BGS2']
             else:
-                self.usedSeq=['RXS2','BGS2','RXS1','BGS1']
-            self.linkXR,self.linkXS=dtwAlign2Cap(self.dProjOut,self.usedSeq)
+                self.usedSeq=['RXS2', 'BGS2', 'RXS1', 'BGS1']
+            self.linkXR, self.linkXS=dtwAlign2Cap(self.dProjOut, self.usedSeq)
             self.isToolAppliedSigAlign=True
             self.button0.setEnabled(True)
 
@@ -668,7 +668,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.linkYR=self.dataR[self.linkXR]
         self.linkYS=self.dataS[self.linkXS]
 
-        self.dProjOut=splineCap(self.dProjOut,self.usedSeq,self.linkXR,self.linkXS)
+        self.dProjOut=splineCap(self.dProjOut, self.usedSeq, self.linkXR, self.linkXS)
         self.isToolApplied=True
 
 

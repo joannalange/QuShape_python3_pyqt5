@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class DlgSelectFile(QtWidgets.QWidget):
-    def __init__(self,label,fileType,path=QtCore.QDir.homePath(),parent=None):
+    def __init__(self, label, fileType, path=QtCore.QDir.homePath(), parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.label=label
@@ -21,11 +21,11 @@ class DlgSelectFile(QtWidgets.QWidget):
         self.layout0.setSpacing(1)
 
         self.setLayout(self.layout0)
-        # self.connect(self.pushButton0,QtCore.SIGNAL("clicked()"),self.fileBrowse)
+        # self.connect(self.pushButton0, QtCore.SIGNAL("clicked()"), self.fileBrowse)
         self.pushButton0.clicked.connect(self.fileBrowse)
 
     def fileBrowse(self):
-        filename = QtWidgets.QFileDialog.getOpenFileName(self,"Select a file",self.path,(self.fileType))
+        filename = QtWidgets.QFileDialog.getOpenFileName(self, "Select a file", self.path, (self.fileType))
         if isinstance(filename, tuple):
             filename = filename[0]
         self.fName = filename
@@ -38,35 +38,35 @@ class DlgSelectFile(QtWidgets.QWidget):
 
 
 class DlgSelectDir(QtWidgets.QWidget):
-    def __init__(self,label,parent=None):
+    def __init__(self, label, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
-        type='file' # dir, save,
+        type='file' # dir, save, 
 
         label0=QtWidgets.QLabel(label)
         self.lineEdit0=QtWidgets.QLineEdit()
         self.lineEdit0.setReadOnly(True)
         self.pushButton0=QtWidgets.QPushButton('Browse')
 
-        # self.connect(self.pushButton0,QtCore.SIGNAL("clicked()"),self.dirBrowse0)
+        # self.connect(self.pushButton0, QtCore.SIGNAL("clicked()"), self.dirBrowse0)
         self.pushButton0.clicked.connect(self.dirBrowse0)
 
         layout0=myGridLayout()
-        layout0.addWidget(label0,1,0)
-        layout0.addWidget(self.lineEdit0,1,1)
-        layout0.addWidget(self.pushButton0,1,2)
+        layout0.addWidget(label0, 1, 0)
+        layout0.addWidget(self.lineEdit0, 1, 1)
+        layout0.addWidget(self.pushButton0, 1, 2)
 
         self.setLayout(layout0)
 
     def dirBrowse0(self):
-        self.newDir=QtWidgets.QFileDialog.getExistingDirectory(self,"Open Directory",QtCore.QDir.homePath())
+        self.newDir=QtWidgets.QFileDialog.getExistingDirectory(self, "Open Directory", QtCore.QDir.homePath())
         # if not self.newDir.isEmpty():
         if self.newDir:
             self.lineEdit0.setText(str(self.newDir))
 
 
 class DlgNoTool(QtWidgets.QWidget):
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr(
@@ -102,17 +102,17 @@ class ToolButton(QtWidgets.QWidget):
         self.setLayout(buttonLayout)
 
 class GroupBoxROI(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         ## Region of Interest
         self.fromSpinBox=QtWidgets.QSpinBox()
-        self.fromSpinBox.setRange(0,len(dProject['dData']['RX']))
+        self.fromSpinBox.setRange(0, len(dProject['dData']['RX']))
         self.fromSpinBox.setValue(0)
         self.fromSpinBox.setSingleStep(1)
 
         self.toSpinBox=QtWidgets.QSpinBox()
-        self.toSpinBox.setRange(0,len(dProject['dData']['RX']))
+        self.toSpinBox.setRange(0, len(dProject['dData']['RX']))
         self.toSpinBox.setValue(len(dProject['dData']['RX']))
         self.toSpinBox.setSingleStep(1)
 
@@ -132,7 +132,7 @@ class GroupBoxROI(QtWidgets.QWidget):
 
 
 class ApplyChannel(QtWidgets.QWidget):
-    def __init__(self,dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.checkBox0={}
@@ -142,14 +142,14 @@ class ApplyChannel(QtWidgets.QWidget):
             self.checkBox0[key].setChecked(True)
 
         hbox0=myGridLayout()
-        hbox0.addWidget(self.checkBox0['RX'],0,0)
-        hbox0.addWidget(self.checkBox0['RXS1'],0,1)
+        hbox0.addWidget(self.checkBox0['RX'], 0, 0)
+        hbox0.addWidget(self.checkBox0['RXS1'], 0, 1)
         if  dProject['isSeq2']:
-            hbox0.addWidget(self.checkBox0['RXS2'],0,2)
-        hbox0.addWidget(self.checkBox0['BG'],1,0)
-        hbox0.addWidget(self.checkBox0['BGS1'],1,1)
+            hbox0.addWidget(self.checkBox0['RXS2'], 0, 2)
+        hbox0.addWidget(self.checkBox0['BG'], 1, 0)
+        hbox0.addWidget(self.checkBox0['BGS1'], 1, 1)
         if dProject['isSeq2']:
-            hbox0.addWidget(self.checkBox0['BGS2'],1,2)
+            hbox0.addWidget(self.checkBox0['BGS2'], 1, 2)
 
         self.groupBox.setLayout(hbox0)
 
@@ -204,7 +204,7 @@ class scaleGroupBox(QtWidgets.QGroupBox):
 
         label0=QtWidgets.QLabel('Scale Factor')
         self.doubleSpinBox0=QtWidgets.QDoubleSpinBox()
-        self.doubleSpinBox0.setRange(0,100.0)
+        self.doubleSpinBox0.setRange(0, 100.0)
         self.doubleSpinBox0.setValue(1.00)
         self.doubleSpinBox0.setSingleStep(0.01)
 
@@ -212,9 +212,9 @@ class scaleGroupBox(QtWidgets.QGroupBox):
         self.checkBoxScale0.setWhatsThis("This option is especially useful for long traces."
                                         " Scaling is applied locally not globally.")
         layout0=myGridLayout()
-        layout0.addWidget(self.checkBoxScale0,0,0,1,2)
-        layout0.addWidget(label0,1,0)
-        layout0.addWidget(self.doubleSpinBox0,1,1)
+        layout0.addWidget(self.checkBoxScale0, 0, 0, 1, 2)
+        layout0.addWidget(label0, 1, 0)
+        layout0.addWidget(self.doubleSpinBox0, 1, 1)
         self.setTitle(self.tr(text))
         self.setLayout(layout0)
 

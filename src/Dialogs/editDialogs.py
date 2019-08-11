@@ -1,10 +1,10 @@
-from PyQt5 import QtWidgets,QtCore
+from PyQt5 import QtWidgets, QtCore
 
 from .myWidgets import myGridLayout
 
 class DlgLineProps(QtWidgets.QDialog):
 
-    def __init__(self,dVar,chKeyRS,parent=None):
+    def __init__(self, dVar, chKeyRS, parent=None):
         super(DlgLineProps, self).__init__(parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setModal(False)
@@ -21,11 +21,11 @@ class DlgLineProps(QtWidgets.QDialog):
         self.checkBox0={}
         self.pushButton0={}
         self.comboBoxLineStyle={}
-        lineStyles=["solid","dashed","dash_dot","dotted"]
-        self.lineStyles=['-','--','-.',':']
+        lineStyles=["solid", "dashed", "dash_dot", "dotted"]
+        self.lineStyles=['-', '--', '-.', ':']
         self.comboBoxMarkerStyle={}
-        markerStyles=["none","point","circle","star", "square","plus","X","diamond"]
-        self.markerStyles1=['','.','o','*','s','+','x','D']
+        markerStyles=["none", "point", "circle", "star", "square", "plus", "X", "diamond"]
+        self.markerStyles1=['', '.', 'o', '*', 's', '+', 'x', 'D']
         self.doubleSpinBoxLW={}
         for key in chKeyRS:
             self.checkBox0[key]=QtWidgets.QCheckBox(key)
@@ -44,15 +44,15 @@ class DlgLineProps(QtWidgets.QDialog):
         layout0=myGridLayout()
         for i in range(len(labels)):
             self.label[i]=QtWidgets.QLabel(labels[i])
-            layout0.addWidget(self.label[i],0,i)
+            layout0.addWidget(self.label[i], 0, i)
 
         for key in chKeyRS: #self.dChKeys['RS']:
             index=chKeyRS.index(key)+1
-            layout0.addWidget(self.checkBox0[key],index,0)
-            layout0.addWidget(self.pushButton0[key],index,1)
-            layout0.addWidget(self.comboBoxLineStyle[key],index,2)
-            layout0.addWidget(self.comboBoxMarkerStyle[key],index,3)
-            layout0.addWidget(self.doubleSpinBoxLW[key],index,4)
+            layout0.addWidget(self.checkBox0[key], index, 0)
+            layout0.addWidget(self.pushButton0[key], index, 1)
+            layout0.addWidget(self.comboBoxLineStyle[key], index, 2)
+            layout0.addWidget(self.comboBoxMarkerStyle[key], index, 3)
+            layout0.addWidget(self.doubleSpinBoxLW[key], index, 4)
 
 
 
@@ -67,7 +67,7 @@ class DlgLineProps(QtWidgets.QDialog):
         if 'BGS2' in chKeyRS:
             self.connect(self.pushButton0['BGS2'], QtCore.SIGNAL("clicked()"), self.changeColorBGS2)
 
-        self.connect(self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply),QtCore.SIGNAL("clicked()"),self.apply)
+        self.connect(self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply), QtCore.SIGNAL("clicked()"), self.apply)
         self.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), self.reject)
 
 
@@ -120,7 +120,7 @@ class DlgLineProps(QtWidgets.QDialog):
 
 class DlgFigureSet(QtWidgets.QDialog):
 
-    def __init__(self,dVar,chKeyRS,parent=None):
+    def __init__(self, dVar, chKeyRS, parent=None):
         super(DlgFigureSet, self).__init__(parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setModal(False)
@@ -132,11 +132,11 @@ class DlgFigureSet(QtWidgets.QDialog):
         self.dVar=dVar.copy()
         self.chKeyRS=chKeyRS
 
-        # Size, width, height, resolution,
+        # Size, width, height, resolution, 
 
         labelT=QtWidgets.QLabel('Size style')
         self.comboBox0=QtWidgets.QComboBox()
-        self.comboBox0.addItems(['Percentage','Inches'])
+        self.comboBox0.addItems(['Percentage', 'Inches'])
 
         labelW = QtWidgets.QLabel("Width")
         self.spinBoxWidth=QtWidgets.QSpinBox()
@@ -161,15 +161,15 @@ class DlgFigureSet(QtWidgets.QDialog):
         self.spinBoxR.setSingleStep(50)
 
         layout0=myGridLayout()
-        layout0.addWidget(self.checkBoxFitWindow,0,0,1,2)
-        layout0.addWidget(labelT,1,0)
-        layout0.addWidget(self.comboBox0,1,1)
-        layout0.addWidget(labelW,2,0)
-        layout0.addWidget(self.spinBoxWidth,2,1)
-        layout0.addWidget(labelH,3,0)
-        layout0.addWidget(self.spinBoxHeight,3,1)
-        layout0.addWidget(labelR,4,0)
-        layout0.addWidget(self.spinBoxR,4,1)
+        layout0.addWidget(self.checkBoxFitWindow, 0, 0, 1, 2)
+        layout0.addWidget(labelT, 1, 0)
+        layout0.addWidget(self.comboBox0, 1, 1)
+        layout0.addWidget(labelW, 2, 0)
+        layout0.addWidget(self.spinBoxWidth, 2, 1)
+        layout0.addWidget(labelH, 3, 0)
+        layout0.addWidget(self.spinBoxHeight, 3, 1)
+        layout0.addWidget(labelR, 4, 0)
+        layout0.addWidget(self.spinBoxR, 4, 1)
 
         groupBox0=QtWidgets.QGroupBox(self.tr('Figure Options'))
         groupBox0.setLayout(layout0)
@@ -177,7 +177,7 @@ class DlgFigureSet(QtWidgets.QDialog):
 
         labelSubs={}
         self.spinBoxSubs={}
-        self.keySubs=['top', 'bottom', 'left','right'] #,'wspace','hspace']
+        self.keySubs=['top', 'bottom', 'left', 'right'] #, 'wspace', 'hspace']
         for key in self.keySubs:
             labelSubs[key]=QtWidgets.QLabel(key)
             self.spinBoxSubs[key]=QtWidgets.QDoubleSpinBox()
@@ -189,12 +189,12 @@ class DlgFigureSet(QtWidgets.QDialog):
         i=0
         while i<len(self.keySubs):
             key=self.keySubs[i]
-            layout1.addWidget(labelSubs[key],i,0)
-            layout1.addWidget(self.spinBoxSubs[key],i,1)
+            layout1.addWidget(labelSubs[key], i, 0)
+            layout1.addWidget(self.spinBoxSubs[key], i, 1)
             i+=1
             key=self.keySubs[i]
-            layout1.addWidget(labelSubs[key],i-1,2)
-            layout1.addWidget(self.spinBoxSubs[key],i-1,3)
+            layout1.addWidget(labelSubs[key], i-1, 2)
+            layout1.addWidget(self.spinBoxSubs[key], i-1, 3)
             i+=1
 
         groupBox1=QtWidgets.QGroupBox(self.tr('Subplot Configuration'))
@@ -230,16 +230,16 @@ class DlgFigureSet(QtWidgets.QDialog):
 
 if __name__ == "__main__":
     import sys
-    dLineVisible={'RX':True,'BG':True,'RXS1':True, 'BGS1':True,'RXS2':False, 'BGS2':False}
-    dLineColor={'RX':(QtWidgets.QColor('red').name()),
-                            'BG':(QtWidgets.QColor('blue').name()),
-                            'RXS1':str(QtWidgets.QColor('green').name()),
-                            'BGS1':str(QtWidgets.QColor('magenta').name()),
-                            'RXS2':str(QtWidgets.QColor('yellow').name()),
+    dLineVisible={'RX':True, 'BG':True, 'RXS1':True, 'BGS1':True, 'RXS2':False, 'BGS2':False}
+    dLineColor={'RX':(QtWidgets.QColor('red').name()), 
+                            'BG':(QtWidgets.QColor('blue').name()), 
+                            'RXS1':str(QtWidgets.QColor('green').name()), 
+                            'BGS1':str(QtWidgets.QColor('magenta').name()), 
+                            'RXS2':str(QtWidgets.QColor('yellow').name()), 
                             'BGS2':str(QtWidgets.QColor('cyan').name())}
     app = QtWidgets.QApplication(sys.argv)
     from .Functions import DVar
-    form = DlgFigureSet(DVar(dLineVisible.keys()),dLineVisible.keys())
+    form = DlgFigureSet(DVar(dLineVisible.keys()), dLineVisible.keys())
     form.show()
     app.exec_()
 

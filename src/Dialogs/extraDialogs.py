@@ -5,7 +5,7 @@ from .myWidgets import *
 from .Functions import *
 
 class DlgVariousTools(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>SOME FUNCTIONS</b></center>"))
@@ -70,7 +70,7 @@ class DlgVariousTools(QtWidgets.QWidget):
 
 
 class DlgSwap(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>CHANNEL SWAP</b></center>"))
@@ -89,19 +89,19 @@ class DlgSwap(QtWidgets.QWidget):
             self.comboBox0[key].setCurrentIndex(self.dProject['chKeyRS'].index(key))
 
         vbox=myGridLayout()
-        vbox.addWidget(self.label0['RX'],0,0)
-        vbox.addWidget(self.comboBox0['RX'],0,1)
-        vbox.addWidget(self.label0['BG'],1,0)
-        vbox.addWidget(self.comboBox0['BG'],1,1)
-        vbox.addWidget(self.label0['RXS1'],2,0)
-        vbox.addWidget(self.comboBox0['RXS1'],2,1)
-        vbox.addWidget(self.label0['BGS1'],3,0)
-        vbox.addWidget(self.comboBox0['BGS1'],3,1)
+        vbox.addWidget(self.label0['RX'], 0, 0)
+        vbox.addWidget(self.comboBox0['RX'], 0, 1)
+        vbox.addWidget(self.label0['BG'], 1, 0)
+        vbox.addWidget(self.comboBox0['BG'], 1, 1)
+        vbox.addWidget(self.label0['RXS1'], 2, 0)
+        vbox.addWidget(self.comboBox0['RXS1'], 2, 1)
+        vbox.addWidget(self.label0['BGS1'], 3, 0)
+        vbox.addWidget(self.comboBox0['BGS1'], 3, 1)
         if self.dProject['isSeq2']:
-            vbox.addWidget(self.label0['RXS2'],4,0)
-            vbox.addWidget(self.comboBox0['RXS2'],4,1)
-            vbox.addWidget(self.label0['BGS2'],5,0)
-            vbox.addWidget(self.comboBox0['BGS2'],5,1)
+            vbox.addWidget(self.label0['RXS2'], 4, 0)
+            vbox.addWidget(self.comboBox0['RXS2'], 4, 1)
+            vbox.addWidget(self.label0['BGS2'], 5, 0)
+            vbox.addWidget(self.comboBox0['BGS2'], 5, 1)
 
         self.groupBox0=QtWidgets.QGroupBox()
         self.groupBox0.setLayout(vbox)
@@ -126,7 +126,7 @@ class DlgSwap(QtWidgets.QWidget):
         self.isToolApplied=True
 
 class DlgScale(QtWidgets.QWidget):
-    def __init__(self, dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.title = QtWidgets.QLabel(self.tr("<center><b>SCALE</b></center>"))
@@ -141,33 +141,33 @@ class DlgScale(QtWidgets.QWidget):
         for key in self.dProject['chKeyRS']:
             self.label0[key]=QtWidgets.QLabel(key)
             self.doubleSpinBox0[key]=QtWidgets.QDoubleSpinBox()
-            self.doubleSpinBox0[key].setRange(0.01,100.00)
+            self.doubleSpinBox0[key].setRange(0.01, 100.00)
             self.doubleSpinBox0[key].setValue(1.00)
             self.doubleSpinBox0[key].setSingleStep(0.01)
 
         self.groupBox1=QtWidgets.QGroupBox(self.tr('Enter Scale Factor'))
 
         vbox=QtGui.QGridLayout()
-        vbox.addWidget(self.label0['RX'],0,0)
-        vbox.addWidget(self.doubleSpinBox0['RX'],0,1)
-        vbox.addWidget(self.label0['BG'],1,0)
-        vbox.addWidget(self.doubleSpinBox0['BG'],1,1)
-        vbox.addWidget(self.label0['RXS1'],2,0)
-        vbox.addWidget(self.doubleSpinBox0['RXS1'],2,1)
-        vbox.addWidget(self.label0['BGS1'],3,0)
-        vbox.addWidget(self.doubleSpinBox0['BGS1'],3,1)
+        vbox.addWidget(self.label0['RX'], 0, 0)
+        vbox.addWidget(self.doubleSpinBox0['RX'], 0, 1)
+        vbox.addWidget(self.label0['BG'], 1, 0)
+        vbox.addWidget(self.doubleSpinBox0['BG'], 1, 1)
+        vbox.addWidget(self.label0['RXS1'], 2, 0)
+        vbox.addWidget(self.doubleSpinBox0['RXS1'], 2, 1)
+        vbox.addWidget(self.label0['BGS1'], 3, 0)
+        vbox.addWidget(self.doubleSpinBox0['BGS1'], 3, 1)
         if self.dProject['isSeq2']:
-            vbox.addWidget(self.label0['RXS2'],4,0)
-            vbox.addWidget(self.doubleSpinBox0['RXS2'],4,1)
-            vbox.addWidget(self.label0['BGS2'],5,0)
-            vbox.addWidget(self.doubleSpinBox0['BGS2'],5,1)
+            vbox.addWidget(self.label0['RXS2'], 4, 0)
+            vbox.addWidget(self.doubleSpinBox0['RXS2'], 4, 1)
+            vbox.addWidget(self.label0['BGS2'], 5, 0)
+            vbox.addWidget(self.doubleSpinBox0['BGS2'], 5, 1)
 
 
-        vbox.setContentsMargins(0,0,0,0)
+        vbox.setContentsMargins(0, 0, 0, 0)
         self.groupBox1.setLayout(vbox)
 
         self.pushButton0=QtWidgets.QPushButton('Scale All to BG')
-        self.connect(self.pushButton0,QtCore.SIGNAL("clicked()"),self.autoScale)
+        self.connect(self.pushButton0, QtCore.SIGNAL("clicked()"), self.autoScale)
 
 ### Button Box
         self.buttonBox = ToolButton()
@@ -191,7 +191,7 @@ class DlgScale(QtWidgets.QWidget):
             fromP=self.groupBoxROI.fromSpinBox.value()
             toP=self.groupBoxROI.toSpinBox.value()
             if toP<fromP:
-                QtWidgets.QMessageBox.warning(self,'Warning', ' FROM  should be higher than TO')
+                QtWidgets.QMessageBox.warning(self, 'Warning', ' FROM  should be higher than TO')
                 self.isApplied=False
                 return
         for key in self.dProject['chKeyRS']:
@@ -209,14 +209,14 @@ class DlgScale(QtWidgets.QWidget):
             self.doubleSpinBox0[key].setValue(dScaleFactor[key])
 
 class DlgOpenABIFFile(QtWidgets.QWidget):
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.title = QtWidgets.QLabel(self.tr("<center><b>OPEN ABIF FILE</b></center>"))
         self.name="Open ABIF File"
         self.toolID=1
 
-        self.fileRead0=DlgSelectFile('ABIF File',"ABIF or Text File (*.ab1 *.fsa *.txt)")
+        self.fileRead0=DlgSelectFile('ABIF File', "ABIF or Text File (*.ab1 *.fsa *.txt)")
         self.listWidget0 = myListWidget()
         self.buttonBox = ToolButton()
 
@@ -231,7 +231,7 @@ class DlgOpenABIFFile(QtWidgets.QWidget):
     def apply(self):
         self.fName=str(self.fileRead0.lineEdit0.text())
         if self.fName=='':
-            QtWidgets.QMessageBox.warning(self,'Warning', 'Select a file')
+            QtWidgets.QMessageBox.warning(self, 'Warning', 'Select a file')
         else:
             self.listWidget0.clear()
             self.reader=ABIFReader(self.fName)
@@ -239,21 +239,21 @@ class DlgOpenABIFFile(QtWidgets.QWidget):
             for e in entry:
                 if str(e.name)!='DATA':
                     item=''
-                    item=str(e.name)+' '+str(e.number)+' '+str(self.reader.getData(e.name,e.number))
+                    item=str(e.name)+' '+str(e.number)+' '+str(self.reader.getData(e.name, e.number))
                     self.listWidget0.addItem(item)
 
             self.Satd={}
             try:
-                self.Satd['RX']=self.reader.getData('Satd',1) #readOfSc(self.reader)
-                self.Satd['BG']=self.reader.getData('Satd',1)
+                self.Satd['RX']=self.reader.getData('Satd', 1) #readOfSc(self.reader)
+                self.Satd['BG']=self.reader.getData('Satd', 1)
             except:
                 self.Satd['RX']=np.array([])
                 self.Satd['BG']=np.array([])
             self.dOutput={}
-            self.dOutput['RX']=self.reader.getData('DATA',1)
-            self.dOutput['BG']=self.reader.getData('DATA',2)
-            self.dOutput['RXS1']=self.reader.getData('DATA',3)
-            self.dOutput['BGS1']=self.reader.getData('DATA',4)
+            self.dOutput['RX']=self.reader.getData('DATA', 1)
+            self.dOutput['BG']=self.reader.getData('DATA', 2)
+            self.dOutput['RXS1']=self.reader.getData('DATA', 3)
+            self.dOutput['BGS1']=self.reader.getData('DATA', 4)
 
         self.dProjOut=DProjectNew()
         self.dProjOut['dData']=self.dOutput
@@ -261,14 +261,14 @@ class DlgOpenABIFFile(QtWidgets.QWidget):
         self.isToolApplied=True
 
 class DlgOpenSeqFile(QtWidgets.QWidget):
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>OPEN SEQUENCE FILE</b></center>"))
         self.name="Read Sequence File"
         self.toolID=1
 
-        self.fileRead0=DlgSelectFile('Seq. File',"Base Files (*.txt *.fasta *.gbk *.seq )")
+        self.fileRead0=DlgSelectFile('Seq. File', "Base Files (*.txt *.fasta *.gbk *.seq )")
         self.listWidget0 = QtGui.QListWidget()
 
 ### Button Box
@@ -288,12 +288,12 @@ class DlgOpenSeqFile(QtWidgets.QWidget):
         self.seqRNA3to5=self.seqRNA5to3[::-1]
         NSeqRNA=len(self.seqRNA5to3)
         self.listWidget0.addItem('Length of RNA : '+str(NSeqRNA))
-        NofNuc=[self.seqRNA5to3.count('G'),self.seqRNA5to3.count('C'),self.seqRNA5to3.count('A'),self.seqRNA5to3.count('U')]
+        NofNuc=[self.seqRNA5to3.count('G'), self.seqRNA5to3.count('C'), self.seqRNA5to3.count('A'), self.seqRNA5to3.count('U')]
 
         self.listWidget0.addItem('Number of nucleotides: G:'+str(NofNuc[0])+', C:'+str(NofNuc[1])+', A: '+str(NofNuc[2])+', U: '+str(NofNuc[3]))
         self.listWidget0.addItem("Nucleotides from 5' to 3': ")
         nn=50
-        for i in range(0,NSeqRNA,nn):
+        for i in range(0, NSeqRNA, nn):
             line='-'*67
             self.listWidget0.addItem(line)
             line=str(NSeqRNA-i)
@@ -311,15 +311,15 @@ class DlgOpenSeqFile(QtWidgets.QWidget):
         self.isToolApplied=True
 
 class DlgOpenShapeFinder(QtWidgets.QWidget):
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>OPEN SHAPEFINDER FILES</b></center>"))
         self.name="Read ShapeFinder File"
         self.toolID=1
 
-        self.fileRead0=DlgSelectFile('Data File',"Text File (*.txt)")
-        self.fileRead1=DlgSelectFile('Report File',"Text File (*.txt)")
+        self.fileRead0=DlgSelectFile('Data File', "Text File (*.txt)")
+        self.fileRead1=DlgSelectFile('Report File', "Text File (*.txt)")
 
 ### Button Box
         self.buttonBox = ToolButton()
@@ -338,28 +338,28 @@ class DlgOpenShapeFinder(QtWidgets.QWidget):
      #   self.dataFile='/Users/fethullah/Shape Data/TPP files 2/KS_1M7_DMSO_-TPP_060809_int.txt'
         dataA=readDataTxt(self.dataFile)
 
-        self.dProjOut['dData']['RX']=dataA[:,0]
-        self.dProjOut['dData']['BG']=dataA[:,1]
-        self.dProjOut['dData']['RXS1']=dataA[:,2]
-        self.dProjOut['dData']['BGS1']=dataA[:,3]
+        self.dProjOut['dData']['RX']=dataA[:, 0]
+        self.dProjOut['dData']['BG']=dataA[:, 1]
+        self.dProjOut['dData']['RXS1']=dataA[:, 2]
+        self.dProjOut['dData']['BGS1']=dataA[:, 3]
 
         self.integratedFile=str(self.fileRead1.lineEdit0.text())
      #   self.integratedFile="/Users/fethullah/Shape Data/TPP files 2/KS_1M7_DMSO_-TPP_060809_areasb.txt"
         fl=open(self.integratedFile, "r")
-        a,data=[],[]
+        a, data=[], []
         lines=fl.readlines()
-        for i in range(len(lines)-1,0,-1):
+        for i in range(len(lines)-1, 0, -1):
             a= lines[i].split('\t')
-            self.dProjOut['seqNum']=np.append(self.dProjOut['seqNum'],int(a[0]))
+            self.dProjOut['seqNum']=np.append(self.dProjOut['seqNum'], int(a[0]))
             self.dProjOut['seqRNA']+=str(a[1])
-            self.dProjOut['dPeakRX']['pos']=np.append(self.dProjOut['dPeakRX']['pos'],int(a[2]))
-            self.dProjOut['dPeakRX']['wid']=np.append(self.dProjOut['dPeakRX']['wid'],float(a[3]))
-            self.dProjOut['dPeakRX']['area']=np.append(self.dProjOut['dPeakRX']['area'],float(a[4]))
-            self.dProjOut['dPeakBG']['pos']=np.append(self.dProjOut['dPeakBG']['pos'],int(a[6]))
-            self.dProjOut['dPeakBG']['wid']=np.append(self.dProjOut['dPeakBG']['wid'],float(a[7]))
-            self.dProjOut['dPeakBG']['area']=np.append(self.dProjOut['dPeakBG']['area'],float(a[8]))
-            self.dProjOut['areaDiff']=np.append(self.dProjOut['areaDiff'],float(a[10]))
-            self.dProjOut['normDiff']=np.append(self.dProjOut['normDiff'],float(a[11]))
+            self.dProjOut['dPeakRX']['pos']=np.append(self.dProjOut['dPeakRX']['pos'], int(a[2]))
+            self.dProjOut['dPeakRX']['wid']=np.append(self.dProjOut['dPeakRX']['wid'], float(a[3]))
+            self.dProjOut['dPeakRX']['area']=np.append(self.dProjOut['dPeakRX']['area'], float(a[4]))
+            self.dProjOut['dPeakBG']['pos']=np.append(self.dProjOut['dPeakBG']['pos'], int(a[6]))
+            self.dProjOut['dPeakBG']['wid']=np.append(self.dProjOut['dPeakBG']['wid'], float(a[7]))
+            self.dProjOut['dPeakBG']['area']=np.append(self.dProjOut['dPeakBG']['area'], float(a[8]))
+            self.dProjOut['areaDiff']=np.append(self.dProjOut['areaDiff'], float(a[10]))
+            self.dProjOut['normDiff']=np.append(self.dProjOut['normDiff'], float(a[11]))
 
         fl.close()
 
@@ -368,7 +368,7 @@ class DlgOpenShapeFinder(QtWidgets.QWidget):
 
         self.dProjOut['seqX']=self.dProjOut['dPeakRX']['pos']
         self.dProjOut['seqNum']=self.dProjOut['seqNum'][:-1]
-        self.dProjOut['seqNum']=np.insert(self.dProjOut['seqNum'],0,self.dProjOut['seqNum'][0]+1)
+        self.dProjOut['seqNum']=np.insert(self.dProjOut['seqNum'], 0, self.dProjOut['seqNum'][0]+1)
         self.dProjOut['seqRNA']=self.dProjOut['seqRNA'][:-1]
         self.dProjOut['seqRNA']= 'N'+self.dProjOut['seqRNA']
 
@@ -395,22 +395,22 @@ class DlgOpenShapeFinder(QtWidgets.QWidget):
 
         self.isToolApplied=True
 
-def readShapeFinderReport(dProject,fName):
+def readShapeFinderReport(dProject, fName):
     fl=open(fName, "r")
-    a,data=[],[]
+    a, data=[], []
     lines=fl.readlines()
-    for i in range(len(lines)-1,0,-1):
+    for i in range(len(lines)-1, 0, -1):
         a= lines[i].split('\t')
-        dProject['seqNum']=np.append(dProject['seqNum'],int(a[0]))
+        dProject['seqNum']=np.append(dProject['seqNum'], int(a[0]))
         dProject['seqRNA']+=str(a[1])
-        dProject['dPeakRX']['pos']=np.append(dProject['dPeakRX']['pos'],int(a[2]))
-        dProject['dPeakRX']['wid']=np.append(dProject['dPeakRX']['wid'],float(a[3]))
-        dProject['dPeakRX']['area']=np.append(dProject['dPeakRX']['area'],float(a[4]))
-        dProject['dPeakBG']['pos']=np.append(dProject['dPeakBG']['pos'],int(a[6]))
-        dProject['dPeakBG']['wid']=np.append(dProject['dPeakBG']['wid'],float(a[7]))
-        dProject['dPeakBG']['area']=np.append(dProject['dPeakBG']['area'],float(a[8]))
-        dProject['areaDiff']=np.append(dProject['areaDiff'],float(a[10]))
-        dProject['normDiff']=np.append(dProject['normDiff'],float(a[11]))
+        dProject['dPeakRX']['pos']=np.append(dProject['dPeakRX']['pos'], int(a[2]))
+        dProject['dPeakRX']['wid']=np.append(dProject['dPeakRX']['wid'], float(a[3]))
+        dProject['dPeakRX']['area']=np.append(dProject['dPeakRX']['area'], float(a[4]))
+        dProject['dPeakBG']['pos']=np.append(dProject['dPeakBG']['pos'], int(a[6]))
+        dProject['dPeakBG']['wid']=np.append(dProject['dPeakBG']['wid'], float(a[7]))
+        dProject['dPeakBG']['area']=np.append(dProject['dPeakBG']['area'], float(a[8]))
+        dProject['areaDiff']=np.append(dProject['areaDiff'], float(a[10]))
+        dProject['normDiff']=np.append(dProject['normDiff'], float(a[11]))
 
     fl.close()
 
@@ -418,7 +418,7 @@ def readShapeFinderReport(dProject,fName):
 
 
 class DlgManualSignalAlign(QtWidgets.QWidget):
-    def __init__(self,dProject,parent=None):
+    def __init__(self, dProject, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         self.labelTitle = QtWidgets.QLabel(self.tr("<center><b>MANUAL SIGNAL ALGINMENT</b></center>"))
@@ -428,8 +428,8 @@ class DlgManualSignalAlign(QtWidgets.QWidget):
         self.dProject=dProject
         self.dProjOut=deepcopy(dProject)
 
-        self.linkXR,self.linkXS=np.array([]),np.array([])
-        self.dataR,self.dataS=np.array([]),np.array([])
+        self.linkXR, self.linkXS=np.array([]), np.array([])
+        self.dataR, self.dataS=np.array([]), np.array([])
         self.isToolApplied=False
 
         label0=QtWidgets.QLabel('Reference Channel')
@@ -441,10 +441,10 @@ class DlgManualSignalAlign(QtWidgets.QWidget):
         self.comboBox1.setCurrentIndex(1)
 
         layout0=myGridLayout()
-        layout0.addWidget(label0,0,0)
-        layout0.addWidget(self.comboBox0,0,1)
-        layout0.addWidget(label1,1,0)
-        layout0.addWidget(self.comboBox1,1,1)
+        layout0.addWidget(label0, 0, 0)
+        layout0.addWidget(self.comboBox0, 0, 1)
+        layout0.addWidget(label1, 1, 0)
+        layout0.addWidget(self.comboBox1, 1, 1)
 
         self.groupBox0=QtWidgets.QGroupBox("Select Channels")
         self.groupBox0.setLayout(layout0)
@@ -482,12 +482,12 @@ class DlgManualSignalAlign(QtWidgets.QWidget):
             self.dataS=self.dProject['dData'][self.keyS]
             NDataR=len(self.dataR)
             NDataS=len(self.dataS)
-            self.linkXR=np.array([int(NDataR/4),int(NDataR/2),int(3*NDataR/4)],int) #np.linspace(NDataR/4, NDataR, 3, endpoint=False)
-            self.linkXS=np.array([int(NDataS/4),int(NDataS/2),int(3*NDataS/4)],int) #np.linspace(NDataS/4, NDataR, 3, endpoint=False)
+            self.linkXR=np.array([int(NDataR/4), int(NDataR/2), int(3*NDataR/4)], int) #np.linspace(NDataR/4, NDataR, 3, endpoint=False)
+            self.linkXS=np.array([int(NDataS/4), int(NDataS/2), int(3*NDataS/4)], int) #np.linspace(NDataS/4, NDataR, 3, endpoint=False)
             self.button0.setEnabled(True)
             self.groupBox0.setChecked(False)
 
         for key in self.dProject['chKeyRS']:
             if key!=self.keyR and self.applyChannel.checkBox0[key].isChecked():
-                self.dProjOut['dData'][key]=splineSampleData(self.dProject['dData'][key],self.linkXR,self.linkXS,len(self.dataR))
+                self.dProjOut['dData'][key]=splineSampleData(self.dProject['dData'][key], self.linkXR, self.linkXS, len(self.dataR))
         self.isToolApplied=True

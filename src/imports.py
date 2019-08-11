@@ -7,7 +7,7 @@ import sys
 import numpy as np
 import shelve
 
-from PyQt5 import QtCore,QtGui,Qt,QtWidgets
+from PyQt5 import QtCore, QtGui, Qt, QtWidgets
 
 import time
 import webbrowser
@@ -20,9 +20,9 @@ matplotlib.use('Qt4Agg')
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 #from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as NavigationToolbar
 from matplotlib.figure import Figure
-#from matplotlib.widgets import MultiCursor,SpanSelector
+#from matplotlib.widgets import MultiCursor, SpanSelector
 from matplotlib.pyplot import setp
-from matplotlib.patches import ConnectionPatch,Rectangle
+from matplotlib.patches import ConnectionPatch, Rectangle
 from matplotlib import rcParams
 from matplotlib.text import Text
 

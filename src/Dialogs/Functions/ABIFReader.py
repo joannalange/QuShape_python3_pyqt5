@@ -1,9 +1,9 @@
-# Python implementation of an ABIF file reader according to Applied Biosystems' specificatons,
+# Python implementation of an ABIF file reader according to Applied Biosystems' specificatons, 
 # see http://www.appliedbiosystems.com/support/software_community/ABIF_File_Format.pdf
 #
-# This code is published by Interactive Biosoftware, France,
+# This code is published by Interactive Biosoftware, France, 
 # see http://www.interactive-biosoftware.com/
-# under GPL license,
+# under GPL license, 
 # see http://www.gnu.org/licenses/gpl.html
 #
 # Author: Francis Wolinski
@@ -40,7 +40,7 @@
 import struct
 import datetime
 
-ABIF_TYPES = {1: 'byte', 2: 'char', 3: 'word', 4: 'short', 5: 'long', 7: 'float', 8: 'double',\
+ABIF_TYPES = {1: 'byte', 2: 'char', 3: 'word', 4: 'short', 5: 'long', 7: 'float', 8: 'double', \
         10: 'date', 11: 'time', 12: 'thumb', 13: 'bool', 18: 'pString', 19: 'cString'}
 
 class ABIFReader:
@@ -209,10 +209,10 @@ class DirEntry:
             return 'user'
 
 def readOfSc(reader):
-    OfSc=reader.getData('OfSc',1)
+    OfSc=reader.getData('OfSc', 1)
     part=[]
     newOfSc=[]
-    for i in range(1,len(reader.getData('OfSc',1))):
+    for i in range(1, len(reader.getData('OfSc', 1))):
         if OfSc[i]-OfSc[i-1]==1:
             part.append(OfSc[i-1])
         else:
@@ -240,32 +240,32 @@ if __name__ == "__main__":
     entry=reader.entries
     for e in entry:
         if e.name!='DATA':
-            print(e.name,e.number,reader.getData(e.name,e.number))
+            print(e.name, e.number, reader.getData(e.name, e.number))
 
-    fig = figure(1,figsize=(12, 6))
+    fig = figure(1, figsize=(12, 6))
     axes0 = fig.add_subplot(411)
     axes1 = fig.add_subplot(412)
     axes2 = fig.add_subplot(413)
     axes3 = fig.add_subplot(414)
 
-    axes0.plot(reader.getData('DATA',1))
-    axes1.plot(reader.getData('DATA',2))
-    axes2.plot(reader.getData('DATA',3))
-    axes3.plot(reader.getData('DATA',4))
+    axes0.plot(reader.getData('DATA', 1))
+    axes1.plot(reader.getData('DATA', 2))
+    axes2.plot(reader.getData('DATA', 3))
+    axes3.plot(reader.getData('DATA', 4))
 
-#    for i in range(len(reader.getData('OfSc',1))):
-#        axes0.axvline(x=reader.getData('OfSc',1)[i], linewidth=1, color='y',alpha=0.5)
-#        axes1.axvline(x=reader.getData('OfSc',1)[i], linewidth=1, color='y',alpha=0.5)
-#        axes2.axvline(x=reader.getData('OfSc',1)[i], linewidth=1, color='y',alpha=0.5)
-#        axes3.axvline(x=reader.getData('OfSc',1)[i], linewidth=1, color='y',alpha=0.5)
+#    for i in range(len(reader.getData('OfSc', 1))):
+#        axes0.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
+#        axes1.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
+#        axes2.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
+#        axes3.axvline(x=reader.getData('OfSc', 1)[i], linewidth=1, color='y', alpha=0.5)
     newOfSc=readOfSc(reader)
     for i in range(len(newOfSc)):
-        axes0.axvspan(newOfSc[i][0],newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
-        axes1.axvspan(newOfSc[i][0],newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
-        axes2.axvspan(newOfSc[i][0],newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
-        axes3.axvspan(newOfSc[i][0],newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
+        axes0.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
+        axes1.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
+        axes2.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
+        axes3.axvspan(newOfSc[i][0], newOfSc[i][-1]+1, facecolor='0.5', alpha=0.5)
 
-   # axes1.plot(reader.getData('OfSc',1),100,'k.')
+   # axes1.plot(reader.getData('OfSc', 1), 100, 'k.')
 
     show()
 
