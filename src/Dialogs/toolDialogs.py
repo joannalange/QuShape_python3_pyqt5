@@ -61,7 +61,7 @@ class DlgToolsAll(QtWidgets.QWidget):
         self.spinBox4.setValue(60)
         self.spinBox4.setSingleStep(1)
 
-        layout1 = QtGui.QGridLayout()
+        layout1 = QtWidgets.QGridLayout()
         layout1.addWidget(self.checkBox01, 0, 0)
         layout1.addWidget(self.checkBox0, 1, 0)
         layout1.addWidget(self.spinBox2, 1, 1)
@@ -610,7 +610,7 @@ class DlgSignalAlign(QtWidgets.QWidget):
             choices0 = ['RXS1 - BGS1']
         self.comboBox0.addItems(choices0)
 
-        gridLayout0 = QtGui.QGridLayout()
+        gridLayout0 = QtWidgets.QGridLayout()
         gridLayout0.addWidget(label1, 0, 0)
         gridLayout0.addWidget(self.comboBox0, 0, 1)
 

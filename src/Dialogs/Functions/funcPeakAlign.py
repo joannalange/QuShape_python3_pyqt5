@@ -1,3 +1,4 @@
+import numpy as np
 from scipy import interpolate
 
 from .funcGeneral import argmax2, argmax3, deriv1, enhance, max2, max3

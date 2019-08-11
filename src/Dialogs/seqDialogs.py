@@ -1,7 +1,3 @@
-import shelve
-
-from PyQt5 import QtGui, QtWidgets
-
 from .Functions import *
 from .myWidgets import *
 

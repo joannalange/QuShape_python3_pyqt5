@@ -1,3 +1,4 @@
+import os
 from mainWindow import *
 
 if __name__ == '__main__':

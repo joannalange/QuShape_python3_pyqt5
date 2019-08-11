@@ -1,3 +1,4 @@
+import os
 from matplotlib import rcParams
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -254,7 +255,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if self.recentFiles:
             for i, fname in enumerate(self.recentFiles):
-                action = QtGui.QAction(QtGui.QIcon(":/icon.png"), "&%d %s" % (
+                action = QtWidgets.QAction(QtGui.QIcon(":/icon.png"), "&%d %s" % (
                     i + 1, QtCore.QFileInfo(fname).fileName()), self)
                 action.setData(QtCore.QVariant(fname))
                 # self.connect(action, QtCore.SIGNAL("triggered()"), self.openProject)
@@ -706,7 +707,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def openProject(self, projFile=None):
         if projFile is None:
             action = self.sender()
-            if isinstance(action, QtGui.QAction):
+            if isinstance(action, QtWidgets.QAction):
                 self.projFileName = str(action.data().toString())
                 if not self.okToContinue():
                     return
@@ -961,7 +962,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def addScriptList(self):
         self.lastScript = str(self.dlg.name)
         self.dProject['scriptList'].append(self.lastScript)
-        item = QtGui.QListWidgetItem(self.lastScript)
+        item = QtWidgets.QListWidgetItem(self.lastScript)
         self.scriptList.addItem(item)
         self.dirty = True
 
