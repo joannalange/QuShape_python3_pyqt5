@@ -1,5 +1,16 @@
-from .Functions import *
-from .myWidgets import *
+import numpy as np
+import shelve
+from copy import deepcopy
+
+from PyQt5 import QtGui, QtWidgets
+
+from .Functions import funcByRef as fref
+from .Functions import funcFile as ffile
+from .Functions import funcSeqAll as fseq
+from .Functions import funcPeakAlign as fpeak
+from .Functions import funcGeneral as fGen
+
+from . import myWidgets as my_widgets
 
 
 class DlgSeqAlign(QtWidgets.QWidget):
@@ -13,10 +24,10 @@ class DlgSeqAlign(QtWidgets.QWidget):
         self.dProject = dProject
         self.dProjOut = deepcopy(dProject)
 
-        self.fileReadSeq = DlgSelectFile('Seq. File', "Base Files (*.txt *.fasta *.gbk *.seq )", self.dProject['dir'])
+        self.fileReadSeq = my_widgets.DlgSelectFile('Seq. File', "Base Files (*.txt *.fasta *.gbk *.seq )", self.dProject['dir'])
         self.fileReadSeq.lineEdit0.setText(self.dProject['fNameSeq'])
         self.seqRNA3to5 = self.dProjOut['RNA'][::-1]
-        self.seqRNA3to5N = changeNucToN(self.seqRNA3to5, self.dProjOut)
+        self.seqRNA3to5N = fseq.changeNucToN(self.seqRNA3to5, self.dProjOut)
         self.NSeqRNA = len(self.dProjOut['RNA'])
 
         ###  SEQUENCE FIND
@@ -45,11 +56,11 @@ class DlgSeqAlign(QtWidgets.QWidget):
         self.radioSeqFind0 = QtWidgets.QRadioButton('Histogram')
         self.radioSeqFind1 = QtWidgets.QRadioButton('Background')
 
-        layoutMethod = myHBoxLayout()
+        layoutMethod = my_widgets.myHBoxLayout()
         layoutMethod.addWidget(self.radioSeqFind0)
         layoutMethod.addWidget(self.radioSeqFind1)
 
-        gridLayout = myGridLayout()
+        gridLayout = my_widgets.myGridLayout()
 
         gridLayout.addWidget(label0, 0, 0)
         gridLayout.addWidget(label1, 0, 1)
@@ -93,7 +104,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
 
         self.checkBoxLineDraw = QtWidgets.QCheckBox('Draw peak match lines')
         self.checkBoxLineDraw.setChecked(True)
-        layoutSetting = myGridLayout()
+        layoutSetting = my_widgets.myGridLayout()
         layoutSetting.addWidget(labelSetting2, 0, 0)
         layoutSetting.addWidget(self.spinBoxSeqRangeFrom, 0, 1)
         layoutSetting.addWidget(labelSetting3, 0, 2)
@@ -108,12 +119,12 @@ class DlgSeqAlign(QtWidgets.QWidget):
                 Press Key 'D' button and click to delete a Nuc. \
                 Press Key 'Shift' button and select a peak to change position. "
 
-        self.hint = hintLabel(text)
+        self.hint = my_widgets.my_widgets.hintLabel(text)
 
         # self.connect(self.fileReadSeq.pushButton0, QtCore.SIGNAL("clicked()"), self.changeSeqFile)
         self.fileReadSeq.pushButton0.clicked.connect(self.changeSeqFile)
 
-        self.buttonBox = ToolButton()
+        self.buttonBox = my_widgets.ToolButton()
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.title)
@@ -128,16 +139,16 @@ class DlgSeqAlign(QtWidgets.QWidget):
 
     def apply(self):
         if self.groupBoxBaseCall.isChecked():
-            self.dProjOut['dData'] = equalLen(self.dProject['dData'])
+            self.dProjOut['dData'] = fGen.equalLen(self.dProject['dData'])
             self.applySeqFindFunc()
             self.groupBoxBaseCall.setChecked(False)
 
             start = self.NSeqRNA - self.spinBoxSeqRangeFrom.value()
             end = self.NSeqRNA - self.spinBoxSeqRangeTo.value()
-            self.dProjOut = applySeqAlign(self.dProjOut, self.seqRNA3to5N, start, end)
-            alignedSeqRNA, alignedSeq, newSeqX, startNucI, endNucI = shapeSeqAlign(self.dProjOut, self.seqRNA3to5N[start:end])
+            self.dProjOut = fseq.applySeqAlign(self.dProjOut, self.seqRNA3to5N, start, end)
+            alignedSeqRNA, alignedSeq, newSeqX, startNucI, endNucI = fseq.shapeSeqAlign(self.dProjOut, self.seqRNA3to5N[start:end])
 
-            newSeqX, newSeq = nucAddDelete(alignedSeqRNA, alignedSeq, newSeqX)
+            newSeqX, newSeq = fseq.nucAddDelete(alignedSeqRNA, alignedSeq, newSeqX)
 
             startNucI = startNucI + start
             endNucI = startNucI + len(newSeqX)
@@ -151,9 +162,9 @@ class DlgSeqAlign(QtWidgets.QWidget):
             self.spinBoxSeqRangeFrom.setValue((self.dProjOut['start'] + 10))
             self.spinBoxSeqRangeTo.setValue((self.dProjOut['end'] - 10))
 
-            self.dProjOut = peakListAll(self.dProjOut, ['RX', 'BG'])
-            self.dProjOut['dPeakBG'], self.controlRX = peakLinking(self.dProjOut['seqX'], self.dProjOut['dPeakBG'], self.dProjOut['dData']['BG'])
-            self.dProjOut['dPeakRX'], self.controlBG = peakLinking(self.dProjOut['dPeakBG']['pos'], self.dProjOut['dPeakRX'],
+            self.dProjOut = fpeak.peakListAll(self.dProjOut, ['RX', 'BG'])
+            self.dProjOut['dPeakBG'], self.controlRX = fpeak.peakLinking(self.dProjOut['seqX'], self.dProjOut['dPeakBG'], self.dProjOut['dData']['BG'])
+            self.dProjOut['dPeakRX'], self.controlBG = fpeak.peakLinking(self.dProjOut['dPeakBG']['pos'], self.dProjOut['dPeakRX'],
                                                                    self.dProjOut['dData']['RX'])
         else:
             self.applyFastSeqAlign()
@@ -162,7 +173,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
     def applyFastSeqAlign(self):
         s = self.NSeqRNA - self.spinBoxSeqRangeFrom.value()
         e = self.NSeqRNA - self.spinBoxSeqRangeTo.value()
-        startNucI = seqAlignFast(self.seqRNA3to5N[s:e], self.dProjOut['seq0'])
+        startNucI = fseq.seqAlignFast(self.seqRNA3to5N[s:e], self.dProjOut['seq0'])
         startNucI = startNucI + s
         self.NSeq0 = len(self.dProjOut['seq0'])
         endNucI = startNucI + self.NSeq0
@@ -193,7 +204,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
 
         #   self.dProjOut=seqAlignAllNew(self.dProjOut, keyS1, keyS2)
         #   self.dProjOut=seqFindWithBG(self.dProjOut, keyS1, t1, keyS2, t2)
-        self.dProjOut = seqFindFinal0(self.dProjOut, keyS1, keyS2)
+        self.dProjOut = fseq.seqFindFinal0(self.dProjOut, keyS1, keyS2)
 
     #  self.dProjOut['seq0'], self.dProjOut['seqX0']=seqFindNorm(self.dProjOut, keyS1, t1, keyS2, t2)
 
@@ -201,9 +212,9 @@ class DlgSeqAlign(QtWidgets.QWidget):
 
     def changeSeqFile(self):
         self.dProjOut['fNameSeq'] = str(self.fileReadSeq.lineEdit0.text())
-        self.dProjOut['RNA'] = readBaseFile(self.dProjOut['fNameSeq'])
+        self.dProjOut['RNA'] = ffile.readBaseFile(self.dProjOut['fNameSeq'])
         self.seqRNA3to5 = self.dProjOut['RNA'][::-1]
-        self.seqRNA3to5N = changeNucToN(self.seqRNA3to5, self.dProjOut)
+        self.seqRNA3to5N = fseq.changeNucToN(self.seqRNA3to5, self.dProjOut)
         self.NSeqRNA = len(self.seqRNA3to5)
         self.setSpinBoxSeq()
 
@@ -230,7 +241,7 @@ class DlgReactivity(QtWidgets.QWidget):
         self.checkBox0 = QtWidgets.QCheckBox('Scale and Normalize with Reference')
 
         ## SCALE
-        self.groupBox1 = scaleGroupBox("Scale BG")
+        self.groupBox1 = my_widgets.scaleGroupBox("Scale BG")
 
         ## NORMALIZATION
         label0 = QtWidgets.QLabel('Outlier')
@@ -248,13 +259,13 @@ class DlgReactivity(QtWidgets.QWidget):
 
         self.checkBox1 = QtWidgets.QCheckBox("Set Negative Value to Zero")
 
-        layout2 = myHBoxLayout()
+        layout2 = my_widgets.myHBoxLayout()
         layout2.addWidget(label0)
         layout2.addWidget(self.spinBox0)
         #  layout2.addWidget(label1)
         #  layout2.addWidget(self.spinBox1)
 
-        layout21 = myVBoxLayout()
+        layout21 = my_widgets.myVBoxLayout()
         #   layout21.addWidget(self.radioNormCluster)
         layout21.addLayout(layout2)
         layout21.addWidget(self.checkBox1)
@@ -271,7 +282,7 @@ class DlgReactivity(QtWidgets.QWidget):
         self.pushButton1 = QtWidgets.QPushButton('Peak Area')
         self.pushButton2 = QtWidgets.QPushButton('Data')
 
-        layout3 = myGridLayout()
+        layout3 = my_widgets.myGridLayout()
         layout3.addWidget(self.radio3to5, 0, 0)
         layout3.addWidget(self.radio5to3, 0, 1)
         layout3.addWidget(self.pushButton0, 1, 0)
@@ -282,7 +293,7 @@ class DlgReactivity(QtWidgets.QWidget):
         self.groupBox3.setLayout(layout3)
         #    self.groupBox3.setEnabled(False)
 
-        self.buttonBox = ToolButton()
+        self.buttonBox = my_widgets.ToolButton()
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.labelTitle)
@@ -300,14 +311,14 @@ class DlgReactivity(QtWidgets.QWidget):
 
     def initialize(self):
         self.dProjOut1 = deepcopy(self.dProject)
-        self.dProjOut1['dPeakRX'] = fitShapeData(self.dProjOut1['dPeakRX'], self.dProjOut1['dData']['RX'])
-        self.dProjOut1['dPeakBG'] = fitShapeData(self.dProjOut1['dPeakBG'], self.dProjOut1['dData']['BG'])
+        self.dProjOut1['dPeakRX'] = fseq.fitShapeData(self.dProjOut1['dPeakRX'], self.dProjOut1['dData']['RX'])
+        self.dProjOut1['dPeakBG'] = fseq.fitShapeData(self.dProjOut1['dPeakBG'], self.dProjOut1['dData']['BG'])
 
-        self.scaleFactor = scaleShapeData(self.dProjOut1['dPeakRX']['amp'], self.dProjOut1['dPeakBG']['amp'])
+        self.scaleFactor = fseq.scaleShapeData(self.dProjOut1['dPeakRX']['amp'], self.dProjOut1['dPeakBG']['amp'])
         self.groupBox1.doubleSpinBox0.setValue(self.scaleFactor)
 
         self.dProjOut1['areaDiff'] = self.dProjOut1['dPeakRX']['area'] - self.dProjOut1['dPeakBG']['area'] * self.scaleFactor
-        self.POutlier, self.PAver = findPOutlierBox(self.dProjOut1['areaDiff'])
+        self.POutlier, self.PAver = fseq.findPOutlierBox(self.dProjOut1['areaDiff'])
 
         self.spinBox0.setValue(self.POutlier)
         self.spinBox1.setValue(self.PAver)
@@ -319,9 +330,9 @@ class DlgReactivity(QtWidgets.QWidget):
         self.dProjOut = deepcopy(self.dProjOut1)
         scaleFactorData = 1
         if self.groupBox1.checkBoxScale0.isChecked():
-            scaleFactor = scaleShapeDataWindow(self.dProjOut['dPeakRX']['amp'], self.dProjOut['dPeakBG']['amp'], deg=40, rate=0.25, step=10,
+            scaleFactor = fseq.scaleShapeDataWindow(self.dProjOut['dPeakRX']['amp'], self.dProjOut['dPeakBG']['amp'], deg=40, rate=0.25, step=10,
                                                fit='linear')
-            scaleFactorData = fitLinear(self.dProjOut['dPeakBG']['pos'], scaleFactor, NData=len(self.dProjOut['dData']['BG']))
+            scaleFactorData = fseq.fitLinear(self.dProjOut['dPeakBG']['pos'], scaleFactor, NData=len(self.dProjOut['dData']['BG']))
         else:
             scaleFactor = float(self.groupBox1.doubleSpinBox0.value())
             scaleFactorData = scaleFactor
@@ -330,9 +341,9 @@ class DlgReactivity(QtWidgets.QWidget):
         self.POutlier = self.spinBox0.value()
         self.PAver = self.spinBox1.value()
 
-        self.dProjOut['normDiff'], aver = normSimple(self.dProjOut['areaDiff'], self.POutlier, self.PAver)
+        self.dProjOut['normDiff'], aver = fseq.normSimple(self.dProjOut['areaDiff'], self.POutlier, self.PAver)
         if self.checkBox1.isChecked():
-            self.dProjOut['normDiff'] = setNegToZero(self.dProjOut['normDiff'])
+            self.dProjOut['normDiff'] = fGen.setNegToZero(self.dProjOut['normDiff'])
 
         self.dProjOut['scaleFactor'] = np.array([scaleFactor])
         self.dProjOut['dPeakBG']['area'] = self.dProjOut['dPeakBG']['area'] * scaleFactor
@@ -351,7 +362,7 @@ class DlgReportTable(QtWidgets.QWidget):
         self.toolID = 1
 
         self.dProject = dProject
-        self.dReport = createDReport(dProject)
+        self.dReport = fseq.createDReport(dProject)
 
         for key in self.dReport.keys():
             self.dReport[key] = self.dReport[key][::-1]
@@ -368,8 +379,8 @@ class DlgReportTable(QtWidgets.QWidget):
         N = len(self.dReport['seqNum'])
         self.table = QtWidgets.QTableWidget()
         self.table.setRowCount(N)
-        self.table.setColumnCount(len(reportKeys))
-        self.table.setHorizontalHeaderLabels(reportKeys)
+        self.table.setColumnCount(len(fseq.reportKeys))
+        self.table.setHorizontalHeaderLabels(fseq.reportKeys)
         self.table.setSelectionBehavior(QtWidgets.QTableWidget.SelectRows)
         self.table.setSelectionMode(QtWidgets.QTableWidget.SingleSelection)
         self.font = QtGui.QFont()
@@ -377,14 +388,14 @@ class DlgReportTable(QtWidgets.QWidget):
         self.table.setFont(self.font)
 
         for i in range(N):
-            for key in reportKeys:
+            for key in fseq.reportKeys:
                 if key == 'seqRNA':
                     item = QtWidgets.QTableWidgetItem(self.dReport[key][i])
                 elif key in ['seqNum', 'posSeq', 'posRX', 'posBG']:
                     item = QtWidgets.QTableWidgetItem("%d" % self.dReport[key][i])
                 else:
                     item = QtWidgets.QTableWidgetItem("%.2f" % self.dReport[key][i])
-                col = reportKeys.index(key)
+                col = fseq.reportKeys.index(key)
                 self.table.setItem(int(i), int(col), item)
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
@@ -399,7 +410,7 @@ class DlgReportTable(QtWidgets.QWidget):
         fName = QtWidgets.QFileDialog.getSaveFileName(self, "Save As", self.dProject['dir'])
         if fName:
             fName = str(fName) + '.txt'
-            writeReportFile(self.dReport, fName)
+            fseq.writeReportFile(self.dReport, fName)
 
 
 class DlgSeqAlignRef(QtWidgets.QWidget):
@@ -417,7 +428,7 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
         self.dataR, self.dataS = np.array([]), np.array([])
 
         #### BY REFERENCE
-        self.fileReadRef = DlgSelectFile('Ref. Proj.', "Reference Project (*.pyShape *.qushape)", self.dProject['dir'])
+        self.fileReadRef = my_widgets.DlgSelectFile('Ref. Proj.', "Reference Project (*.pyShape *.qushape)", self.dProject['dir'])
         if 'fNameRef' in self.dProject.keys():
             self.fileReadRef.lineEdit0.setText(self.dProject['fNameRef'])
         # self.connect(self.fileReadRef.pushButton0, QtCore.SIGNAL("clicked()"), self.changeRefFile)
@@ -425,15 +436,15 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
 
         label10 = QtWidgets.QLabel("Ref. Channel")
         self.comboBox10 = QtWidgets.QComboBox()
-        self.comboBox10.addItems(chKeysRS)
+        self.comboBox10.addItems(fGen.chKeysRS)
         self.comboBox10.setCurrentIndex(3)
 
         label11 = QtWidgets.QLabel("Sample Channel")
         self.comboBox11 = QtWidgets.QComboBox()
-        self.comboBox11.addItems(chKeysRS)
+        self.comboBox11.addItems(fGen.chKeysRS)
         self.comboBox11.setCurrentIndex(3)
 
-        layout0 = myGridLayout()
+        layout0 = my_widgets.myGridLayout()
         layout0.addWidget(self.fileReadRef, 0, 0, 1, 2)
         layout0.addWidget(label10, 1, 0)
         layout0.addWidget(self.comboBox10, 1, 1)
@@ -457,7 +468,7 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
 
         self.checkBoxScale0 = QtWidgets.QCheckBox('Scale by windowing')
 
-        layout1 = myGridLayout()
+        layout1 = my_widgets.myGridLayout()
         layout1.addWidget(labelRX, 0, 0)
         layout1.addWidget(self.spinBoxRX, 0, 1)
         layout1.addWidget(labelBG, 1, 0)
@@ -471,7 +482,7 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
         #  self.button0=QtWidgets.QPushButton('Modify Matched Peaks')
         #  self.button0.setEnabled(False)
 
-        self.button0 = peakMatchModifyButton()
+        self.button0 = my_widgets.peakMatchModifyButton()
 
         self.button1 = QtWidgets.QPushButton('Modify Peak Link by Reference')
         self.button1.setEnabled(False)
@@ -481,10 +492,10 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
                                           ))
         text = self.tr(
             "HINT: When the matched peaks are modified; Key 'A'  to add a Peak. Key 'D'  to delete a Peak. Key 'Shift' to change position. ")
-        self.hint = hintLabel(text)
+        self.hint = my_widgets.hintLabel(text)
 
         ### BUTTON BOX
-        self.buttonBox = ToolButton()
+        self.buttonBox = my_widgets.ToolButton()
 
         ## MAIN LAYOUT
         mainLayout = QtWidgets.QVBoxLayout()
@@ -511,7 +522,7 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
             self.keyS = str(self.comboBox11.currentText())
             self.dataR = self.dProjRef['dData'][self.keyR]
             self.dataS = self.dProject['dData'][self.keyS]
-            self.linkXR, self.linkXS = seqAlignRef(self.dProjRef, self.dProject, self.keyR, self.keyS)
+            self.linkXR, self.linkXS = fseq.seqAlignRef(self.dProjRef, self.dProject, self.keyR, self.keyS)
             self.groupBox0.setChecked(False)
             self.button0.setEnabled(True)
             self.isMatchedPeaksChanged = True
@@ -520,17 +531,17 @@ class DlgSeqAlignRef(QtWidgets.QWidget):
             self.dProjOut = deepcopy(self.dProject)
             NDataR = len(self.dataR)
             for key in self.dProjOut['chKeyRS']:
-                self.dProjOut['dData'][key] = splineSampleData(self.dProject['dData'][key], self.dataR, self.linkXR, self.linkXS, False)
+                self.dProjOut['dData'][key] = fpeak.splineSampleData(self.dProject['dData'][key], self.dataR, self.linkXR, self.linkXS, False)
             self.linkYR = self.dataR[self.linkXR]
             self.linkYS = self.dataS[self.linkXS]
 
-            self.dProjOut = postSeqAlignRef(self.dProjRef, self.dProjOut)
-            self.dProjOut['dPeakRX'] = fPeakList(self.dProjOut['dData']['RX'])
-            self.dProjOut['dPeakBG'] = fPeakList(self.dProjOut['dData']['BG'])
-            self.dProjOut['dPeakBG'], self.controlRX = peakLinking(self.dProjRef['dPeakBG']['pos'], self.dProjOut['dPeakBG'],
-                                                                   self.dProjOut['dData']['BG'])
-            self.dProjOut['dPeakRX'], self.controlBG = peakLinking(self.dProjRef['dPeakRX']['pos'], self.dProjOut['dPeakRX'],
-                                                                   self.dProjOut['dData']['RX'])
+            self.dProjOut = fref.postSeqAlignRef(self.dProjRef, self.dProjOut)
+            self.dProjOut['dPeakRX'] = fpeak.fPeakList(self.dProjOut['dData']['RX'])
+            self.dProjOut['dPeakBG'] = fpeak.fPeakList(self.dProjOut['dData']['BG'])
+            self.dProjOut['dPeakBG'], self.controlRX = fseq.peakLinking(self.dProjRef['dPeakBG']['pos'], self.dProjOut['dPeakBG'],
+                                                                        self.dProjOut['dData']['BG'])
+            self.dProjOut['dPeakRX'], self.controlBG = fseq.peakLinking(self.dProjRef['dPeakRX']['pos'], self.dProjOut['dPeakRX'],
+                                                                        self.dProjOut['dData']['RX'])
             self.button1.setEnabled(True)
             self.isMatchedPeaksChanged = False
         self.isToolApplied = True
@@ -557,17 +568,17 @@ class DlgReactivityRef(QtWidgets.QWidget):
         self.isToolApplied = False
 
         ### SCALE RX
-        self.groupBox0 = scaleGroupBox("Scale RX")
+        self.groupBox0 = my_widgets.scaleGroupBox("Scale RX")
         ### SCALE BG
-        self.groupBox1 = scaleGroupBox("Scale BG")
+        self.groupBox1 = my_widgets.scaleGroupBox("Scale BG")
         ### SCALE REACTIVITY
-        self.groupBox2 = scaleGroupBox("Scale Reactivity")
+        self.groupBox2 = my_widgets.scaleGroupBox("Scale Reactivity")
 
         self.pushButton0 = QtWidgets.QPushButton('Reactivity')
         self.pushButton1 = QtWidgets.QPushButton('Peak Area')
         self.pushButton2 = QtWidgets.QPushButton('Data')
 
-        layout3 = myGridLayout()
+        layout3 = my_widgets.myGridLayout()
         layout3.addWidget(self.pushButton0, 1, 0)
         layout3.addWidget(self.pushButton1, 1, 1)
         layout3.addWidget(self.pushButton2, 1, 3)
@@ -576,7 +587,7 @@ class DlgReactivityRef(QtWidgets.QWidget):
         self.groupBox3.setLayout(layout3)
 
         ### BUTTON BOX
-        self.buttonBox = ToolButton()
+        self.buttonBox = my_widgets.ToolButton()
         ## MAIN LAYOUT
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.title)
@@ -593,27 +604,27 @@ class DlgReactivityRef(QtWidgets.QWidget):
     def initialize(self):
         self.dProjOut1 = deepcopy(self.dProject)
 
-        self.dProjOut1['dPeakRX'] = fitShapeData(self.dProjOut1['dPeakRX'], self.dProjOut1['dData']['RX'])
-        self.dProjOut1['dPeakBG'] = fitShapeData(self.dProjOut1['dPeakBG'], self.dProjOut1['dData']['BG'])
+        self.dProjOut1['dPeakRX'] = fseq.fitShapeData(self.dProjOut1['dPeakRX'], self.dProjOut1['dData']['RX'])
+        self.dProjOut1['dPeakBG'] = fseq.fitShapeData(self.dProjOut1['dPeakBG'], self.dProjOut1['dData']['BG'])
 
-        self.scaleFactor0 = scaleShapeData(self.dProjRef['dPeakRX']['area'], self.dProjOut1['dPeakRX']['area'], rate=1)
+        self.scaleFactor0 = fseq.scaleShapeData(self.dProjRef['dPeakRX']['area'], self.dProjOut1['dPeakRX']['area'], rate=1)
         self.groupBox0.doubleSpinBox0.setValue(self.scaleFactor0)
 
-        self.scaleFactor1 = scaleShapeData(self.dProjRef['dPeakBG']['area'], self.dProjOut1['dPeakBG']['area'], rate=1)
+        self.scaleFactor1 = fseq.scaleShapeData(self.dProjRef['dPeakBG']['area'], self.dProjOut1['dPeakBG']['area'], rate=1)
         self.groupBox1.doubleSpinBox0.setValue(self.scaleFactor1)
 
         areaDiff = self.dProjOut1['dPeakRX']['area'] * self.scaleFactor0 - self.dProjOut1['dPeakBG']['area'] * self.scaleFactor1
-        self.POutlier, self.PAver = findPOutlierBox(areaDiff)
-        normDiff, aver = normSimple(areaDiff, self.POutlier, self.PAver)
+        self.POutlier, self.PAver = fseq.findPOutlierBox(areaDiff)
+        normDiff, aver = fseq.normSimple(areaDiff, self.POutlier, self.PAver)
 
-        self.scaleFactor2 = scaleShapeData(self.dProjRef['normDiff'], normDiff, rate=1)
+        self.scaleFactor2 = fseq.scaleShapeData(self.dProjRef['normDiff'], normDiff, rate=1)
         self.groupBox2.doubleSpinBox0.setValue(self.scaleFactor2)
 
     def apply(self):
         self.dProjOut = deepcopy(self.dProjOut1)
         if self.groupBox0.checkBoxScale0.isChecked():
-            self.scaleFactor0 = scaleShapeDataWindow(self.dProjRef['dPeakRX']['area'], self.dProjOut1['dPeakRX']['area'])
-            scaleFactorData0 = fitLinear(self.dProjOut1['dPeakRX']['pos'], self.scaleFactor0, NData=len(self.dProjOut1['dData']['RX']))
+            self.scaleFactor0 = fseq.scaleShapeDataWindow(self.dProjRef['dPeakRX']['area'], self.dProjOut1['dPeakRX']['area'])
+            scaleFactorData0 = fGen.fitLinear(self.dProjOut1['dPeakRX']['pos'], self.scaleFactor0, NData=len(self.dProjOut1['dData']['RX']))
         else:
             self.scaleFactor0 = float(self.groupBox0.doubleSpinBox0.value())
             scaleFactorData0 = self.scaleFactor0
@@ -623,8 +634,8 @@ class DlgReactivityRef(QtWidgets.QWidget):
         self.dProjOut['dData']['RX'] = self.dProjOut1['dData']['RX'] * scaleFactorData0
 
         if self.groupBox1.checkBoxScale0.isChecked():
-            self.scaleFactor1 = scaleShapeDataWindow(self.dProjRef['dPeakBG']['area'], self.dProjOut1['dPeakBG']['area'])
-            scaleFactorData1 = fitLinear(self.dProjOut1['dPeakBG']['pos'], self.scaleFactor1, NData=len(self.dProjOut1['dData']['BG']))
+            self.scaleFactor1 = fseq.scaleShapeDataWindow(self.dProjRef['dPeakBG']['area'], self.dProjOut1['dPeakBG']['area'])
+            scaleFactorData1 = fGen.fitLinear(self.dProjOut1['dPeakBG']['pos'], self.scaleFactor1, NData=len(self.dProjOut1['dData']['BG']))
         else:
             self.scaleFactor1 = float(self.groupBox1.doubleSpinBox0.value())
             scaleFactorData1 = self.scaleFactor1
@@ -634,10 +645,10 @@ class DlgReactivityRef(QtWidgets.QWidget):
         self.dProjOut['dData']['BG'] = self.dProjOut1['dData']['BG'] * scaleFactorData1
 
         self.dProjOut['areaDiff'] = self.dProjOut['dPeakRX']['area'] - self.dProjOut['dPeakBG']['area']
-        self.POutlier, self.PAver = findPOutlierBox(self.dProjOut['areaDiff'])
-        self.dProjOut['normDiff'], aver = normSimple(self.dProjOut['areaDiff'], self.POutlier, self.PAver)
+        self.POutlier, self.PAver = fseq.findPOutlierBox(self.dProjOut['areaDiff'])
+        self.dProjOut['normDiff'], aver = fseq.normSimple(self.dProjOut['areaDiff'], self.POutlier, self.PAver)
         if self.groupBox2.checkBoxScale0.isChecked():
-            self.scaleFactor2 = scaleShapeDataWindow(self.dProjRef['normDiff'], self.dProjOut['normDiff'])
+            self.scaleFactor2 = fseq.scaleShapeDataWindow(self.dProjRef['normDiff'], self.dProjOut['normDiff'])
         else:
             self.scaleFactor2 = float(self.groupBox2.doubleSpinBox0.value())
         self.dProjOut['normDiff'] = self.dProjOut['normDiff'] * self.scaleFactor2
@@ -666,7 +677,7 @@ class DlgApplyAutoRef(QtWidgets.QWidget):
         self.pushButton1 = QtWidgets.QPushButton('Peak Area')
         self.pushButton2 = QtWidgets.QPushButton('Data')
 
-        layout3 = myGridLayout()
+        layout3 = my_widgets.myGridLayout()
         layout3.addWidget(self.checkBox0, 1, 0, 1, 3)
         layout3.addWidget(self.checkBox1, 2, 0, 1, 3)
         layout3.addWidget(self.pushButton0, 3, 0)
@@ -677,7 +688,7 @@ class DlgApplyAutoRef(QtWidgets.QWidget):
         self.groupBox3.setLayout(layout3)
 
         ### BUTTON BOX
-        self.buttonBox = ToolButton()
+        self.buttonBox = my_widgets.ToolButton()
         ## MAIN LAYOUT
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.title)
@@ -689,7 +700,7 @@ class DlgApplyAutoRef(QtWidgets.QWidget):
     def apply(self):
         self.dProjOut = deepcopy(self.dProject)
         if self.checkBox0.isChecked():
-            self.dProjOut = applyAllToolsAuto1(self.dProject, self.dProjRef)
+            self.dProjOut = fref.applyAllToolsAuto1(self.dProject, self.dProjRef)
         if self.checkBox1.isChecked():
-            self.dProjOut = applyAllSeq(self.dProjOut, self.dProjRef)
+            self.dProjOut = fref.applyAllSeq(self.dProjOut, self.dProjRef)
         self.isToolApplied = True
