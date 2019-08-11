@@ -407,7 +407,7 @@ class DlgReportTable(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
     def saveTextReport(self):
-        fName = QtWidgets.QFileDialog.getSaveFileName(self, "Save As", self.dProject['dir'])
+        fName = QtWidgets.QFileDialog.getSaveFileName(self, "Save As", self.dProject['dir'])[0]
         if fName:
             fName = str(fName) + '.txt'
             fseq.writeReportFile(self.dReport, fName)

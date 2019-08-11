@@ -289,6 +289,8 @@ class MainWindow(QtWidgets.QMainWindow):
         settings = QtCore.QSettings()
         fname = str(settings.value("LastFile").toString())
         if fname and QtCore.QFile.exists(fname):
+            if isinstance(fname, tuple):
+                fname = fname[0]
             self.projFileName = fname
             self.openProject(self.projFileName)
 
@@ -714,11 +716,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def openProjectDlg(self):
         self.checkClickedApply()
         if self.okToContinue():
-            self.projFileName = QtWidgets.QFileDialog.getOpenFileName(self, "Select a file", self.workingDir,
-                                                                      ("QuShape project file (*.qushape *.pyshape *.txt *.fsa )"))
+            filepath_answer = QtWidgets.QFileDialog.getOpenFileName(self, "Select a file", self.workingDir,
+                                                                    ("QuShape project file (*.qushape *.pyshape *.txt *.fsa )"))
+            if isinstance(filepath_answer, tuple):
+                filepath_answer = filepath_answer[0]
+            self.projFileName = filepath_answer
             # if not self.projFileName.isEmpty():
             if self.projFileName:
                 self.projFileName = str(self.projFileName)
+                # print(self.projFileName)
+                # self.openProject(self.projFileName)
                 try:
                     self.openProject(self.projFileName)
                 except:
@@ -798,12 +805,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.saveProject()
 
     def saveCurLane(self):
-        fileName = QtWidgets.QFileDialog.getSaveFileName(self, "Save As", self.dProject['dir'], "Text Files (*.txt)")
+        fileName = QtWidgets.QFileDialog.getSaveFileName(self, "Save As", self.dProject['dir'], "Text Files (*.txt)")[0]
         if fileName:
             saveCurLaneAsTxt(fileName, self.dDrawData['dData'], self.dProject['chKeyRS'])
 
     def saveFigure(self):
-        fname = QtWidgets.QFileDialog.getSaveFileName(self, " ", self.dProject['dir'])
+        fname = QtWidgets.QFileDialog.getSaveFileName(self, " ", self.dProject['dir'])[0]
         if fname:
             # self.canvas.print_figure(str(fname))
             self.fig.savefig(str(fname))

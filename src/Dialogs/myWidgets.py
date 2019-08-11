@@ -58,6 +58,8 @@ class DlgSelectDir(QtWidgets.QWidget):
 
     def dirBrowse0(self):
         self.newDir = QtWidgets.QFileDialog.getExistingDirectory(self, "Open Directory", QtCore.QDir.homePath())
+        if isinstance(self.newDir, tuple):
+            self.newDir = self.newDir[0]
         # if not self.newDir.isEmpty():
         if self.newDir:
             self.lineEdit0.setText(str(self.newDir))
