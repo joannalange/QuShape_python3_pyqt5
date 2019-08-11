@@ -686,80 +686,80 @@ def splineSampleData(dataS, dataR, linkXR, linkXS, isCorr=True):
     return newS
 
 
-if __name__ == "__main__":
-    import os
-    import time
-    import numpy as np
-    import matplotlib.pyplot as plt
-    from matplotlib.pyplot import figure, show
-    from matplotlib.patches import ConnectionPatch
-
-    np.set_printoptions(precision=2)
-
-    currentDir = os.getcwd()
-
-    plt.close('all')
-    fig = figure(figsize=(14, 8))
-    axes0 = fig.add_subplot(211)
-    axes1 = fig.add_subplot(212)
-
-    fName = currentDir + '//data//dataTPPforSigAlign.txt'
-    data = np.loadtxt(fName)
-
-    data0 = normShapeData(data[:, 2])
-    data1 = normShapeData(data[:, 3])
-
-    data0 = enhance(data0)
-    data1 = enhance(data1)
-
-    data0 = data0[100:200]
-    data1 = data1[110:210]
-
-    peakX0, peakY0 = peakDetection(data0)
-    peakX1, peakY1 = peakDetection(data1)
-
-    t0 = time.clock()
-    dPeakList1 = fPeakList(data1, True, True, None)
-    t1 = time.clock()
-    print('peakList', t0, t1, t1 - t0)
-    dPeakList0 = fPeakList(data0, True, True, 'Cubic')
-    dParams = DPeakAlignParams()
-    dParams['band'] = 1
-    dParams['simFunc'] = 'Amplitude'
-    #   print 'pos0 \n', dPeakList0['pos']
-    #   print 'pos1\n', dPeakList1['pos']
-
-    #    print 'amp0\n', dPeakList0['amp']
-    #   print 'amp1\n', dPeakList1['amp']
-
-    bandM = SakoeChibaBand(dPeakList0["NPeak"], dPeakList1["NPeak"], dPeakList0["NPeak"] * dParams['band'])
-
-    t0 = time.clock()
-    costM = obtainCostM(dPeakList0, dPeakList1, bandM, dParams)
-    t1 = time.clock()
-    print('costTime', t0, t1, t1 - t0)
-    # print 'costM\n', costM
-    scormat, arrow = peakScoringGlobal(dPeakList0, dPeakList1, costM, bandM, gap=dParams['gap'], minScr=dParams['minScore'])
-    print('scormat\n', scormat)
-    # print 'arrow\n', arrow
-
-    score = scormat[-1, -1]
-    aligned0, aligned1 = peakBacktraceGlobal(dPeakList0['pos'], dPeakList1['pos'], scormat, arrow, costM)
-    print('aligned0\n', aligned0)
-    print('aligned1\n', aligned1)
-
-    axes0.plot(data0, 'r', dPeakList0['pos'], dPeakList0['amp'], 'rs')
-    axes1.plot(data1, 'b', dPeakList1['pos'], dPeakList1['amp'], 'bs')
-
-    for i in range(len(aligned0)):
-        if aligned0[i] != -1 and aligned1[i] != -1:
-            xy0 = (aligned0[i], data0[aligned0[i]])
-            xy1 = (aligned1[i], data1[aligned1[i]])
-            con = ConnectionPatch(xy1, xy0, "data", "data", axesA=axes1, axesB=axes0,
-                                  arrowstyle="<|-|>", ec='0.3', fc='0.3', picker=3)
-            axes1.add_artist(con)
-
-    print(dPeakList0['pos'], dPeakList0["NPeak"])
-    print(dPeakList1['pos'], dPeakList1["NPeak"])
-
-    show()
+# if __name__ == "__main__":
+#     import os
+#     import time
+#     import numpy as np
+#     import matplotlib.pyplot as plt
+#     from matplotlib.pyplot import figure, show
+#     from matplotlib.patches import ConnectionPatch
+#
+#     np.set_printoptions(precision=2)
+#
+#     currentDir = os.getcwd()
+#
+#     plt.close('all')
+#     fig = figure(figsize=(14, 8))
+#     axes0 = fig.add_subplot(211)
+#     axes1 = fig.add_subplot(212)
+#
+#     fName = currentDir + '//data//dataTPPforSigAlign.txt'
+#     data = np.loadtxt(fName)
+#
+#     data0 = normShapeData(data[:, 2])
+#     data1 = normShapeData(data[:, 3])
+#
+#     data0 = enhance(data0)
+#     data1 = enhance(data1)
+#
+#     data0 = data0[100:200]
+#     data1 = data1[110:210]
+#
+#     peakX0, peakY0 = peakDetection(data0)
+#     peakX1, peakY1 = peakDetection(data1)
+#
+#     t0 = time.clock()
+#     dPeakList1 = fPeakList(data1, True, True, None)
+#     t1 = time.clock()
+#     print('peakList', t0, t1, t1 - t0)
+#     dPeakList0 = fPeakList(data0, True, True, 'Cubic')
+#     dParams = DPeakAlignParams()
+#     dParams['band'] = 1
+#     dParams['simFunc'] = 'Amplitude'
+#     #   print 'pos0 \n', dPeakList0['pos']
+#     #   print 'pos1\n', dPeakList1['pos']
+#
+#     #    print 'amp0\n', dPeakList0['amp']
+#     #   print 'amp1\n', dPeakList1['amp']
+#
+#     bandM = SakoeChibaBand(dPeakList0["NPeak"], dPeakList1["NPeak"], dPeakList0["NPeak"] * dParams['band'])
+#
+#     t0 = time.clock()
+#     costM = obtainCostM(dPeakList0, dPeakList1, bandM, dParams)
+#     t1 = time.clock()
+#     print('costTime', t0, t1, t1 - t0)
+#     # print 'costM\n', costM
+#     scormat, arrow = peakScoringGlobal(dPeakList0, dPeakList1, costM, bandM, gap=dParams['gap'], minScr=dParams['minScore'])
+#     print('scormat\n', scormat)
+#     # print 'arrow\n', arrow
+#
+#     score = scormat[-1, -1]
+#     aligned0, aligned1 = peakBacktraceGlobal(dPeakList0['pos'], dPeakList1['pos'], scormat, arrow, costM)
+#     print('aligned0\n', aligned0)
+#     print('aligned1\n', aligned1)
+#
+#     axes0.plot(data0, 'r', dPeakList0['pos'], dPeakList0['amp'], 'rs')
+#     axes1.plot(data1, 'b', dPeakList1['pos'], dPeakList1['amp'], 'bs')
+#
+#     for i in range(len(aligned0)):
+#         if aligned0[i] != -1 and aligned1[i] != -1:
+#             xy0 = (aligned0[i], data0[aligned0[i]])
+#             xy1 = (aligned1[i], data1[aligned1[i]])
+#             con = ConnectionPatch(xy1, xy0, "data", "data", axesA=axes1, axesB=axes0,
+#                                   arrowstyle="<|-|>", ec='0.3', fc='0.3', picker=3)
+#             axes1.add_artist(con)
+#
+#     print(dPeakList0['pos'], dPeakList0["NPeak"])
+#     print(dPeakList1['pos'], dPeakList1["NPeak"])
+#
+#     show()
