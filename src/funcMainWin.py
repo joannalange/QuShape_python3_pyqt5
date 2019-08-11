@@ -173,7 +173,6 @@ class ToolDock(QtWidgets.QDockWidget):
         self.setWindowTitle('Tool Inspector')
         #   self.setFixedSize(250, 350)
         self.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea)
-        print(dir(self))
         # self.connect(self, QtCore.SIGNAL("topLevelChanged(bool)"), self.dockToolLocationChanged)
         self.topLevelChanged.connect(self.dockToolLocationChanged)
 
