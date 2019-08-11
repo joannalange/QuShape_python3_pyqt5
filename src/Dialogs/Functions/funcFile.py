@@ -4,6 +4,8 @@ from .ABIFReader import ABIFReader
 
 
 def readShapeData(fName):
+    if isinstance(fName, tuple):
+        fName = fName[0]
     dyes = ['6-FAM', 'VIC', 'NED', 'ROX']
     Satd = np.array([])
     extFile = fName.split('.')[-1]
@@ -25,6 +27,8 @@ def readShapeData(fName):
 def readBaseFile(fName, RNAflag=True):
     """ Read different type of Sequence file. Fasta, Seq, Genbank and plain text
     """
+    if isinstance(fName, tuple):
+        fName = fName[0]
     extension = fName.split('.')[-1]
     if extension == 'seq':
         sequence = readSeqSeq(fName)
@@ -49,6 +53,8 @@ def readBaseFile(fName, RNAflag=True):
 
 
 def readSeqGenbank(fName):
+    if isinstance(fName, tuple):
+        fName = fName[0]
     inFile = open(fName)
     data = inFile.read()
     # Find the ORIGIN
@@ -68,6 +74,8 @@ def readSeqGenbank(fName):
 
 
 def readSeqText(fName):
+    if isinstance(fName, tuple):
+        fName = fName[0]
     sequence = ''
     # while 1:
     with open(fName, 'r') as f:
@@ -84,6 +92,8 @@ def readSeqFasta(filename):
     """Read fasta data from the given file.  Returns a two-element list, 
        the first of which is the fasta information (the first line), the
        rest of which is the sequence, represented as a string."""
+    if isinstance(filename, tuple):
+        filename = filename[0]
     inFile = open(filename)
     info = inFile.readline()
     data = inFile.read()
@@ -95,6 +105,8 @@ def readSeqFasta(filename):
 
 
 def readSeqSeq(fileName):
+    if isinstance(fileName, tuple):
+        fileName = fileName[0]
     inFile = open(fileName)
     data = inFile.readlines()
     info = data[1].split()[0]
@@ -132,6 +144,8 @@ def readABI(fname):
 
 
 def readDataTxt(fName):
+    if isinstance(fName, tuple):
+        fName = fName[0]
     fl = open(fName, "r")
     a, data = [], []
     for line in fl.readlines():
@@ -146,6 +160,8 @@ def readDataTxt(fName):
 
 
 def loadTxtFile(fName):
+    if isinstance(fName, tuple):
+        fName = fName[0]
     try:
         dataA = np.loadtxt(fName, delimiter='\t')
     except:
@@ -166,7 +182,10 @@ def loadTxtFile(fName):
 
 def saveCurLaneAsTxt(fileName, dDrawData, dChKeys):
     from .funcGeneral import maxLenF
+    if isinstance(fileName, tuple):
+        fileName = fileName[0]
     fileName = str(fileName)
+
     if fileName.split('.')[-1] != "txt":
         fileName = fileName + '.txt'
     maxLen = maxLenF(dDrawData)

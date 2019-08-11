@@ -1,10 +1,8 @@
 import numpy as np
 from copy import deepcopy
 
-# from Dialogs.Functions import *
-from Dialogs.Functions.funcGeneral import averQ, fitLinear, normSimple, smoothRect
-from Dialogs.Functions.funcPeakAlign import DPeakList, fPeakList, myPeakAlignment
-from Dialogs.Functions.funcPeakAlign import DPeakAlignParams
+from . import funcGeneral as fGen
+from . import funcPeakAlign as fpeak
 
 
 ### SEQEUENCE ALIGNMENT ###
@@ -262,14 +260,14 @@ def nucAddDelete(seqRNA, seq, seqX):
 
 
 def peakLinking(seqX, dPeakList1, data1, isOptPos=False, minScore=0.5):
-    dPeakList0 = DPeakList()
+    dPeakList0 = fpeak.DPeakList()
     dPeakList0['pos'] = np.array(seqX, dtype='i4')
     dPeakList0['NPeak'] = len(seqX)
-    dParams = DPeakAlignParams()
+    dParams = fpeak.DPeakAlignParams()
     dParams['simFunc'] = 'Position'
     dParams['minScore'] = minScore
     dParams['timeT'] = 0.0
-    aligned0, aligned1 = myPeakAlignment(dPeakList0, dPeakList1, dParams)
+    aligned0, aligned1 = fpeak.myPeakAlignment(dPeakList0, dPeakList1, dParams)
     dPeakList11, controlA = findLinkedPeaks(aligned0, aligned1, dPeakList1, data1, isOptPos)
     return dPeakList11, controlA
 
@@ -315,15 +313,15 @@ def findLinkedPeaks(aligned0, aligned1, dPeakList1, data1, isOptPos):
 
 def seqFindFinal0(dProject, keyS1='BGS1', keyS2='BGS2'):
     dataS1 = dProject['dData'][keyS1]
-    peakListBG = fPeakList(dProject['dData']['BG'])
-    peakListS1 = fPeakList(dProject['dData'][keyS1], isDel=True, isAdd=True)
+    peakListBG = fpeak.fPeakList(dProject['dData']['BG'])
+    peakListS1 = fpeak.fPeakList(dProject['dData'][keyS1], isDel=True, isAdd=True)
     seqX = findSeqX(peakListBG, peakListS1)
     peakListS1['NPeak'] = len(seqX)
     peakListS1['pos'] = seqX
     peakListS1['amp'] = dataS1[seqX]
     peakListBG, controlBG = peakLinking(seqX, peakListBG, dProject['dData']['BG'], True)
     if dProject['isSeq2']:
-        peakListS2 = fPeakList(dProject['dData'][keyS2])
+        peakListS2 = fpeak.fPeakList(dProject['dData'][keyS2])
         peakListS2, controlS2 = peakLinking(seqX, peakListS2, dProject['dData'][keyS2], True)
     else:
         peakListS2 = None
@@ -354,9 +352,9 @@ def seqFindFinal0(dProject, keyS1='BGS1', keyS2='BGS2'):
 
 
 def findSeqX(peakListBG, peakListS1):
-    dParams = DPeakAlignParams()
+    dParams = fpeak.DPeakAlignParams()
     dParams['simFunc'] = 'Position'
-    aligned0, aligned1 = myPeakAlignment(peakListBG, peakListS1, dParams)
+    aligned0, aligned1 = fpeak.myPeakAlignment(peakListBG, peakListS1, dParams)
     seqX = np.array([], int)
     for i in range(2, len(aligned0) - 1, 1):
         if aligned1[i] == -1:
@@ -595,11 +593,11 @@ def removeDifferenceOutlier(A, B):
 def optimizeScaleFactor(A, B, func='Data'):
     factor = 1.0
     if func == 'Data':
-        resultList = fmin(scaleFactorFuncData, factor, args=(A, B), full_output=1, disp=0)
+        resultList = fpeak.fmin(scaleFactorFuncData, factor, args=(A, B), full_output=1, disp=0)
     elif func == 'Median':
-        resultList = fmin(scaleFactorFuncMedian, factor, args=(A, B), full_output=1, disp=0)
+        resultList = fpeak.fmin(scaleFactorFuncMedian, factor, args=(A, B), full_output=1, disp=0)
     else:
-        resultList = fmin(scaleFactorFuncAver, factor, args=(A, B), full_output=1, disp=0)
+        resultList = fpeak.fmin(scaleFactorFuncAver, factor, args=(A, B), full_output=1, disp=0)
 
     if resultList[4] == 0:
         scaleFactor = resultList[0]
@@ -619,7 +617,7 @@ def scaleFactorFuncMedian(factor, A, B):
 
 
 def scaleFactorFuncAver(factor, A, B):
-    err = np.abs(averQ(A) - factor * averQ(B))
+    err = np.abs(fGen.averQ(A) - factor * fGen.averQ(B))
     return err
 
 
@@ -649,10 +647,10 @@ def scaleShapeDataWindow(data0, data1, deg=40, rate=1, step=10, fit=None, ref=No
         aX = np.append(aX, i)
 
     # aY=scipy.signal.medfilt(aScaleFactor, 5)
-    aY = smoothRect(aScaleFactor, degree=2)
+    aY = fGen.smoothRect(aScaleFactor, degree=2)
     aX = aX[1:-1]
     aY = aY[1:-1]
-    fittedSig = fitLinear(aX, aY, len(data1))
+    fittedSig = fGen.fitLinear(aX, aY, len(data1))
     # data11=data1*fittedSig
     if fit == 'linear':
         newX = np.arange(len(fittedSig))

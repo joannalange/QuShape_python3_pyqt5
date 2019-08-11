@@ -1,4 +1,13 @@
-from .Functions import *
+from copy import deepcopy
+
+import numpy as np
+
+from .Functions import ABIFReader as ar
+from .Functions import funcFile as ffile
+from .Functions import funcGeneral as fGen
+from .Functions import funcPeakAlign as fpeak
+from .Functions import funcSeqAll as fseq
+
 from .myWidgets import *
 
 
@@ -56,11 +65,11 @@ class DlgVariousTools(QtWidgets.QWidget):
                     fromP = 0
                     toP = len(self.dProjOut['dData'][key])
                 if self.radioButton0.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP] = enhance(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP] = fGen.enhance(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton1.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP] = deriv1(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP] = fGen.deriv1(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton2.isChecked():
-                    self.dProjOut['dData'][key][fromP:toP] = normSimple(self.dProject['dData'][key][fromP:toP])
+                    self.dProjOut['dData'][key][fromP:toP] = fseq.normSimple(self.dProject['dData'][key][fromP:toP])
                 elif self.radioButton3.isChecked():
                     self.dProjOut['dData'][key][fromP:toP] = np.fft.fftshift(np.fft.fft(self.dProject['dData'][key][fromP:toP])).real
         self.isToolApplied = True
@@ -231,7 +240,7 @@ class DlgOpenABIFFile(QtWidgets.QWidget):
             QtWidgets.QMessageBox.warning(self, 'Warning', 'Select a file')
         else:
             self.listWidget0.clear()
-            self.reader = ABIFReader(self.fName)
+            self.reader = ar.ABIFReader(self.fName)
             entry = self.reader.entries
             for e in entry:
                 if str(e.name) != 'DATA':
@@ -252,7 +261,7 @@ class DlgOpenABIFFile(QtWidgets.QWidget):
             self.dOutput['RXS1'] = self.reader.getData('DATA', 3)
             self.dOutput['BGS1'] = self.reader.getData('DATA', 4)
 
-        self.dProjOut = DProjectNew()
+        self.dProjOut = fGen.DProjectNew()
         self.dProjOut['dData'] = self.dOutput
         self.dProjOut['Satd'] = self.Satd
         self.isToolApplied = True
@@ -282,7 +291,7 @@ class DlgOpenSeqFile(QtWidgets.QWidget):
 
     def apply(self):
         self.fileSeqRNA = str(self.fileRead0.lineEdit0.text())
-        self.seqRNA5to3 = readBaseFile(str(self.fileSeqRNA))
+        self.seqRNA5to3 = ffile.readBaseFile(str(self.fileSeqRNA))
         self.seqRNA3to5 = self.seqRNA5to3[::-1]
         NSeqRNA = len(self.seqRNA5to3)
         self.listWidget0.addItem('Length of RNA : ' + str(NSeqRNA))
@@ -334,10 +343,10 @@ class DlgOpenShapeFinder(QtWidgets.QWidget):
         self.isToolApplied = False
 
     def apply(self):
-        self.dProjOut = DProjectNew()
+        self.dProjOut = fGen.DProjectNew()
         self.dataFile = str(self.fileRead0.lineEdit0.text())
         #   self.dataFile='/Users/fethullah/Shape Data/TPP files 2/KS_1M7_DMSO_-TPP_060809_int.txt'
-        dataA = readDataTxt(self.dataFile)
+        dataA = ffile.readDataTxt(self.dataFile)
 
         self.dProjOut['dData']['RX'] = dataA[:, 0]
         self.dProjOut['dData']['BG'] = dataA[:, 1]
@@ -491,5 +500,5 @@ class DlgManualSignalAlign(QtWidgets.QWidget):
 
         for key in self.dProject['chKeyRS']:
             if key != self.keyR and self.applyChannel.checkBox0[key].isChecked():
-                self.dProjOut['dData'][key] = splineSampleData(self.dProject['dData'][key], self.linkXR, self.linkXS, len(self.dataR))
+                self.dProjOut['dData'][key] = fpeak.splineSampleData(self.dProject['dData'][key], self.linkXR, self.linkXS, len(self.dataR))
         self.isToolApplied = True

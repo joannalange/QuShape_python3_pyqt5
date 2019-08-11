@@ -119,7 +119,7 @@ class DlgSeqAlign(QtWidgets.QWidget):
                 Press Key 'D' button and click to delete a Nuc. \
                 Press Key 'Shift' button and select a peak to change position. "
 
-        self.hint = my_widgets.my_widgets.hintLabel(text)
+        self.hint = my_widgets.hintLabel(text)
 
         # self.connect(self.fileReadSeq.pushButton0, QtCore.SIGNAL("clicked()"), self.changeSeqFile)
         self.fileReadSeq.pushButton0.clicked.connect(self.changeSeqFile)
@@ -163,9 +163,9 @@ class DlgSeqAlign(QtWidgets.QWidget):
             self.spinBoxSeqRangeTo.setValue((self.dProjOut['end'] - 10))
 
             self.dProjOut = fpeak.peakListAll(self.dProjOut, ['RX', 'BG'])
-            self.dProjOut['dPeakBG'], self.controlRX = fpeak.peakLinking(self.dProjOut['seqX'], self.dProjOut['dPeakBG'], self.dProjOut['dData']['BG'])
-            self.dProjOut['dPeakRX'], self.controlBG = fpeak.peakLinking(self.dProjOut['dPeakBG']['pos'], self.dProjOut['dPeakRX'],
-                                                                   self.dProjOut['dData']['RX'])
+            self.dProjOut['dPeakBG'], self.controlRX = fseq.peakLinking(self.dProjOut['seqX'], self.dProjOut['dPeakBG'], self.dProjOut['dData']['BG'])
+            self.dProjOut['dPeakRX'], self.controlBG = fseq.peakLinking(self.dProjOut['dPeakBG']['pos'], self.dProjOut['dPeakRX'],
+                                                                        self.dProjOut['dData']['RX'])
         else:
             self.applyFastSeqAlign()
         self.isToolApplied = True
