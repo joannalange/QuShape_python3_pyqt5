@@ -1,10 +1,21 @@
 import os
+import shelve
 import sys
 
+from copy import deepcopy
+
+import numpy as np
 from matplotlib import rcParams
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from matplotlib.patches import ConnectionPatch
 from matplotlib.pyplot import setp
+
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+import drawClass as draw_class
+import funcMainWin as fmw
 
 from Dialogs.myStyleSheet import myStyleSheet
 from Dialogs.myWidgets import myListWidget
@@ -16,9 +27,7 @@ from Dialogs import toolDialogs as tool_dialogs
 from Dialogs import myWidgets as my_widgets
 from Dialogs.Functions.funcFile import saveCurLaneAsTxt
 from Dialogs.Functions.funcSeqAll import fitFuncG
-
-from drawClass import *
-from funcMainWin import *
+from Dialogs.Functions import funcGeneral as fGen
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -49,10 +58,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.mainFrame)
-        setRcParams(rcParams)
+        fGen.setRcParams(rcParams)
         self.scrollArea = QtWidgets.QScrollArea()
         self.scrollArea.setWidget(self.canvas)
-        self.mainTopWidget = MainTopWidget()
+        self.mainTopWidget = fmw.MainTopWidget()
         self.setLineColor()
 
         mainLayout = QtWidgets.QVBoxLayout()
@@ -98,7 +107,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.qSettings.setValue("workingDir", QtCore.QVariant(self.workingDir))
 
     def createDockWidgets(self):
-        self.dockTool = ToolDock("Tool Inspector", self)  # QtGui.QDockWidget("Tool Inspector", self)
+        self.dockTool = fmw.ToolDock("Tool Inspector", self)  # QtGui.QDockWidget("Tool Inspector", self)
         self.dockTool.setObjectName("dockToolInspector")
         self.newProject()
 
@@ -328,11 +337,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def variables(self):
         self.workingDir = QtCore.QDir.homePath()
         self.eventKey = None
-        self.dDrawData = DData()
-        self.dProject = DProjectNew()
-        self.dProjRef = DProjectNew()
-        self.dVar = DVar(chKeysRS)
-        self.dVarDefault = DVar(self.dProject['chKeyRS'])
+        self.dDrawData = fGen.DData()
+        self.dProject = fGen.DProjectNew()
+        self.dProjRef = fGen.DProjectNew()
+        self.dVar = fGen.DVar(fGen.chKeysRS)
+        self.dVarDefault = fGen.DVar(self.dProject['chKeyRS'])
         self.intervalData = []
         self.projFileName = None
         self.curScript = ''
@@ -405,32 +414,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if self.dlg.name == "Sequence Alignment":  # or self.lastScript=="Align and Integrate":
             if event.inaxes == self.axesSeq:
-                self.dlg.dProjOut, self.peakInd, self.conFromBGToRX, self.conFromSeqToBG = clickedSeqAlign(x, self.dlg.dProjOut, self.eventKey,
+                self.dlg.dProjOut, self.peakInd, self.conFromBGToRX, self.conFromSeqToBG = fGen.clickedSeqAlign(x, self.dlg.dProjOut, self.eventKey,
                                                                                                            self.conFromBGToRX, self.conFromSeqToBG,
                                                                                                            self.chAxes)
                 self.dlg.applyFastSeqAlign()
                 self.updateSeqAxes(self.dlg.dProjOut)
                 self.dDrawData = deepcopy(self.dlg.dProjOut)
             elif self.eventKey == QtCore.Qt.Key_Shift and event.inaxes == self.chAxes['RX']:
-                self.clickedPeakInd = findClickedInd(x, self.dlg.dProjOut['dPeakRX']['pos'])
+                self.clickedPeakInd = fGen.findClickedInd(x, self.dlg.dProjOut['dPeakRX']['pos'])
                 self.isArrowSelectedRX = True
             elif self.eventKey == QtCore.Qt.Key_Shift and event.inaxes == self.chAxes['BG']:
-                self.clickedPeakInd = findClickedInd(x, self.dlg.dProjOut['dPeakBG']['pos'])
+                self.clickedPeakInd = fGen.findClickedInd(x, self.dlg.dProjOut['dPeakBG']['pos'])
                 self.isArrowSelectedBG = True
 
         elif self.dVar['flag']['isPeakLinkRefModify']:
             if self.eventKey == QtCore.Qt.Key_Shift and event.inaxes == self.chAxes['BG']:
-                self.clickedPeakInd = findClickedInd(x, self.dlg.dProjOut['dPeakRX']['pos'])
+                self.clickedPeakInd = fGen.findClickedInd(x, self.dlg.dProjOut['dPeakRX']['pos'])
                 self.isArrowSelectedRX = True
             elif self.eventKey == QtCore.Qt.Key_Shift and event.inaxes == self.chAxes['BGS1']:
-                self.clickedPeakInd = findClickedInd(x, self.dlg.dProjOut['dPeakBG']['pos'])
+                self.clickedPeakInd = fGen.findClickedInd(x, self.dlg.dProjOut['dPeakBG']['pos'])
                 self.isArrowSelectedBG = True
 
         elif self.dVar['flag']['isPeakMatchModify']:
             if event.inaxes == self.axesR:
-                self.clickedPeakInd = findClickedInd(x, self.dlg.linkXR)
+                self.clickedPeakInd = fGen.findClickedInd(x, self.dlg.linkXR)
             elif event.inaxes == self.axesS:
-                self.clickedPeakInd = findClickedInd(x, self.dlg.linkXS)
+                self.clickedPeakInd = fGen.findClickedInd(x, self.dlg.linkXS)
             else:
                 return True
             if self.eventKey == QtCore.Qt.Key_Shift and event.inaxes == self.axesR:
@@ -449,8 +458,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 if event.inaxes == self.axesS:
                     self.clickedXS = x
                 if self.clickedXR != None and self.clickedXS != None:
-                    self.clickedPeakIndR = findClickedInd(self.clickedXR, self.dlg.linkXR)
-                    self.clickedPeakIndS = findClickedInd(self.clickedXS, self.dlg.linkXS)
+                    self.clickedPeakIndR = fGen.findClickedInd(self.clickedXR, self.dlg.linkXR)
+                    self.clickedPeakIndS = fGen.findClickedInd(self.clickedXS, self.dlg.linkXS)
                     if self.clickedPeakIndR == self.clickedPeakIndS:
                         self.dlg.linkXR = np.insert(self.dlg.linkXR, self.clickedPeakInd, self.clickedXR)
                         self.dlg.linkXS = np.insert(self.dlg.linkXS, self.clickedPeakInd, self.clickedXS)
@@ -479,7 +488,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.dlg.spinBoxMinusTo.setValue(x)
                     self.clickedApply()
         elif self.dlg.name == "Report":
-            self.clickedPeakInd = findClickedInd(x, self.dlg.dReport['posSeq'])
+            self.clickedPeakInd = fGen.findClickedInd(x, self.dlg.dReport['posSeq'])
             self.dlg.table.selectRow(self.clickedPeakInd)
 
     def onMove(self, event):
@@ -553,8 +562,8 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.dlg.name == "Sequence Alignment":  # "Sequence Alignment":
             if self.isArrowSelectedRX:
                 if event.inaxes == self.chAxes['RX']:
-                    argmax = argmax3(self.dlg.dProjOut['dData']['RX'][self.mouseX - 1], self.dlg.dProjOut['dData']['RX'][self.mouseX],
-                                     self.dlg.dProjOut['dData']['RX'][self.mouseX + 1])
+                    argmax = fGen.argmax3(self.dlg.dProjOut['dData']['RX'][self.mouseX - 1], self.dlg.dProjOut['dData']['RX'][self.mouseX],
+                                          self.dlg.dProjOut['dData']['RX'][self.mouseX + 1])
                     self.mouseX = self.mouseX - 1 + argmax
                     self.conFromBGToRX[self.clickedPeakInd].xy2 = (self.mouseX, self.dlg.dProjOut['dData']['RX'][self.mouseX])
                     self.dlg.dProjOut['dPeakRX']['pos'][self.clickedPeakInd] = self.mouseX
@@ -567,8 +576,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.isArrowSelectedRX = False
             if self.isArrowSelectedBG:
                 if event.inaxes == self.chAxes['BG']:
-                    argmax = argmax3(self.dlg.dProjOut['dData']['BG'][self.mouseX - 1], self.dlg.dProjOut['dData']['BG'][self.mouseX],
-                                     self.dlg.dProjOut['dData']['BG'][self.mouseX + 1])
+                    argmax = fGen.argmax3(self.dlg.dProjOut['dData']['BG'][self.mouseX - 1], self.dlg.dProjOut['dData']['BG'][self.mouseX],
+                                          self.dlg.dProjOut['dData']['BG'][self.mouseX + 1])
                     self.mouseX = self.mouseX - 1 + argmax
                     self.conFromBGToRX[self.clickedPeakInd].xy1 = (self.mouseX, self.dlg.dProjOut['dData']['BG'][self.mouseX])
                     self.conFromSeqToBG[self.clickedPeakInd].xy2 = (self.mouseX, self.dlg.dProjOut['dData']['BG'][self.mouseX])
@@ -644,7 +653,7 @@ class MainWindow(QtWidgets.QMainWindow):
     ######  FILE FUNCTIONS #####
     def applyNewProject(self):
         if self.dlg.isApplied:
-            self.dVar = DVar(self.dlg.dProject['chKeyRS'])
+            self.dVar = fGen.DVar(self.dlg.dProject['chKeyRS'])
             self.dDrawData = deepcopy(self.dlg.dProject)
             self.drawFigure()
             self.dlg.buttonBox.doneButton.setEnabled(True)
@@ -691,7 +700,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.checkClickedApply()
         if not self.okToContinue():
             return
-        self.dlg = np_dialogs.DlgNewProject0(DProjectNew())
+        self.dlg = np_dialogs.DlgNewProject0(fGen.DProjectNew())
         self.newProject0()
 
     def setOpenProject(self):
@@ -726,7 +735,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 return
 
-        self.dProject, self.dVar, self.intervalData, self.dProjRef = openProjFile(self.projFileName)
+        self.dProject, self.dVar, self.intervalData, self.dProjRef = fmw.openProjFile(self.projFileName)
         self.workingDir = QtCore.QFileInfo(self.projFileName).path()
 
         self.dirty = False
@@ -1129,7 +1138,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.draw()
 
     def drawSignalAlignModify(self):
-        self.conFromRtoS, self.axesR, self.axesS = drawPeakLinkModifyFig(self.fig, self.dlg.dataR, self.dlg.dataS, self.dlg.linkXR, self.dlg.linkXS)
+        self.conFromRtoS, self.axesR, self.axesS = draw_class.drawPeakLinkModifyFig(self.fig, self.dlg.dataR, self.dlg.dataS, self.dlg.linkXR, self.dlg.linkXS)
         self.dVar['flag']['isPeakMatchModify'] = True
         #  self.verticalLines = createVerticalLines(self.fig.get_axes())
         self.dlg.isMatchedPeaksChanged = True
@@ -1138,7 +1147,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def drawPeakLinkRefModify(self):
         self.mainTopWidget.splitComboBox.setCurrentIndex(0)
         self.dVar['flag']['isPeakLinkRefModify'] = True
-        self.dDrawData = DProjectNew()
+        self.dDrawData = fGen.DProjectNew()
         self.dDrawData['dData']['RX'] = self.dlg.dProjRef['dData']['RX']
         self.dDrawData['dData']['BG'] = self.dlg.dProjOut['dData']['RX']
         self.dDrawData['dData']['RXS1'] = self.dlg.dProjRef['dData']['BG']
@@ -1159,7 +1168,7 @@ class MainWindow(QtWidgets.QMainWindow):
         amp1 = self.dlg.dProjRef['dData']['RX'][pos1]
         ax0 = self.chAxes['BG']
         ax1 = self.chAxes['RX']
-        self.conRX = drawMatchLines0(pos0, amp0, pos1, amp1, ax0, ax1)
+        self.conRX = draw_class.drawMatchLines0(pos0, amp0, pos1, amp1, ax0, ax1)
 
         pos0 = self.dlg.dProjOut['dPeakBG']['pos']
         amp0 = self.dlg.dProjOut['dPeakBG']['amp']
@@ -1167,7 +1176,7 @@ class MainWindow(QtWidgets.QMainWindow):
         amp1 = self.dlg.dProjRef['dData']['BG'][pos1]
         ax0 = self.chAxes['BGS1']
         ax1 = self.chAxes['RXS1']
-        self.conBG = drawMatchLines0(pos0, amp0, pos1, amp1, ax0, ax1)
+        self.conBG = draw_class.drawMatchLines0(pos0, amp0, pos1, amp1, ax0, ax1)
         self.canvas.draw()
 
     def drawGaussFit(self, dProject):
@@ -1180,9 +1189,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.chAxes[key].plot(x, A1, 'k-', lw=1.5)
 
     def drawMatchLines(self, dProject):
-        self.conFromBGToRX = drawMatchLines0(dProject['dPeakBG']['pos'], dProject['dPeakBG']['amp'], dProject['dPeakRX']['pos'],
+        self.conFromBGToRX = draw_class.drawMatchLines0(dProject['dPeakBG']['pos'], dProject['dPeakBG']['amp'], dProject['dPeakRX']['pos'],
                                              dProject['dPeakRX']['amp'], self.chAxes['BG'], self.chAxes['RX'])
-        self.conFromSeqToBG = drawMatchLines0(dProject['seqX'], dProject['dData']['BGS1'][dProject['seqX']], dProject['dPeakBG']['pos'],
+        self.conFromSeqToBG = draw_class.drawMatchLines0(dProject['seqX'], dProject['dData']['BGS1'][dProject['seqX']], dProject['dPeakBG']['pos'],
                                               dProject['dPeakBG']['amp'], self.chAxes['BGS1'], self.chAxes['BG'])
         self.canvas.draw()
 
@@ -1190,10 +1199,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.axesSeq.clear()
         self.axesSeqText = []
         for i in range(len(dProject['seqRNA'])):
-            clr = setNucColor(dProject['seqRNA'][i])
+            clr = fGen.setNucColor(dProject['seqRNA'][i])
             self.axesSeq.text(dProject['seqX'][i], 0, dProject['seqRNA'][i], fontsize=8, color=clr, horizontalalignment='center')
         for i in range(len(dProject['seqX0'])):
-            clr = setNucColor(dProject['seq0'][i])
+            clr = fGen.setNucColor(dProject['seq0'][i])
             self.axesSeq.text(dProject['seqX0'][i], -1, dProject['seq0'][i], fontsize=8, color=clr, horizontalalignment='center')
 
         xticks, xlabels = [], []
@@ -1237,15 +1246,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.drawReactivityRef(self.dlg.dProjOut, self.dlg.dProjRef, self.drawReactivityType)
 
     def drawReactivityRef(self, dProject, dProjRef, drawType=0):
-        drawReactivityRef(self.fig, dProject, dProjRef, drawType)
-        self.verticalLines = createVerticalLines(self.fig.get_axes())
-        self.spanRect = createRects(self.fig.get_axes())
+        draw_class.drawReactivityRef(self.fig, dProject, dProjRef, drawType)
+        self.verticalLines = draw_class.createVerticalLines(self.fig.get_axes())
+        self.spanRect = draw_class.createRects(self.fig.get_axes())
         self.canvas.draw()
 
     def drawReactivityFig(self, dProject, is5to3=False, drawType=0):
-        createReactivityFig(self.fig, dProject, is5to3, drawType)
-        self.verticalLines = createVerticalLines(self.fig.get_axes())
-        self.spanRect = createRects(self.fig.get_axes())
+        draw_class.createReactivityFig(self.fig, dProject, is5to3, drawType)
+        self.verticalLines = draw_class.createVerticalLines(self.fig.get_axes())
+        self.spanRect = draw_class.createRects(self.fig.get_axes())
         self.canvas.draw()
 
     #### PLOT  FUNCTIONS
@@ -1282,9 +1291,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dFigMargin['B'] = 0.07
         self.fig.subplots_adjust(self.dFigMargin['L'], self.dFigMargin['B'], self.dFigMargin['R'], self.dFigMargin['T'], 0.0, 0.0)
         self.dVar['drawType'] = self.mainTopWidget.splitComboBox.currentIndex()
-        self.dVar['maxLen'] = maxLenF(self.dDrawData['dData'])
+        self.dVar['maxLen'] = fGen.maxLenF(self.dDrawData['dData'])
 
-        self.chAxes = createAxes(self.fig, self.dVar, self.dDrawData['dData'].keys())
+        self.chAxes = draw_class.createAxes(self.fig, self.dVar, self.dDrawData['dData'].keys())
 
         self.dLineData = {}
         for key in self.dDrawData['dData'].keys():
@@ -1303,17 +1312,17 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.dVar['flag']['isDrawStad']:
             self.drawSatd()
         try:
-            self.dAxesYLim = findAxesYLim(self.dDrawData['dData'], self.dVar['drawType'])
+            self.dAxesYLim = fGen.findAxesYLim(self.dDrawData['dData'], self.dVar['drawType'])
         except:
             pass
 
         ### Draw Vertical Lines
-        self.verticalLines = createVerticalLines(self.fig.get_axes())
+        self.verticalLines = draw_class.createVerticalLines(self.fig.get_axes())
         self.setAxesLines()
         self.setAxesYLim()
         self.setAxesXLim()
         ### Draw  Rectangular for Span
-        self.spanRect = createRects(self.fig.get_axes())
+        self.spanRect = draw_class.createRects(self.fig.get_axes())
         self.resizeFigure()
 
     def setAxesLines(self):
