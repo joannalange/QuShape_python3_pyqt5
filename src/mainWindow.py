@@ -4,9 +4,9 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import setp
 
-from Dialogs import *
-from drawClass import *
-from funcMainWin import *
+from .Dialogs import *
+from .drawClass import *
+from .funcMainWin import *
 
 
 class MainWindow(QtWidgets.QMainWindow):

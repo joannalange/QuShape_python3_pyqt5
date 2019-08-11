@@ -1,5 +1,10 @@
 import os
-from mainWindow import *
+import sys
+
+from PyQt5 import QtGui, QtWidgets
+
+from mainWindow import MainWindow
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
