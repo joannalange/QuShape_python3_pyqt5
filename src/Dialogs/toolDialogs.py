@@ -216,7 +216,8 @@ class DlgRegionOfInterest(QtWidgets.QWidget):
         self.groupBox0.setLayout(layout0)
 
         self.buttunAuto = QtWidgets.QPushButton('Auto ROI by Reference')
-        self.connect(self.buttunAuto, QtCore.SIGNAL("clicked()"), self.autoFindROI)
+        self.buttunAuto.clicked.connect(self.autoFindROI)
+        # self.connect(self.buttunAuto, QtCore.SIGNAL("clicked()"), self.autoFindROI)
 
         if not self.dProject['isRef']:
             self.buttunAuto.setEnabled(False)
@@ -650,7 +651,8 @@ class DlgSignalAlign(QtWidgets.QWidget):
         self.setLayout(mainLayout)
 
         self.isToolAppliedSigAlign = False
-        self.connect(self.comboBox0, QtCore.SIGNAL('currentIndexChanged(int)'), self.comboChanged)
+        self.comboBox0.currentIndexChanged.connect(self.comboChanged)
+        # self.connect(self.comboBox0, QtCore.SIGNAL('currentIndexChanged(int)'), self.comboChanged)
 
     def comboChanged(self):
         self.isToolAppliedSigAlign = False

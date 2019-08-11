@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from .myWidgets import myGridLayout
 
@@ -56,17 +56,25 @@ class DlgLineProps(QtWidgets.QDialog):
 
         self.buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Apply | QtWidgets.QDialogButtonBox.Close)
 
-        self.connect(self.pushButton0['RX'], QtCore.SIGNAL("clicked()"), self.changeColorRX)
-        self.connect(self.pushButton0['RXS1'], QtCore.SIGNAL("clicked()"), self.changeColorRXS1)
-        self.connect(self.pushButton0['BG'], QtCore.SIGNAL("clicked()"), self.changeColorBG)
-        self.connect(self.pushButton0['BGS1'], QtCore.SIGNAL("clicked()"), self.changeColorBGS1)
+        # self.connect(self.pushButton0['RX'], QtCore.SIGNAL("clicked()"), self.changeColorRX)
+        # self.connect(self.pushButton0['RXS1'], QtCore.SIGNAL("clicked()"), self.changeColorRXS1)
+        # self.connect(self.pushButton0['BG'], QtCore.SIGNAL("clicked()"), self.changeColorBG)
+        # self.connect(self.pushButton0['BGS1'], QtCore.SIGNAL("clicked()"), self.changeColorBGS1)
+        self.pushButton0['RX'].clicked.connect(self.changeColorRX)
+        self.pushButton0['RXS1'].clicked.connect(self.changeColorRXS1)
+        self.pushButton0['BG'].clicked.connect(self.changeColorBG)
+        self.pushButton0['BGS1'].clicked.connect(self.changeColorBGS1)
         if 'RXS2' in chKeyRS:
-            self.connect(self.pushButton0['RXS2'], QtCore.SIGNAL("clicked()"), self.changeColorRXS2)
+            self.pushButton0['RXS2'].clicked.connect(self.changeColorRXS2)
+            # self.connect(self.pushButton0['RXS2'], QtCore.SIGNAL("clicked()"), self.changeColorRXS2)
         if 'BGS2' in chKeyRS:
-            self.connect(self.pushButton0['BGS2'], QtCore.SIGNAL("clicked()"), self.changeColorBGS2)
+            self.pushButton0['BGS2'].clicked.connect(self.changeColorBGS2)
+            # self.connect(self.pushButton0['BGS2'], QtCore.SIGNAL("clicked()"), self.changeColorBGS2)
 
-        self.connect(self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply), QtCore.SIGNAL("clicked()"), self.apply)
-        self.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), self.reject)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply)
+        # self.connect(self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply), QtCore.SIGNAL("clicked()"), self.apply)
+        self.buttonBox.rejected.connect(self.reject)
+        # self.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), self.reject)
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addLayout(layout0)
@@ -233,12 +241,12 @@ if __name__ == "__main__":
     import sys
 
     dLineVisible = {'RX': True, 'BG': True, 'RXS1': True, 'BGS1': True, 'RXS2': False, 'BGS2': False}
-    dLineColor = {'RX': (QtWidgets.QColor('red').name()),
-                  'BG': (QtWidgets.QColor('blue').name()),
-                  'RXS1': str(QtWidgets.QColor('green').name()),
-                  'BGS1': str(QtWidgets.QColor('magenta').name()),
-                  'RXS2': str(QtWidgets.QColor('yellow').name()),
-                  'BGS2': str(QtWidgets.QColor('cyan').name())}
+    dLineColor = {'RX': (QtGui.QColor('red').name()),
+                  'BG': (QtGui.QColor('blue').name()),
+                  'RXS1': str(QtGui.QColor('green').name()),
+                  'BGS1': str(QtGui.QColor('magenta').name()),
+                  'RXS2': str(QtGui.QColor('yellow').name()),
+                  'BGS2': str(QtGui.QColor('cyan').name())}
     app = QtWidgets.QApplication(sys.argv)
     from .Functions import DVar
 
