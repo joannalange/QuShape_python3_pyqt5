@@ -532,7 +532,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.eventKey = None
         self.mouseX = int(event.xdata)
         self.mouseReleaseX = int(event.xdata)
-        if self.spanRect[0].get_width > 3:
+        if self.spanRect[0].get_width() > 3:
             for ax, rect in zip(self.fig.get_axes(), self.spanRect):
                 rect.set_visible(True)
                 ax.draw_artist(rect)
