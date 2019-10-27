@@ -593,11 +593,11 @@ def removeDifferenceOutlier(A, B):
 def optimizeScaleFactor(A, B, func='Data'):
     factor = 1.0
     if func == 'Data':
-        resultList = fpeak.fmin(scaleFactorFuncData, factor, args=(A, B), full_output=1, disp=0)
+        resultList = np.fmin(scaleFactorFuncData, factor, args=(A, B), full_output=1, disp=0)
     elif func == 'Median':
-        resultList = fpeak.fmin(scaleFactorFuncMedian, factor, args=(A, B), full_output=1, disp=0)
+        resultList = np.fmin(scaleFactorFuncMedian, factor, args=(A, B), full_output=1, disp=0)
     else:
-        resultList = fpeak.fmin(scaleFactorFuncAver, factor, args=(A, B), full_output=1, disp=0)
+        resultList = np.fmin(scaleFactorFuncAver, factor, args=(A, B), full_output=1, disp=0)
 
     if resultList[4] == 0:
         scaleFactor = resultList[0]
