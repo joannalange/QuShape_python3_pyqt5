@@ -38,7 +38,7 @@ def shapeCostM(seqRNA, seq, score=None, match=2, misMatch=-1):
     n = len(seqRNA)
     m = len(seq)
     costMSeq = np.zeros([n, m])
-    if score == None:
+    if score is None:
         score = np.ones(m)
     for i in range(n):
         for j in np.arange(m):
