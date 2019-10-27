@@ -332,7 +332,7 @@ class DlgReactivity(QtWidgets.QWidget):
         if self.groupBox1.checkBoxScale0.isChecked():
             scaleFactor = fseq.scaleShapeDataWindow(self.dProjOut['dPeakRX']['amp'], self.dProjOut['dPeakBG']['amp'], deg=40, rate=0.25, step=10,
                                                fit='linear')
-            scaleFactorData = fseq.fitLinear(self.dProjOut['dPeakBG']['pos'], scaleFactor, NData=len(self.dProjOut['dData']['BG']))
+            scaleFactorData = fGen.fitLinear(self.dProjOut['dPeakBG']['pos'], scaleFactor, NData=len(self.dProjOut['dData']['BG']))
         else:
             scaleFactor = float(self.groupBox1.doubleSpinBox0.value())
             scaleFactorData = scaleFactor
