@@ -487,7 +487,7 @@ def optimizeAllSigma(dataA, peakList, wid=5):
 
 def optimizePosition(dataA, peakList, sigma, controlA=None):
     NPeak = peakList['NPeak']
-    if controlA == None:
+    if controlA is None:
         controlA = np.zeros(NPeak)
 
     for i in range(1, NPeak - 1):
