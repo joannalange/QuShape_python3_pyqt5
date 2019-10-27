@@ -945,9 +945,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.isClickedApply = False
 
         if self.dlg.name == "Sequence Alignment":
-            self.dVar['isDoneSeqAlign'] = True
-        if next:
-            self.nextStep(self.dlg.name)
+           self.dVar['isDoneSeqAlign'] = True
+
+        self.nextStep(self.dlg.name)
 
     def clickedSkip(self):
         self.drawData = deepcopy(self.dProject)
