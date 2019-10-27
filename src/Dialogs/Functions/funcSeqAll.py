@@ -1,4 +1,6 @@
 import numpy as np
+from scipy.optimize import fmin
+
 from copy import deepcopy
 
 from . import funcGeneral as fGen
@@ -593,11 +595,11 @@ def removeDifferenceOutlier(A, B):
 def optimizeScaleFactor(A, B, func='Data'):
     factor = 1.0
     if func == 'Data':
-        resultList = np.fmin(scaleFactorFuncData, factor, args=(A, B), full_output=1, disp=0)
+        resultList = fmin(scaleFactorFuncData, factor, args=(A, B), full_output=1, disp=0)
     elif func == 'Median':
-        resultList = np.fmin(scaleFactorFuncMedian, factor, args=(A, B), full_output=1, disp=0)
+        resultList = fmin(scaleFactorFuncMedian, factor, args=(A, B), full_output=1, disp=0)
     else:
-        resultList = np.fmin(scaleFactorFuncAver, factor, args=(A, B), full_output=1, disp=0)
+        resultList = fmin(scaleFactorFuncAver, factor, args=(A, B), full_output=1, disp=0)
 
     if resultList[4] == 0:
         scaleFactor = resultList[0]
